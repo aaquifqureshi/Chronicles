@@ -1,3 +1,16 @@
+/*
+* File Name     : chronicles.dart
+* Date Created  : 28th January 2025
+* last Modified : 28th January 2025
+* Author        : Mrunal Nirajkumar Shah
+* Group         : trOlsz Group
+* Description   : This file is the start point in this app.
+*                It runs the app and send it to the next Screen
+*                based on the authentication requirements set by
+*                the group.
+*
+*/
+
 import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
@@ -100,7 +113,7 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                infiniteRoundWidthButton(
+                InfiniteRoundWidthButton(
                   onPress: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -117,7 +130,7 @@ class WelcomeScreen extends StatelessWidget {
                   highlightColor: loginRegisterHighlightColor,
                   splashColor: loginRegisterSplashColor,
                 ),
-                infiniteRoundWidthButton(
+                InfiniteRoundWidthButton(
                   onPress: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -134,7 +147,7 @@ class WelcomeScreen extends StatelessWidget {
                   highlightColor: loginRegisterHighlightColor,
                   splashColor: loginRegisterSplashColor,
                 ),
-                infiniteRoundWidthButton(
+                InfiniteRoundWidthButton(
                   onPress: () {},
                   backgroundColor: continueWithGoogleBGColor,
                   borderWidth: googleButtonBorderWidth,

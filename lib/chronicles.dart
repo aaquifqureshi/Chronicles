@@ -2,6 +2,7 @@
 * File Name     : chronicles.dart
 * Date Created  : 28th January 2025
 * last Modified : 28th January 2025
+* Author        : Mrunal Nirajkumar Shah
 * Group         : trOlsz Group
 * Description   : This file is the start point in this app.
 *                It runs the app and send it to the next Screen
@@ -25,8 +26,10 @@ void main() {
 }
 
 class Chronicles extends StatelessWidget {
-  bool isUserLoginActive = isLoginDone();
-  bool isPinLoginRequired = isPinRequired();
+  final bool isUserLoginActive = isLoginDone();
+  final bool isPinLoginRequired = isPinRequired();
+
+  Chronicles({super.key});
 
   @override
   Widget build(BuildContext context) {

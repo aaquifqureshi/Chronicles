@@ -1,22 +1,35 @@
+/*
+* File Name     : chronicles.dart
+* Date Created  : 28th January 2025
+* last Modified : 28th January 2025
+* Author        : Mrunal Nirajkumar Shah
+* Group         : trOlsz Group
+* Description   : This file is the start point in this app.
+*                It runs the app and send it to the next Screen
+*                based on the authentication requirements set by
+*                the group.
+*
+*/
+
 import 'package:flutter/material.dart';
 
-class infiniteRoundWidthButton extends StatelessWidget {
-  double horizontalMargin;
-  double verticalMargin;
-  double horizontalPadding;
-  double verticalPadding;
-  double height;
-  double elevationValue;
-  Color backgroundColor;
-  Color borderColor;
-  Color splashColor;
-  Color highlightColor;
-  double circularBorderRadius;
-  double borderWidth;
-  Widget buttonLabel;
-  void Function()? onPress;
+class InfiniteRoundWidthButton extends StatelessWidget {
+  final double horizontalMargin;
+  final double verticalMargin;
+  final double horizontalPadding;
+  final double verticalPadding;
+  final double height;
+  final double elevationValue;
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color splashColor;
+  final Color highlightColor;
+  final double circularBorderRadius;
+  final double borderWidth;
+  final Widget buttonLabel;
+  final void Function()? onPress;
 
-  infiniteRoundWidthButton({
+  InfiniteRoundWidthButton({
     this.height = 50.0,
     this.horizontalMargin = 20.0,
     this.verticalMargin = 0.0,

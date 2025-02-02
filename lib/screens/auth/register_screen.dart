@@ -14,13 +14,12 @@
 import 'package:chronicles/screens/auth/login_screen.dart';
 import 'package:chronicles/screens/auth/welcome_screen.dart';
 import 'package:chronicles/screens/dashboard/dashboard.dart';
-import 'package:flutter/material.dart';
-import 'package:chronicles/utilities/image_import/logo_import.dart';
-import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
+import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
+import 'package:chronicles/utilities/image_import/logo_import.dart';
+import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
-
   final double rightPadding = 25.0;
   final double leftPadding = 25.0;
   final double logoWidth = 130.0;
@@ -64,7 +63,6 @@ class RegisterScreen extends StatelessWidget {
     color: Color(0xFF1F1F1F),
   );
 
-
   final gestureButtonStyle = TextStyle(
     fontSize: 14.0,
     fontFamily: "Hind",
@@ -97,16 +95,16 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: ()async{
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => WelcomeScreen(),
-          ),
-        );
-        return false;
-      },
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
 
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      },
       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
@@ -126,9 +124,9 @@ class RegisterScreen extends StatelessWidget {
                     },
                   ),
                 ),
-
                 Padding(
-                  padding: EdgeInsets.only(left: leftPadding,right: rightPadding,top: logoTop),
+                  padding: EdgeInsets.only(
+                      left: leftPadding, right: rightPadding, top: logoTop),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -165,12 +163,13 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(normalMeassageText,
-                            style: normalMeassageTextStyle,),
+                          Text(
+                            normalMeassageText,
+                            style: normalMeassageTextStyle,
+                          ),
                           GestureDetector(
                             onTap: () {},
                             child: Text(
@@ -183,7 +182,10 @@ class RegisterScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text("& ",style: normalMeassageTextStyle,),
+                          Text(
+                            "& ",
+                            style: normalMeassageTextStyle,
+                          ),
                           GestureDetector(
                             onTap: () {},
                             child: Text(
@@ -193,7 +195,6 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       InfiniteRoundWidthButton(
                         onPress: () {
                           Navigator.of(context).push(
@@ -204,7 +205,8 @@ class RegisterScreen extends StatelessWidget {
                         },
                         buttonLabel: Text(
                           signUpText,
-                          style: buttonLabelTextStyle(textColor: signUpTextColor),
+                          style:
+                              buttonLabelTextStyle(textColor: signUpTextColor),
                         ),
                         verticalMargin: verticalButtonMargin,
                         height: buttonHeight,
@@ -212,11 +214,13 @@ class RegisterScreen extends StatelessWidget {
                         splashColor: loginRegisterSplashColor,
                         horizontalMargin: horizontalMargin,
                       ),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(accountExistText,style: accountExistStyle,),
+                          Text(
+                            accountExistText,
+                            style: accountExistStyle,
+                          ),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(

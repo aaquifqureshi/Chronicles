@@ -14,14 +14,12 @@
 import 'package:chronicles/screens/auth/register_screen.dart';
 import 'package:chronicles/screens/auth/welcome_screen.dart';
 import 'package:chronicles/screens/dashboard/dashboard.dart';
-import 'package:flutter/material.dart';
-import 'package:chronicles/utilities/image_import/logo_import.dart';
-import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
-
+import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
+import 'package:chronicles/utilities/image_import/logo_import.dart';
+import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-
   final double logoWidth = 130.0;
   final double logoHeight = 130.0;
   final double logoTop = 15.0;
@@ -64,8 +62,7 @@ class LoginScreen extends StatelessWidget {
   final forgotPasswordStyle = TextStyle(
       fontFamily: "Hind",
       fontWeight: FontWeight.w600,
-      color: Color(0xFF4EABCC)
-  );
+      color: Color(0xFF4EABCC));
 
   final normalMsgStyle = TextStyle(
     fontSize: 16.0,
@@ -92,117 +89,126 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(top: 25),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(top: 25),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(left: 25,right: 25,top: logoTop),
-                child: Column(
-                  children: [
-                    ImportLogo(width: logoWidth, height: logoHeight)
-                        .importLogowo(),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: accLogin_emailText),
-                            child: Text(
-                              accountLoginText,
-                              style: accountLoginTextStyle,
-                            ),
-                          ),
-                        ),
-
-                        Text(
-                          emailText,
-                          style: labelTextStyle,
-                        ),
-                        GrayTextfield(
-                          hintText: emailHint,
-                          topPadding: topPadding,
-                          bottomPadding: bottomPadding,
-                        ),
-
-                        Text(
-                          passwordText,
-                          style: labelTextStyle,
-                        ),
-                        GrayTextfield(
-                          hintText: passwordHint,
-                          topPadding: topPadding,
-                          bottomPadding: bottomPadding,
-                        ),
-
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              forgotPasswordText,
-                              style: forgotPasswordStyle,
-                            ),
-                          ),
-                        ),
-
-                        InfiniteRoundWidthButton(
-                          onPress: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Dashboard(),
-                              ),
-                            );
-                          },
-                          buttonLabel: Text(
-                            loginText,
-                            style: buttonLabelTextStyle(textColor: loginTextColor),
-                          ),
-                          verticalMargin: verticalButtonMargin,
-                          height: buttonHeight,
-                          highlightColor: loginRegisterHighlightColor,
-                          splashColor: loginRegisterSplashColor,
-                          horizontalMargin: horizontalMargin,
-                        ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(normalmsg,style: normalMsgStyle,),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => RegisterScreen(),
-                                  ),
-                                );
-                              },
+                Padding(
+                  padding: EdgeInsets.only(left: 25, right: 25, top: logoTop),
+                  child: Column(
+                    children: [
+                      ImportLogo(width: logoWidth, height: logoHeight)
+                          .importLogowo(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.only(bottom: accLogin_emailText),
                               child: Text(
-                                registerButtonText,
-                                style: registerTextStyle,
+                                accountLoginText,
+                                style: accountLoginTextStyle,
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                          ),
+                          Text(
+                            emailText,
+                            style: labelTextStyle,
+                          ),
+                          GrayTextfield(
+                            hintText: emailHint,
+                            topPadding: topPadding,
+                            bottomPadding: bottomPadding,
+                          ),
+                          Text(
+                            passwordText,
+                            style: labelTextStyle,
+                          ),
+                          GrayTextfield(
+                            hintText: passwordHint,
+                            topPadding: topPadding,
+                            bottomPadding: bottomPadding,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Text(
+                                forgotPasswordText,
+                                style: forgotPasswordStyle,
+                              ),
+                            ),
+                          ),
+                          InfiniteRoundWidthButton(
+                            onPress: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Dashboard(),
+                                ),
+                              );
+                            },
+                            buttonLabel: Text(
+                              loginText,
+                              style: buttonLabelTextStyle(
+                                  textColor: loginTextColor),
+                            ),
+                            verticalMargin: verticalButtonMargin,
+                            height: buttonHeight,
+                            highlightColor: loginRegisterHighlightColor,
+                            splashColor: loginRegisterSplashColor,
+                            horizontalMargin: horizontalMargin,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                normalmsg,
+                                style: normalMsgStyle,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => RegisterScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  registerButtonText,
+                                  style: registerTextStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -17,6 +17,8 @@ import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/register_auth.dart';
+
 final double rightPadding = 25.0;
 final double leftPadding = 25.0;
 final double logoWidth = 130.0;
@@ -190,7 +192,17 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     InfiniteRoundWidthButton(
                       onPress: () {
-                        Navigator.popAndPushNamed(context, '/Dashboard');
+                        bool authValue = registerAuthentication();
+
+                        if (authValue) {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/Dashboard',
+                            (Route<dynamic> route) => false,
+                          );
+                        } else {
+                          print('Alert');
+                        }
                       },
                       buttonLabel: Text(
                         signUpText,

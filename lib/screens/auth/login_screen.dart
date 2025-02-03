@@ -12,6 +12,7 @@
 */
 
 import 'package:chronicles/services/internet_connectivity.dart';
+import 'package:chronicles/services/login_auth.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
 import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
@@ -158,7 +159,16 @@ class LoginScreen extends StatelessWidget {
                         ),
                         InfiniteRoundWidthButton(
                           onPress: () {
-                            Navigator.popAndPushNamed(context, '/Dashboard');
+                            bool authValue = loginAuthentication();
+                            if (authValue) {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/Dashboard',
+                                (Route<dynamic> route) => false,
+                              );
+                            } else {
+                              print('Alert');
+                            }
                           },
                           buttonLabel: Text(
                             loginText,

@@ -35,3 +35,26 @@ class ImportLogo {
     );
   }
 }
+
+class ImageImport {
+  double width = 20.0;
+  double height = 20.0;
+
+  ImageImport({required this.width, required this.height});
+
+  Image importProfileIcon() {
+    return Image.asset(
+      'assets/images/build/profile_icon.png',
+      width: width,
+      height: height,
+    );
+  }
+
+  Image importAddIcon() {
+    return Image.asset(
+      'assets/images/build/add_icon.png',
+      width: width,
+      height: height,
+    );
+  }
+}

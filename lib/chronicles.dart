@@ -38,6 +38,7 @@ class Chronicles extends StatelessWidget {
     return MaterialApp(
       theme: galacticOcean,
       routes: {
+        '/Chronicles': (context) => Chronicles(),
         '/WelcomeScreen': (context) => WelcomeScreen(),
         '/Login': (context) => LoginScreen(),
         '/Register': (context) => RegisterScreen(),

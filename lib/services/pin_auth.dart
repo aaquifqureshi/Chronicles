@@ -1,3 +1,3 @@
 bool isPinRequired() {
-  return false;
+  return true;
 }

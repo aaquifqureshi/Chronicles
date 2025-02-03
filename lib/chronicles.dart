@@ -11,13 +11,15 @@
 *
 */
 
-import 'package:flutter/material.dart';
-import 'package:chronicles/themes/galactic_ocean.dart';
-import 'package:chronicles/services/pin_auth.dart';
-import 'package:chronicles/services/login_auth.dart';
-import 'package:chronicles/screens/auth/welcome_screen.dart';
+import 'package:chronicles/screens/auth/login_screen.dart';
 import 'package:chronicles/screens/auth/pin_login_screen.dart';
+import 'package:chronicles/screens/auth/register_screen.dart';
+import 'package:chronicles/screens/auth/welcome_screen.dart';
 import 'package:chronicles/screens/dashboard/dashboard.dart';
+import 'package:chronicles/services/login_auth.dart';
+import 'package:chronicles/services/pin_auth.dart';
+import 'package:chronicles/themes/galactic_ocean.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(
@@ -35,7 +37,12 @@ class Chronicles extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: galacticOcean,
-
+      routes: {
+        '/WelcomeScreen': (context) => WelcomeScreen(),
+        '/Login': (context) => LoginScreen(),
+        '/Register': (context) => RegisterScreen(),
+        '/Dashboard': (context) => Dashboard(),
+      },
       // Check condition for login & pin requirements, and go to required screens.
       home: isUserLoginActive
           ? (isPinLoginRequired ? PinLoginScreen() : Dashboard())

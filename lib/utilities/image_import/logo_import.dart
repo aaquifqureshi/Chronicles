@@ -44,7 +44,7 @@ class ImageImport {
 
   Image importProfileIcon() {
     return Image.asset(
-      'assets/images/build/profile_icon.png',
+      'assets/images/icons/profile_icon.png',
       width: width,
       height: height,
     );
@@ -52,7 +52,7 @@ class ImageImport {
 
   Image importAddIcon() {
     return Image.asset(
-      'assets/images/build/add_icon.png',
+      'assets/images/icons/add_icon.png',
       width: width,
       height: height,
     );

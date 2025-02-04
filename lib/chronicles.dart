@@ -20,10 +20,17 @@ import 'package:chronicles/services/login_auth.dart';
 import 'package:chronicles/services/pin_auth.dart';
 import 'package:chronicles/themes/galactic_ocean.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(
     Chronicles(),
+  );
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [
+      SystemUiOverlay.top, // Shows Status bar and hides Navigation bar
+    ],
   );
 }
 

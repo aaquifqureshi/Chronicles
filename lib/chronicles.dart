@@ -29,7 +29,7 @@ void main() {
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
     overlays: [
-      SystemUiOverlay.top, // Shows Status bar and hides Navigation bar
+      SystemUiOverlay.top,
     ],
   );
 }

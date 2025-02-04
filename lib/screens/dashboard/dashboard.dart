@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 final String username = "trOlsz";
 
-final bool task1 = true;
-final bool task2 = false;
+bool task1 = true;
+bool task2 = false;
 
 final helloMsgStyle = TextStyle(
   height: 1.8,
@@ -44,14 +44,20 @@ final taskListTextStyle = TextStyle(
   color: Color(0xFF1F1F1F),
 );
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
           backgroundColor: Color(0xFF4EABCC),
+          shape: CircleBorder(),
           child: Icon(
-            Icons.add,
+            Icons.edit,
             color: Color(0xFFFFFFFF),
           ),
           onPressed: () {}),
@@ -59,6 +65,7 @@ class Dashboard extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         color: Color(0xFFD7EFF6),
         height: 62.0,
+        shape: CircularNotchedRectangle(),
       ),
       appBar: AppBar(
         backgroundColor: Color(0xFFFFFFFF),
@@ -82,7 +89,7 @@ class Dashboard extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 20),
+          padding: EdgeInsets.only(top: 5, bottom: 20, left: 15, right: 15),
           child: Column(
             children: [
               Padding(
@@ -124,7 +131,11 @@ class Dashboard extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                    border: Border.all(),
+                    color: Color(0xFFFDFDFDFF),
+                    border: Border.all(
+                      color: Color(0xFFDDDFE5),
+                      width: 2.0,
+                    ),
                     borderRadius: BorderRadius.circular(6.0),
                   ),
                   child: StreakCalender(),
@@ -149,7 +160,11 @@ class Dashboard extends StatelessWidget {
                   height: 120,
                   width: 360,
                   decoration: BoxDecoration(
-                    border: Border.all(),
+                    color: Color(0xFFFDFDFDFF),
+                    border: Border.all(
+                      color: Color(0xFFDDDFE5),
+                      width: 2.0,
+                    ),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Padding(
@@ -160,7 +175,10 @@ class Dashboard extends StatelessWidget {
                           children: [
                             Checkbox(
                               value: task1,
-                              onChanged: (value) {},
+                              onChanged: (value) {
+                                task1 = value!;
+                                setState(() {});
+                              },
                             ),
                             Text(
                               "Complete Presentation",
@@ -172,7 +190,10 @@ class Dashboard extends StatelessWidget {
                           children: [
                             Checkbox(
                               value: task2,
-                              onChanged: (value) {},
+                              onChanged: (value) {
+                                task2 = value!;
+                                setState(() {});
+                              },
                             ),
                             Text(
                               "Book Tickets",
@@ -196,7 +217,11 @@ class Dashboard extends StatelessWidget {
                 height: 180,
                 width: 360,
                 decoration: BoxDecoration(
-                  border: Border.all(),
+                  border: Border.all(
+                    color: Color(0xFFDDDFE5),
+                    width: 2.0,
+                  ),
+                  color: Color(0xFFFDFDFDFF),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Padding(

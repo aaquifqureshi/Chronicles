@@ -43,16 +43,16 @@ class _StreakCalenderState extends State<StreakCalender> {
       currentDateProperties: DatesProperties(
         datesDecoration: DatesDecoration(
           datesBorderRadius: 1000,
-          datesBackgroundColor: Color(0x504EABCC),
-          datesBorderColor: Color(0xFF111519),
+          datesBackgroundColor: Color(0xFFFFFFFF),
+          datesBorderColor: Color(0xFFFFFFFF),
           datesTextColor: Color(0xFF1F1F1F),
         ),
       ),
       generalDatesProperties: DatesProperties(
         datesDecoration: DatesDecoration(
           datesBorderRadius: 1000,
-          datesBackgroundColor: Color(0x604EABCC),
-          datesBorderColor: Color(0xFF111519),
+          datesBackgroundColor: Color(0xFFFFFFFF),
+          datesBorderColor: Color(0xFFFFFFFF),
           datesTextColor: Color(0xFF1F1F1F),
         ),
       ),
@@ -61,7 +61,7 @@ class _StreakCalenderState extends State<StreakCalender> {
           datesBorderRadius: 1000,
           datesBackgroundColor: Color(0xFF4EABCC),
           datesBorderColor: Color(0xFF111519),
-          datesTextColor: Colors.white,
+          datesTextColor: Color(0xFFFFFFFF),
         ),
       ),
       leadingTrailingDatesProperties: DatesProperties(

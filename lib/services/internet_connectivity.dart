@@ -74,8 +74,9 @@ class _InternetConnectionStatusState extends State<InternetConnectionStatus> {
         ? connectionTrueIcon
         : connectionFalseIcon;
   }
+}
 
-  bool getInternetStatus() {
-    return _connectionStatus == InternetStatus.connected;
-  }
+Future<bool> getInternetStatus() async {
+  bool result = await InternetConnection().hasInternetAccess;
+  return result;
 }

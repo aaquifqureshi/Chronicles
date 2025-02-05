@@ -18,10 +18,13 @@ import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
+import '../../utilities/components/alerts/auth_failed_alert.dart';
+import '../../utilities/components/alerts/no_internet_alert.dart';
+
 final double logoWidth = 130.0;
 final double logoHeight = 130.0;
 final double logoTop = 15.0;
-final double accLogin_emailText = 40.0;
+final double accLoginEmailText = 40.0;
 final double topPadding = 0;
 final double bottomPadding = 18;
 
@@ -123,8 +126,7 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Center(
                           child: Padding(
-                            padding:
-                                EdgeInsets.only(bottom: accLogin_emailText),
+                            padding: EdgeInsets.only(bottom: accLoginEmailText),
                             child: Text(
                               accountLoginText,
                               style: accountLoginTextStyle,
@@ -160,16 +162,18 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         InfiniteRoundWidthButton(
-                          onPress: () {
+                          onPress: () async {
                             bool authValue = loginAuthentication();
-                            if (authValue) {
+                            if (authValue && await getInternetStatus()) {
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 '/Dashboard',
                                 (Route<dynamic> route) => false,
                               );
+                            } else if (authValue == false) {
+                              authFailedAlert(context);
                             } else {
-                              print('Alert');
+                              noInternetAlert(context);
                             }
                           },
                           buttonLabel: Text(

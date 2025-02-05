@@ -17,7 +17,10 @@ import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/login_auth.dart';
 import '../../services/register_auth.dart';
+import '../../utilities/components/alerts/auth_failed_alert.dart';
+import '../../utilities/components/alerts/no_internet_alert.dart';
 
 final double rightPadding = 25.0;
 final double leftPadding = 25.0;
@@ -193,17 +196,18 @@ class RegisterScreen extends StatelessWidget {
                       ],
                     ),
                     InfiniteRoundWidthButton(
-                      onPress: () {
+                      onPress: () async {
                         bool authValue = registerAuthentication();
-
-                        if (authValue) {
+                        if (authValue && await getInternetStatus()) {
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             '/Dashboard',
                             (Route<dynamic> route) => false,
                           );
+                        } else if (authValue == false) {
+                          authFailedAlert(context);
                         } else {
-                          print('Alert');
+                          noInternetAlert(context);
                         }
                       },
                       buttonLabel: Text(

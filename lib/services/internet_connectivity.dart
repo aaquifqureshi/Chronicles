@@ -23,15 +23,26 @@ class InternetConnectionStatus extends StatefulWidget {
 
 class _InternetConnectionStatusState extends State<InternetConnectionStatus> {
   InternetStatus? _connectionStatus;
-  late StreamSubscription<InternetStatus> _subscription;
+  late final StreamSubscription<InternetStatus> _subscription;
 
   @override
   void initState() {
     super.initState();
-    _subscription = InternetConnection().onStatusChange.listen((status) {
+
+    InternetConnection().hasInternetAccess.then((hasInternet) {
       setState(() {
-        _connectionStatus = status;
+        _connectionStatus = hasInternet
+            ? InternetStatus.connected
+            : InternetStatus.disconnected;
       });
+    });
+
+    _subscription = InternetConnection().onStatusChange.listen((status) {
+      if (mounted) {
+        setState(() {
+          _connectionStatus = status;
+        });
+      }
     });
   }
 
@@ -46,13 +57,25 @@ class _InternetConnectionStatusState extends State<InternetConnectionStatus> {
     return internetConnectionStatusIcon(_connectionStatus);
   }
 
-  Icon internetConnectionStatusIcon(connectionStatus) {
+  Widget internetConnectionStatusIcon(connectionStatus) {
+    if (connectionStatus == null) {
+      return SizedBox(
+        width: 20.0,
+        height: 20.0,
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(
+            iconColor,
+          ),
+          strokeWidth: 2,
+        ),
+      );
+    }
     return connectionStatus == InternetStatus.connected
         ? connectionTrueIcon
         : connectionFalseIcon;
   }
 
   bool getInternetStatus() {
-    return _connectionStatus == InternetStatus.connected ? true : false;
+    return _connectionStatus == InternetStatus.connected;
   }
 }

@@ -72,6 +72,8 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
 }
 
 class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
+
   // Build Method Starts
   @override
   Widget build(BuildContext context) {

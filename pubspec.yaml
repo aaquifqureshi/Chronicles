@@ -13,8 +13,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+  
   internet_connection_checker_plus: ^2.7.0
   streak_calendar: ^1.1.2
+  rflutter_alert: ^2.0.7
 
 
 dev_dependencies:

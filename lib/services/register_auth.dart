@@ -1,3 +1,3 @@
 bool registerAuthentication() {
-  return true;
+  return false;
 }

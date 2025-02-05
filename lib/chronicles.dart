@@ -35,26 +35,29 @@ void main() {
 }
 
 class Chronicles extends StatelessWidget {
-  final bool isUserLoginActive = isLoginDone();
-  final bool isPinLoginRequired = isPinRequired();
-
-  Chronicles({super.key});
+  const Chronicles({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final bool isUserLoginActive = isLoginDone();
+    final bool isPinLoginRequired = isPinRequired();
+
+    Widget homeScreen;
+    if (isUserLoginActive) {
+      homeScreen = isPinLoginRequired ? PinLoginScreen() : Dashboard();
+    } else {
+      homeScreen = WelcomeScreen();
+    }
+
     return MaterialApp(
       theme: galacticOcean,
       routes: {
-        '/Chronicles': (context) => Chronicles(),
         '/WelcomeScreen': (context) => WelcomeScreen(),
         '/Login': (context) => LoginScreen(),
         '/Register': (context) => RegisterScreen(),
         '/Dashboard': (context) => Dashboard(),
       },
-      // Check condition for login & pin requirements, and go to required screens.
-      home: isUserLoginActive
-          ? (isPinLoginRequired ? PinLoginScreen() : Dashboard())
-          : WelcomeScreen(),
+      home: homeScreen,
     );
   }
 }

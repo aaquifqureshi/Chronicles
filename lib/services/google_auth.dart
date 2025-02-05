@@ -1,0 +1,3 @@
+bool isGoogleAuthenticationDone() {
+  return true;
+}

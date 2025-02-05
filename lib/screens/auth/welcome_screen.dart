@@ -17,6 +17,8 @@ import 'package:chronicles/utilities/components/buttons/infinite_width_button.da
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/google_auth.dart';
+
 // Logo Height and Width
 final double logoWidth = 135.0;
 final double logoHeight = 135.0;
@@ -150,7 +152,17 @@ class WelcomeScreen extends StatelessWidget {
                   splashColor: loginRegisterSplashColor,
                 ),
                 InfiniteRoundWidthButton(
-                  onPress: () {},
+                  onPress: () {
+                    if (isGoogleAuthenticationDone()) {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/Dashboard',
+                        (Route<dynamic> route) => false,
+                      );
+                    } else {
+                      print('Alert');
+                    }
+                  },
                   backgroundColor: continueWithGoogleBGColor,
                   borderWidth: googleButtonBorderWidth,
                   borderColor: continueWithGoogleBorderColor,

@@ -2,6 +2,8 @@ import 'package:chronicles/utilities/components/calender/streak_calender.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
+import '../../utilities/components/searchbar/boxSearchBar.dart';
+
 final String username = "trOlsz";
 
 final helloMsgStyle = TextStyle(
@@ -92,7 +94,7 @@ class _DashboardState extends State<Dashboard> {
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 20.0),
-                child: SearchBar(),
+                child: BoxSearchBar(),
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0),

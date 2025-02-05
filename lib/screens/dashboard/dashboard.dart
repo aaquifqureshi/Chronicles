@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 
 final String username = "trOlsz";
 
-bool task1 = true;
-bool task2 = false;
-
 final helloMsgStyle = TextStyle(
   height: 1.8,
   fontSize: 30.0,
@@ -54,13 +51,14 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xFF4EABCC),
-          shape: CircleBorder(),
-          child: Icon(
-            Icons.edit,
-            color: Color(0xFFFFFFFF),
-          ),
-          onPressed: () {}),
+        backgroundColor: Color(0xFF4EABCC),
+        shape: CircleBorder(),
+        child: Icon(
+          Icons.edit,
+          color: Color(0xFFFFFFFF),
+        ),
+        onPressed: () {},
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: BottomAppBar(
         color: Color(0xFFD7EFF6),
@@ -94,36 +92,7 @@ class _DashboardState extends State<Dashboard> {
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.2),
-                        blurRadius: 5,
-                        spreadRadius: 2,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search",
-                      hintStyle: hintTextStyle,
-                      icon: Padding(
-                        padding: EdgeInsets.only(left: 11.0),
-                        child: Icon(Icons.search),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                    ),
-                  ),
-                ),
+                child: SearchBar(),
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0),
@@ -131,7 +100,7 @@ class _DashboardState extends State<Dashboard> {
                 child: Container(
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                    color: Color(0xFFFDFDFDFF),
+                    color: Color(0xFFFFFFFF),
                     border: Border.all(
                       color: Color(0xFFDDDFE5),
                       width: 2.0,
@@ -139,124 +108,6 @@ class _DashboardState extends State<Dashboard> {
                     borderRadius: BorderRadius.circular(6.0),
                   ),
                   child: StreakCalender(),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Task",
-                      style: headingTextStyle,
-                    ),
-                    ImageImport(width: 22, height: 22).importAddIcon(),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 12.0),
-                child: Container(
-                  height: 120,
-                  width: 360,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFDFDFDFF),
-                    border: Border.all(
-                      color: Color(0xFFDDDFE5),
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: task1,
-                              onChanged: (value) {
-                                task1 = value!;
-                                setState(() {});
-                              },
-                            ),
-                            Text(
-                              "Complete Presentation",
-                              style: taskListTextStyle,
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: task2,
-                              onChanged: (value) {
-                                task2 = value!;
-                                setState(() {});
-                              },
-                            ),
-                            Text(
-                              "Book Tickets",
-                              style: taskListTextStyle,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Recent",
-                  style: headingTextStyle,
-                ),
-              ),
-              Container(
-                height: 180,
-                width: 360,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xFFDDDFE5),
-                    width: 2.0,
-                  ),
-                  color: Color(0xFFFDFDFDFF),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            height: 160,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              color: Color(0x304EABCC),
-                              border: Border.all(
-                                color: Colors.transparent,
-                              ),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                          Container(
-                            height: 160,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              color: Color(0x304EABCC),
-                              border: Border.all(
-                                color: Colors.transparent,
-                              ),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
                 ),
               ),
             ],

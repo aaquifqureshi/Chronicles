@@ -16,6 +16,7 @@ dependencies:
   internet_connection_checker_plus: ^2.7.0
   streak_calendar: ^1.1.2
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

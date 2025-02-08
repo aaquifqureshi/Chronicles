@@ -3,6 +3,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 AlertStyle authFailedAlertStyle = AlertStyle(
   backgroundColor: Color(0xFFFFFFFF),
+  isCloseButton: false,
   descStyle: TextStyle(
     color: Color(0xFF1F1F1F),
   ),
@@ -13,14 +14,18 @@ AlertStyle authFailedAlertStyle = AlertStyle(
     ),
   ),
   titleStyle: TextStyle(
+    fontFamily: 'Abyssinica_SIL',
     color: Color(0xFF4EABCC),
     fontWeight: FontWeight.bold,
     fontSize: 30.0,
   ),
 );
 
-TextStyle authFailedAlertTextStyle =
-    TextStyle(color: Color(0xFFFFFFFF), fontSize: 20);
+TextStyle authFailedAlertTextStyle = TextStyle(
+  fontFamily: 'Hind',
+  color: Color(0xFFFFFFFF),
+  fontSize: 20,
+);
 
 void authFailedAlert(BuildContext context) {
   Alert(

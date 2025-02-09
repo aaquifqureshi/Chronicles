@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:streak_calendar/streak_calendar.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class StreakCalender extends StatefulWidget {
   StreakCalender({super.key});
@@ -9,29 +11,65 @@ class StreakCalender extends StatefulWidget {
 }
 
 class _StreakCalenderState extends State<StreakCalender> {
-  List<DateTime> listStreakDates = [
-    DateTime(2025, 1, 30),
-    DateTime(2025, 1, 31),
-    DateTime(2025, 2, 1),
-    DateTime(2025, 2, 9),
-    DateTime(2025, 2, 10),
-    DateTime(2025, 2, 11),
-    DateTime(2025, 2, 13),
-    DateTime(2025, 2, 20),
-    DateTime(2025, 2, 21),
-    DateTime(2025, 2, 23),
-    DateTime(2025, 2, 24),
-  ];
+  List<DateTime> listStreakDates = [];
+  Database? _database;
 
   @override
   void initState() {
     super.initState();
+    initDatabase();
   }
 
-  void addDate(DateTime date) {
+
+  Future<void> initDatabase() async {
+    _database = await openDatabase(
+      join(await getDatabasesPath(), 'streaks.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          "CREATE TABLE streaks(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT UNIQUE)",
+        );
+      },
+      version: 1,
+    );
+
+    await loadStreakDates();
+    await didUserLogin();
+  }
+
+  Future<void> loadStreakDates() async {
+    if (_database == null) return;
+
+    final List<Map<String, dynamic>> results = await _database!.query('streaks');
+
     setState(() {
-      listStreakDates.add(date);
+      listStreakDates = results
+          .map((e) => DateTime.parse(e['date'])) // Convert string to DateTime
+          .toList();
     });
+  }
+
+  Future<void> didUserLogin() async {
+    if (_database == null) return;
+
+    String today = DateTime.now().toIso8601String().split('T')[0];
+
+    List<Map<String, dynamic>> result = await _database!.query(
+      'streaks',
+      where: 'date = ?',
+      whereArgs: [today],
+    );
+
+    if (result.isEmpty) {
+      await _database!.insert(
+        'streaks',
+        {'date': today},
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+
+      setState(() {
+        listStreakDates.add(DateTime.now());
+      });
+    }
   }
 
   @override
@@ -59,7 +97,7 @@ class _StreakCalenderState extends State<StreakCalender> {
       streakDatesProperties: DatesProperties(
         datesDecoration: DatesDecoration(
           datesBorderRadius: 1000,
-          datesBackgroundColor: Color(0xFF4EABCC),
+          datesBackgroundColor: Color(0xFF4EABCC), // Blue streak color
           datesBorderColor: Color(0xFF111519),
           datesTextColor: Color(0xFFFFFFFF),
         ),

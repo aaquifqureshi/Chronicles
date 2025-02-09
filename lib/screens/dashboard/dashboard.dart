@@ -17,8 +17,8 @@ final helloMsgStyle = TextStyle(
 final usernameStyle = TextStyle(
   height: 1.8,
   fontSize: 30.0,
-  fontFamily: 'Abyssinica_SIL',
-  fontWeight: FontWeight.w400,
+  fontFamily: 'hind',
+  fontWeight: FontWeight.w500,
   color: Color(0xFF4EABCC),
 );
 
@@ -55,10 +55,7 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFF4EABCC),
         shape: CircleBorder(),
-        child: Icon(
-          Icons.edit,
-          color: Color(0xFFFFFFFF),
-        ),
+        child: Icon(Icons.edit_outlined, color: Color(0xFFFFFFFF)),
         onPressed: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -70,21 +67,24 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         backgroundColor: Color(0xFFFFFFFF),
         scrolledUnderElevation: 0.5,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Hello,",
-                  style: helloMsgStyle,
-                ),
-                Text(username, style: usernameStyle),
-              ],
-            ),
-            ImageImport(width: 54, height: 54).importProfileIcon(),
-          ],
+        title: Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello,",
+                    style: helloMsgStyle,
+                  ),
+                  Text(username, style: usernameStyle),
+                ],
+              ),
+              ImageImport(width: 56, height: 56).importProfileIcon(),
+            ],
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -93,7 +93,7 @@ class _DashboardState extends State<Dashboard> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 20.0),
+                padding: EdgeInsets.only(top: 20.0, left: 5, right: 5),
                 child: BoxSearchBar(),
               ),
               Container(

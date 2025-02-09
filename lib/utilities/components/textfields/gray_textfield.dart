@@ -17,12 +17,13 @@ class GrayTextfield extends StatelessWidget {
   final String hintText;
   final double topPadding;
   final double bottomPadding;
-
+  final TextEditingController controller;
 
   const GrayTextfield({
     this.topPadding = 0,
     this.bottomPadding = 0,
     required this.hintText,
+    required this.controller,
   });
 
   @override
@@ -40,8 +41,9 @@ class GrayTextfield extends StatelessWidget {
     );
 
     return Padding(
-      padding: EdgeInsets.only(top: topPadding,bottom: bottomPadding),
+      padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
       child: TextField(
+        controller: controller,
         style: textFieldStyle,
         decoration: InputDecoration(
           hintText: hintText,
@@ -55,7 +57,6 @@ class GrayTextfield extends StatelessWidget {
               width: 1.2,
             ),
           ),
-
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
@@ -63,7 +64,6 @@ class GrayTextfield extends StatelessWidget {
               width: 1.2,
             ),
           ),
-
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(

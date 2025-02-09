@@ -18,7 +18,7 @@ import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
-import '../../utilities/components/alerts/auth_failed_alert.dart';
+import '../../utilities/components/alerts/auth_alerts.dart';
 import '../../utilities/components/alerts/no_internet_alert.dart';
 
 final double logoWidth = 130.0;
@@ -87,7 +87,8 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
 }
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  TextEditingController login_email = TextEditingController();
+  TextEditingController login_password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +139,7 @@ class LoginScreen extends StatelessWidget {
                           style: labelTextStyle,
                         ),
                         GrayTextfield(
+                          controller: login_email,
                           hintText: emailHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
@@ -147,6 +149,7 @@ class LoginScreen extends StatelessWidget {
                           style: labelTextStyle,
                         ),
                         GrayTextfield(
+                          controller: login_password,
                           hintText: passwordHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
@@ -163,15 +166,28 @@ class LoginScreen extends StatelessWidget {
                         ),
                         InfiniteRoundWidthButton(
                           onPress: () async {
-                            bool authValue = loginAuthentication();
-                            if (authValue && await getInternetStatus()) {
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                '/Dashboard',
-                                (Route<dynamic> route) => false,
-                              );
-                            } else if (authValue == false) {
-                              authFailedAlert(context);
+                            var authValue = await loginAuthentication(
+                              context,
+                              login_email.text.trim(),
+                              login_password.text.trim(),
+                            );
+                            bool hasInternet = await getInternetStatus();
+                            if (hasInternet == true) {
+                              if (authValue == 'true') {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/Dashboard',
+                                  (Route<dynamic> route) => false,
+                                );
+                              } else if (authValue == "emptyFields") {
+                                authEmptyFieldAlert(context);
+                              } else if (authValue == "invalidCredentials") {
+                                authSpecificAlert(
+                                    context, "Email or Password is wrong");
+                              } else if (authValue == 'unexpectedError') {
+                                authSpecificAlert(
+                                    context, "Unexpected Error Occured");
+                              }
                             } else {
                               noInternetAlert(context);
                             }

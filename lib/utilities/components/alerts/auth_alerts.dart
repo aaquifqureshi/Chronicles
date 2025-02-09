@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-AlertStyle authFailedAlertStyle = AlertStyle(
+AlertStyle authAlertStyle = AlertStyle(
   backgroundColor: Color(0xFFFFFFFF),
   isCloseButton: false,
   descStyle: TextStyle(
@@ -21,25 +21,44 @@ AlertStyle authFailedAlertStyle = AlertStyle(
   ),
 );
 
-TextStyle authFailedAlertTextStyle = TextStyle(
+TextStyle authAlertTextStyle = TextStyle(
   fontFamily: 'Hind',
   color: Color(0xFFFFFFFF),
   fontSize: 20,
 );
 
-void authFailedAlert(BuildContext context) {
+void authEmptyFieldAlert(BuildContext context) {
   Alert(
     context: context,
-    title: "Access Denied",
-    desc: "Please check username and/or password...",
-    style: authFailedAlertStyle,
+    title: "Error!",
+    desc: "Fields cannot be empty",
+    style: authAlertStyle,
     buttons: [
       DialogButton(
         onPressed: () => Navigator.pop(context),
         color: Color(0xFF4EABCC),
         child: Text(
           "Try Again!",
-          style: authFailedAlertTextStyle,
+          style: authAlertTextStyle,
+        ),
+      ),
+    ],
+  ).show();
+}
+
+void authSpecificAlert(BuildContext context, String msg) {
+  Alert(
+    context: context,
+    title: "Error!",
+    desc: msg,
+    style: authAlertStyle,
+    buttons: [
+      DialogButton(
+        onPressed: () => Navigator.pop(context),
+        color: Color(0xFF4EABCC),
+        child: Text(
+          "Try Again!",
+          style: authAlertTextStyle,
         ),
       ),
     ],

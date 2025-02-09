@@ -17,9 +17,8 @@ import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/login_auth.dart';
 import '../../services/register_auth.dart';
-import '../../utilities/components/alerts/auth_failed_alert.dart';
+import '../../utilities/components/alerts/auth_alerts.dart';
 import '../../utilities/components/alerts/no_internet_alert.dart';
 
 final double rightPadding = 25.0;
@@ -27,7 +26,6 @@ final double leftPadding = 25.0;
 final double logoWidth = 130.0;
 final double logoHeight = 130.0;
 final double logoTop = 15.0;
-final double between_textfields = 12.0;
 final double topPadding = 0;
 final double bottomPadding = 12.0;
 
@@ -96,7 +94,10 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
 }
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  TextEditingController register_firstName = TextEditingController();
+  TextEditingController register_lastName = TextEditingController();
+  TextEditingController register_email = TextEditingController();
+  TextEditingController register_password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -142,21 +143,25 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                         GrayTextfield(
+                          controller: register_firstName,
                           hintText: firstNameHint,
                           topPadding: 41,
                           bottomPadding: bottomPadding,
                         ),
                         GrayTextfield(
+                          controller: register_lastName,
                           hintText: lastNameHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
                         ),
                         GrayTextfield(
+                          controller: register_email,
                           hintText: emailHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
                         ),
                         GrayTextfield(
+                          controller: register_password,
                           hintText: passwordHint,
                           topPadding: topPadding,
                           bottomPadding: 13,
@@ -197,15 +202,34 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     InfiniteRoundWidthButton(
                       onPress: () async {
-                        bool authValue = registerAuthentication();
-                        if (authValue && await getInternetStatus()) {
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            '/Dashboard',
-                            (Route<dynamic> route) => false,
-                          );
-                        } else if (authValue == false) {
-                          authFailedAlert(context);
+                        var authValue = await registerAuthentication(
+                          context,
+                          register_firstName.text.trim(),
+                          register_lastName.text.trim(),
+                          register_email.text.trim(),
+                          register_password.text.trim(),
+                        );
+                        bool hasInternet = await getInternetStatus();
+                        if (hasInternet == true) {
+                          if (authValue == 'true') {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/Dashboard',
+                              (Route<dynamic> route) => false,
+                            );
+                          } else if (authValue == "emptyFields") {
+                            authEmptyFieldAlert(context);
+                          } else if (authValue == "emailAlreadyUsed") {
+                            authSpecificAlert(context, "Email Already in use.");
+                          } else if (authValue == 'invalidEmail') {
+                            authSpecificAlert(context, "Invalid Email syntax");
+                            // }
+                            // else if(authValue == 'invalidPasswordFormat'){
+                            //   authSpecificAlert(context,"Password must contain a lower case character, Password must contain an upper case character, Password must contain a non-alphanumeric character");
+                          } else if (authValue == 'unexpectedError') {
+                            authSpecificAlert(
+                                context, "Unexpected Error Occured");
+                          }
                         } else {
                           noInternetAlert(context);
                         }

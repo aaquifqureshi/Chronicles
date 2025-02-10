@@ -49,25 +49,40 @@ class Chronicles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isUserLoginActive = isLoginDone();
-    final bool isPinLoginRequired = isPinRequired();
+    return FutureBuilder(
+      future: _getHomeScreen(context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
 
-    Widget homeScreen;
-    if (isUserLoginActive) {
-      homeScreen = isPinLoginRequired ? PinLoginScreen() : Dashboard();
-    } else {
-      homeScreen = WelcomeScreen();
-    }
-
-    return MaterialApp(
-      theme: galacticOcean,
-      routes: {
-        '/WelcomeScreen': (context) => WelcomeScreen(),
-        '/Login': (context) => LoginScreen(),
-        '/Register': (context) => RegisterScreen(),
-        '/Dashboard': (context) => Dashboard(),
+        Widget? homeScreen = snapshot.data;
+        return MaterialApp(
+          theme: galacticOcean,
+          routes: {
+            '/WelcomeScreen': (context) => WelcomeScreen(),
+            '/Login': (context) => LoginScreen(),
+            '/Register': (context) => RegisterScreen(),
+            '/Dashboard': (context) => Dashboard(),
+          },
+          home: homeScreen,
+        );
       },
-      home: homeScreen,
     );
+  }
+}
+
+Future<Widget> _getHomeScreen(BuildContext context) async {
+  final bool isUserLoginActive = await isLoginDone();
+  final bool isPinLoginRequired = await isPinRequired();
+  print(isUserLoginActive);
+  print(isPinLoginRequired);
+  if (isUserLoginActive) {
+    return isPinLoginRequired ? PinLoginScreen() : Dashboard();
+  } else {
+    return WelcomeScreen();
   }
 }

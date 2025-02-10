@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chronicles/services/secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 Future<String> registerAuthentication(BuildContext context, String firstName,
@@ -10,6 +11,8 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
       lastName.isEmpty) {
     return 'emptyFields';
   }
+
+  SecureStorage storage = SecureStorage();
 
   try {
     UserCredential userCredential =
@@ -37,22 +40,27 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
         'join_date': Timestamp.now(),
         'theme_id': '',
       });
-
-      print("User document successfully created!");
     } catch (e) {
       print("Firestore Error: $e");
     }
-
+    storage.updateSecureData('isLoginDone', 'true');
+    storage.updateSecureData('isPinRequired', 'false');
     return 'true';
   } on FirebaseAuthException catch (e) {
     //print(e.message);
     if (e.code == 'email-already-in-use') {
+      storage.updateSecureData('isLoginDone', 'false');
+      storage.updateSecureData('isPinRequired', 'false');
       return 'emailAlreadyUsed';
     } else if (e.code == 'invalid-email') {
+      storage.updateSecureData('isLoginDone', 'false');
+      storage.updateSecureData('isPinRequired', 'false');
       return "invalidEmail";
       // }else if(e.message != null && e.message!.contains("PASSWORD_DOES_NOT_MEET_REQUIREMENTS")){
       //   return 'invalidPasswordFormat';
     }
+    storage.updateSecureData('isLoginDone', 'false');
+    storage.updateSecureData('isPinRequired', 'false');
     return 'unexpectedError';
   }
 }

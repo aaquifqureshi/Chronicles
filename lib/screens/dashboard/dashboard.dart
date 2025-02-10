@@ -1,12 +1,11 @@
 import 'package:chronicles/utilities/components/calender/streak_calender.dart';
-import 'package:chronicles/utilities/components/todo/todo_main.dart';
+import 'package:chronicles/screens/todo/todo_main.dart';
+import 'package:chronicles/screens/todo/todo_top_three.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
-
-import '../../utilities/components/todo/todo_top_three.dart';
 
 final String username = "trOlsz";
 
@@ -146,6 +145,7 @@ class _DashboardState extends State<Dashboard> {
                           builder: (context) => ToDoList(),
                         ),
                       );
+                      setState(() {});
                     },
                     icon: Icon(Icons.add),
                     style: IconButton.styleFrom(
@@ -164,7 +164,11 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   borderRadius: BorderRadius.circular(6.0),
                 ),
-                child: Top3ToDoList(),
+                child: SizedBox(
+                  height: 200.0,
+                  width: double.infinity,
+                  child: Top3ToDoList(),
+                ),
               ),
             ],
           ),

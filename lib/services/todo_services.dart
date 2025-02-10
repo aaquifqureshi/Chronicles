@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../utilities/components/todo/todo.dart';
+import 'package:chronicles/utilities/components/todo/todo.dart';
 
 class ToDoDatabaseService {
   static Database? _db;

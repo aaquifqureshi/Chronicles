@@ -49,3 +49,7 @@ flutter:
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto/static/Roboto-Regular.ttf
+    - family: Klee_One
+      fonts:
+        - asset: assets\fonts\Klee_One\KleeOne-Regular.ttf
+          weight: 500

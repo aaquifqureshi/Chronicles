@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/textfields/todo_textfield.dart';
 
 final kTextStyle = TextStyle(
+  fontFamily: 'Hind',
   fontSize: 20.0,
   color: Color(0xFFFFFFFF),
 );

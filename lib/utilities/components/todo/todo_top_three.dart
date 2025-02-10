@@ -8,12 +8,18 @@ class Top3ToDoList extends StatefulWidget {
   List<CheckboxWithLabel> top3TodoList = [
     CheckboxWithLabel(
       label: 'A',
+      index: 1,
+      checkboxValue: false,
     ),
     CheckboxWithLabel(
       label: 'B',
+      index: 2,
+      checkboxValue: false,
     ),
     CheckboxWithLabel(
       label: 'C',
+      index: 3,
+      checkboxValue: false,
     ),
   ];
 

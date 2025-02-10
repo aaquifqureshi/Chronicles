@@ -7,10 +7,17 @@ final checkboxLabelTextStyle = TextStyle(
 );
 
 class CheckboxWithLabel extends StatefulWidget {
-  String label = '';
+  int index;
   bool checkboxValue = false;
+  String label = 'XYZ';
+  TextEditingController text;
 
-  CheckboxWithLabel({super.key, required this.label});
+  CheckboxWithLabel({
+    super.key,
+    required this.label,
+    required this.index,
+    required this.checkboxValue,
+  }) : text = TextEditingController(text: label);
 
   @override
   State<CheckboxWithLabel> createState() => _CheckboxWithLabelState();
@@ -19,36 +26,44 @@ class CheckboxWithLabel extends StatefulWidget {
 class _CheckboxWithLabelState extends State<CheckboxWithLabel> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Checkbox(
-          value: widget.checkboxValue,
-          onChanged: (value) {
-            setState(
-              () {
-                widget.checkboxValue = value!;
-              },
-            );
-          },
-          checkColor: Color(0xFFFFFFFF),
-          activeColor: Color(0xFF4EABCC),
-          shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(5.0), // Adjust the radius as needed
+    return Container(
+      margin: EdgeInsets.only(bottom: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Checkbox(
+            value: widget.checkboxValue,
+            onChanged: (value) {
+              setState(
+                () {
+                  widget.checkboxValue = value!;
+                },
+              );
+            },
+            checkColor: Color(0xFFFFFFFF),
+            activeColor: Color(0xFF4EABCC),
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(5.0), // Adjust the radius as needed
+            ),
+            side: BorderSide(
+              color: Color(0xFF111519),
+              width: 2.0,
+            ),
           ),
-          side: BorderSide(
-            color: Color(0xFF111519),
-            width: 2.0,
+          SizedBox(
+            width: 10.0,
           ),
-        ),
-        SizedBox(
-          width: 10.0,
-        ),
-        Expanded(
-          child: TextField(),
-        ),
-      ],
+          Expanded(
+            child: TextField(
+              controller: widget.text,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

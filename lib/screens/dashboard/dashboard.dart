@@ -1,9 +1,12 @@
 import 'package:chronicles/utilities/components/calender/streak_calender.dart';
+import 'package:chronicles/utilities/components/todo/todo_main.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
+
+import '../../utilities/components/todo/todo_top_three.dart';
 
 final String username = "trOlsz";
 
@@ -41,6 +44,13 @@ final taskListTextStyle = TextStyle(
   fontSize: 16.0,
   fontFamily: 'Hind',
   fontWeight: FontWeight.w500,
+  color: Color(0xFF1F1F1F),
+);
+
+final taskTitleTextField = TextStyle(
+  fontSize: 32.0,
+  fontFamily: 'Hind',
+  fontWeight: FontWeight.bold,
   color: Color(0xFF1F1F1F),
 );
 
@@ -119,6 +129,42 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   child: StreakCalender(),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Task',
+                    style: taskTitleTextField,
+                  ),
+                  IconButton(
+                    color: Color(0xFFFFFFFF),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ToDoList(),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.add),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Color(0xFF4EABCC),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  border: Border.all(
+                    color: Color(0xFFDDDFE5),
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                child: Top3ToDoList(),
               ),
             ],
           ),

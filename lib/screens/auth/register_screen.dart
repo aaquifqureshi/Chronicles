@@ -160,10 +160,11 @@ class RegisterScreen extends StatelessWidget {
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
                         ),
-                        GrayTextfield(
+                        PasswordTextfield(
                           controller: register_password,
                           hintText: passwordHint,
                           topPadding: topPadding,
+                          isPassword: true,
                           bottomPadding: 13,
                         ),
                       ],
@@ -223,9 +224,6 @@ class RegisterScreen extends StatelessWidget {
                             authSpecificAlert(context, "Email Already in use.");
                           } else if (authValue == 'invalidEmail') {
                             authSpecificAlert(context, "Invalid Email syntax");
-                            // }
-                            // else if(authValue == 'invalidPasswordFormat'){
-                            //   authSpecificAlert(context,"Password must contain a lower case character, Password must contain an upper case character, Password must contain a non-alphanumeric character");
                           } else if (authValue == 'unexpectedError') {
                             authSpecificAlert(
                                 context, "Unexpected Error Occured");

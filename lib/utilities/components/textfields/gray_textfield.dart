@@ -76,3 +76,81 @@ class GrayTextfield extends StatelessWidget {
     );
   }
 }
+
+class PasswordTextfield extends StatefulWidget {
+  final String hintText;
+  final double topPadding;
+  final double bottomPadding;
+  final bool isPassword;
+  final TextEditingController controller;
+  PasswordTextfield({
+    this.topPadding = 0,
+    this.bottomPadding = 0,
+    required this.hintText,
+    this.isPassword = true,
+    required this.controller,
+  });
+  @override
+  State<PasswordTextfield> createState() => _PasswordTextfieldState();
+}
+
+class _PasswordTextfieldState extends State<PasswordTextfield> {
+  bool passwordVisible = true;
+  @override
+  final hintStyle = TextStyle(
+    color: Color(0xFF80858D),
+    fontFamily: "Hind",
+    fontWeight: FontWeight.w500,
+  );
+  final textFieldStyle = TextStyle(
+    fontSize: 16.0,
+    fontFamily: "Hind",
+    fontWeight: FontWeight.w500,
+  );
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          EdgeInsets.only(top: widget.topPadding, bottom: widget.bottomPadding),
+      child: TextField(
+        controller: widget.controller,
+        style: textFieldStyle,
+        obscureText: passwordVisible,
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          hintStyle: hintStyle,
+          filled: true,
+          fillColor: Color(0xFFF7F8FA),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: Color(0xFFDDDFE5),
+              width: 1.2,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: Color(0xFFDDDFE5),
+              width: 1.2,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: Color(0xFFFDDDFE5),
+              width: 1.2,
+            ),
+          ),
+          suffixIcon: IconButton(
+            icon:
+                Icon(passwordVisible ? Icons.visibility_off : Icons.visibility),
+            onPressed: () {
+              passwordVisible = !passwordVisible;
+              setState(() {});
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

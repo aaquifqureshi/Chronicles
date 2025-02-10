@@ -148,11 +148,12 @@ class LoginScreen extends StatelessWidget {
                           passwordText,
                           style: labelTextStyle,
                         ),
-                        GrayTextfield(
+                        PasswordTextfield(
                           controller: login_password,
                           hintText: passwordHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
+                          isPassword: true,
                         ),
                         Align(
                           alignment: Alignment.centerRight,

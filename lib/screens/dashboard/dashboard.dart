@@ -3,6 +3,7 @@ import 'package:chronicles/screens/todo/todo_main.dart';
 import 'package:chronicles/screens/todo/todo_top_three.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
+import 'package:chronicles/services/secure_storage.dart';
 
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
@@ -12,7 +13,7 @@ final String username = "trOlsz";
 final helloMsgStyle = TextStyle(
   height: 1.8,
   fontSize: 32.0,
-  fontFamily: 'Klee_One',
+  fontFamily: 'Abyssinica_SIL',
   fontWeight: FontWeight.w500,
   color: Color(0xFF1F1F1F),
 );
@@ -20,7 +21,7 @@ final helloMsgStyle = TextStyle(
 final usernameStyle = TextStyle(
   height: 1.8,
   fontSize: 32.0,
-  fontFamily: 'Klee_One',
+  fontFamily: 'Abyssinica_SIL',
   fontWeight: FontWeight.w500,
   color: Color(0xFF4EABCC),
 );
@@ -99,7 +100,15 @@ class _DashboardState extends State<Dashboard> {
                   Text(username, style: usernameStyle),
                 ],
               ),
-              ImageImport(width: 56, height: 56).importProfileIcon(),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.popAndPushNamed(context, '/');
+                    SecureStorage storage = SecureStorage();
+                    storage.updateSecureData('isLoginDone', 'false');
+                    storage.updateSecureData('isPinRequired', 'false');
+                  },
+                  child:
+                      ImageImport(width: 56, height: 56).importProfileIcon()),
             ],
           ),
         ),

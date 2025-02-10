@@ -2,7 +2,8 @@ import 'package:chronicles/utilities/components/calender/streak_calender.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 
-import '../../utilities/components/searchbar/boxSearchBar.dart';
+import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
+import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
 
 final String username = "trOlsz";
 
@@ -56,7 +57,14 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Color(0xFF4EABCC),
         shape: CircleBorder(),
         child: Icon(Icons.edit_outlined, color: Color(0xFFFFFFFF)),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TextEditor(),
+            ),
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: BottomAppBar(

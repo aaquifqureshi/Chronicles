@@ -50,7 +50,6 @@ final taskListTextStyle = TextStyle(
 final taskTitleTextField = TextStyle(
   fontSize: 24.0,
   fontFamily: 'Hind',
-  fontWeight: FontWeight.bold,
   color: Color(0xFF1F1F1F),
 );
 

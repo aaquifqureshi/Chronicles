@@ -47,7 +47,7 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : todos.isEmpty
-              ? const Center(child: Text('Nothing ToDo'))
+              ? const Center(child: Text('Nothing To Do'))
               : ListView.builder(
                   itemCount: todos.length,
                   itemBuilder: (context, index) {
@@ -55,15 +55,18 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
                     return ListTile(
                       title: Row(
                         children: [
-                          Checkbox(
-                            value: todo.status == 1,
-                            onChanged: (value) {
-                              setState(() {
-                                todo.status = value! ? 1 : 0;
-                                _updateTodoStatus(index, todo.status);
-                                _loadTodos();
-                              });
-                            },
+                          Transform.scale(
+                            scale: 1.1,
+                            child: Checkbox(
+                              value: todo.status == 1,
+                              onChanged: (value) {
+                                setState(() {
+                                  todo.status = value! ? 1 : 0;
+                                  _updateTodoStatus(index, todo.status);
+                                  _loadTodos();
+                                });
+                              },
+                            ),
                           ),
                           Expanded(
                             child: Text(todo.content),

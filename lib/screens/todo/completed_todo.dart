@@ -70,7 +70,7 @@ class _CompletedTodoState extends State<CompletedTodo> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Completed ToDo'),
+        title: const Text('Completed To Do'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -101,15 +101,19 @@ class _CompletedTodoState extends State<CompletedTodo> {
                                 key: ValueKey(todo.index),
                                 title: Row(
                                   children: [
-                                    Checkbox(
-                                      value: todo.status == 1,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          todo.status = value! ? 1 : 0;
-                                          _updateTodoStatus(index, todo.status);
-                                          _loadTodos();
-                                        });
-                                      },
+                                    Transform.scale(
+                                      scale: 1.1,
+                                      child: Checkbox(
+                                        value: todo.status == 1,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            todo.status = value! ? 1 : 0;
+                                            _updateTodoStatus(
+                                                index, todo.status);
+                                            _loadTodos();
+                                          });
+                                        },
+                                      ),
                                     ),
                                     Expanded(
                                       child: ToDoTextField(

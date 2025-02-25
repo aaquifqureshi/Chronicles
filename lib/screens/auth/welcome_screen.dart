@@ -153,7 +153,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 InfiniteRoundWidthButton(
                   onPress: () {
-                    if (isGoogleAuthenticationDone()) {
+                    if (GoogleAuthenticationDone()) {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/Dashboard',

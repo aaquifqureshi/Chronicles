@@ -1,3 +1,3 @@
-bool isGoogleAuthenticationDone() {
+bool GoogleAuthenticationDone() {
   return true;
 }

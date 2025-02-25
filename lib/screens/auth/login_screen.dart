@@ -174,7 +174,8 @@ class LoginScreen extends StatelessWidget {
                             );
                             bool hasInternet = await getInternetStatus();
                             if (hasInternet == true) {
-                              if (authValue == 'true') {
+                              if (authValue == 'true' &&
+                                  await getInternetStatus()) {
                                 Navigator.pushNamedAndRemoveUntil(
                                   context,
                                   '/Dashboard',

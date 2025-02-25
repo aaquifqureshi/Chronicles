@@ -36,7 +36,7 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
           .doc(userId)
           .set({
         'user_id': userId,
-        'username': '',
+        'username': firstName,
         'user_email': email,
         'user_firstname': firstName,
         'user_lastname': lastName,

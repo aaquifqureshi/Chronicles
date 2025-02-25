@@ -7,6 +7,7 @@ import 'package:chronicles/services/secure_storage.dart';
 
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 final String username = "trOlsz";
 
@@ -100,9 +101,13 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
               GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     Navigator.popAndPushNamed(context, '/');
                     SecureStorage storage = SecureStorage();
+                    GoogleSignIn googleSignIn = GoogleSignIn();
+
+                    await googleSignIn.signOut();
+
                     storage.updateSecureData('isLoginDone', 'false');
                     storage.updateSecureData('isPinRequired', 'false');
                   },

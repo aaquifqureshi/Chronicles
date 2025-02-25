@@ -12,7 +12,20 @@
           "package_name": "com.trOlsz.chronicles"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "164887569503-2fdmh6a1o4dop75o8hb2m4grmfq01p4k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trOlsz.chronicles",
+            "certificate_hash": "3681980e3acfad68f4f2ccfe56d3660961468aad"
+          }
+        },
+        {
+          "client_id": "164887569503-jbv42cerd49vodp3jmpj4t7mkvo71i59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCg_7j_ifQX08ASCNl1ZfDI46gbZbLHxCk"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164887569503-jbv42cerd49vodp3jmpj4t7mkvo71i59.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "164887569503-f4urs48b5kdcpj9peatl680appqo6icf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.trOlsz.chronicles"
+              }
+            }
+          ]
         }
       }
     }

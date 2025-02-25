@@ -174,21 +174,21 @@ class LoginScreen extends StatelessWidget {
                             );
                             bool hasInternet = await getInternetStatus();
                             if (hasInternet == true) {
-                              if (authValue == 'true' &&
-                                  await getInternetStatus()) {
+                              if (authValue == 'true') {
                                 Navigator.pushNamedAndRemoveUntil(
                                   context,
                                   '/Dashboard',
-                                  (Route<dynamic> route) => false,
+                                      (Route<dynamic> route) => false,
                                 );
                               } else if (authValue == "emptyFields") {
-                                authEmptyFieldAlert(context);
+                                authAlert(context,msg: "Fields cannot be empty",icon: Icons.error_outline);
+                              } else if (authValue == "invalidEmailDomain"){
+                                authAlert(context,msg:"Invalid Email",icon: Icons.error_outline);
                               } else if (authValue == "invalidCredentials") {
-                                authSpecificAlert(
-                                    context, "Email or Password is wrong");
-                              } else if (authValue == 'unexpectedError') {
-                                authSpecificAlert(
-                                    context, "Unexpected Error Occured");
+                                authAlert(context,msg:"Email or Password is wrong",icon: Icons.error_outline);
+                              }else if (authValue == 'unexpectedError') {
+                                authAlert(
+                                    context, msg:"Unexpected Error Occured",icon: Icons.error_outline);
                               }
                             } else {
                               noInternetAlert(context);
@@ -197,7 +197,7 @@ class LoginScreen extends StatelessWidget {
                           buttonLabel: Text(
                             loginText,
                             style:
-                                buttonLabelTextStyle(textColor: loginTextColor),
+                            buttonLabelTextStyle(textColor: loginTextColor),
                           ),
                           verticalMargin: verticalButtonMargin,
                           height: buttonHeight,

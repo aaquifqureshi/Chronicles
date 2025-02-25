@@ -1,5 +1,8 @@
+import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chronicles/services/secure_storage.dart';
+
+import 'email_verification.dart';
 
 Future<bool> isLoginDone() async {
   SecureStorage loginAuth = SecureStorage();
@@ -21,6 +24,11 @@ Future<String> loginAuthentication(
   if (email.isEmpty || password.isEmpty) {
     return 'emptyFields';
   }
+
+  if (!isValidEmail(email)) {
+    return 'invalidEmailDomain';
+  }
+
   SecureStorage storage = SecureStorage();
 
   try {

@@ -21,44 +21,52 @@ AlertStyle authAlertStyle = AlertStyle(
   ),
 );
 
-TextStyle authAlertTextStyle = TextStyle(
+TextStyle authAlertButtonStyle = TextStyle(
   fontFamily: 'Hind',
   color: Color(0xFFFFFFFF),
   fontSize: 20,
 );
 
-void authEmptyFieldAlert(BuildContext context) {
-  Alert(
-    context: context,
-    title: "Error!",
-    desc: "Fields cannot be empty",
-    style: authAlertStyle,
-    buttons: [
-      DialogButton(
-        onPressed: () => Navigator.pop(context),
-        color: Color(0xFF4EABCC),
-        child: Text(
-          "Try Again!",
-          style: authAlertTextStyle,
-        ),
-      ),
-    ],
-  ).show();
-}
+TextStyle authAlertTextStyle = TextStyle(
+  fontSize: 16.0,
+  fontFamily: "Hind",
+  fontWeight: FontWeight.w600,
+  color: Color(0xFF1F1F1F),
+);
 
-void authSpecificAlert(BuildContext context, String msg) {
+void authAlert(BuildContext context, {String msg = "", IconData? icon}) {
   Alert(
     context: context,
-    title: "Error!",
+    title: "Error",
     desc: msg,
     style: authAlertStyle,
+    // Error :
+    // I tried to put multiple icons in the alert but due to desc the text was printing before the icon.
+    // order it was printing : desc -> icon -> button
+    // order I wanted : icon -> desc(Text) -> button
+
+    // content: Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   children: [
+    //     Icon(
+    //       icon ?? Icons.warning,
+    //       size: 50,
+    //       color: Colors.red,
+    //     ),
+    //     SizedBox(height: 10),
+    //     Text(
+    //       msg,
+    //       style: authAlertTextStyle,
+    //     ),
+    //   ],
+    // ),
     buttons: [
       DialogButton(
         onPressed: () => Navigator.pop(context),
         color: Color(0xFF4EABCC),
         child: Text(
           "Try Again!",
-          style: authAlertTextStyle,
+          style: authAlertButtonStyle,
         ),
       ),
     ],

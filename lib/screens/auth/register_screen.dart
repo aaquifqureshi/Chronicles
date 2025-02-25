@@ -216,17 +216,18 @@ class RegisterScreen extends StatelessWidget {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/Dashboard',
-                              (Route<dynamic> route) => false,
+                                  (Route<dynamic> route) => false,
                             );
                           } else if (authValue == "emptyFields") {
-                            authEmptyFieldAlert(context);
+                            authAlert(context,msg: "Fields cannot be empty",icon: Icons.error_outline);
                           } else if (authValue == "emailAlreadyUsed") {
-                            authSpecificAlert(context, "Email Already in use.");
-                          } else if (authValue == 'invalidEmail') {
-                            authSpecificAlert(context, "Invalid Email syntax");
-                          } else if (authValue == 'unexpectedError') {
-                            authSpecificAlert(
-                                context, "Unexpected Error Occured");
+                            authAlert(context,msg: "Email Already in use.",icon: Icons.email_sharp);
+                          } else if(authValue == "invalidEmailDomain") {
+                            authAlert(context,msg: "Wrong Email syntax.",icon: Icons.error_outline);
+                          }
+                          else if (authValue == 'unexpectedError') {
+                            authAlert(
+                                context,msg:"Unexpected Error Occured",icon: Icons.error_outline);
                           }
                         } else {
                           noInternetAlert(context);

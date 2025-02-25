@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chronicles/services/secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../utilities/components/alerts/auth_alerts.dart';
+import 'email_verification.dart';
+
 Future<String> registerAuthentication(BuildContext context, String firstName,
     String lastName, String email, String password) async {
   if (email.isEmpty ||
@@ -12,6 +15,9 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
     return 'emptyFields';
   }
 
+  if (!isValidEmail(email)) {
+    return 'invalidEmailDomain';
+  }
   SecureStorage storage = SecureStorage();
 
   try {
@@ -52,15 +58,11 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
       storage.updateSecureData('isLoginDone', 'false');
       storage.updateSecureData('isPinRequired', 'false');
       return 'emailAlreadyUsed';
-    } else if (e.code == 'invalid-email') {
-      storage.updateSecureData('isLoginDone', 'false');
-      storage.updateSecureData('isPinRequired', 'false');
-      return "invalidEmail";
-      // }else if(e.message != null && e.message!.contains("PASSWORD_DOES_NOT_MEET_REQUIREMENTS")){
-      //   return 'invalidPasswordFormat';
     }
-    storage.updateSecureData('isLoginDone', 'false');
-    storage.updateSecureData('isPinRequired', 'false');
-    return 'unexpectedError';
+    // }else if(e.message != null && e.message!.contains("PASSWORD_DOES_NOT_MEET_REQUIREMENTS")){
+    //   return 'invalidPasswordFormat';
   }
+  storage.updateSecureData('isLoginDone', 'false');
+  storage.updateSecureData('isPinRequired', 'false');
+  return 'unexpectedError';
 }

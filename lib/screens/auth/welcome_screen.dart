@@ -152,8 +152,9 @@ class WelcomeScreen extends StatelessWidget {
                   splashColor: loginRegisterSplashColor,
                 ),
                 InfiniteRoundWidthButton(
-                  onPress: () {
-                    if (GoogleAuthenticationDone()) {
+                  onPress: () async {
+                    bool success = await GoogleAuthenticationDone();
+                    if (success) {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/Dashboard',

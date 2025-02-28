@@ -8,8 +8,7 @@ import 'package:chronicles/services/secure_storage.dart';
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-final String username = "trOlsz";
+import '../../utilities/components/profile/fetch_username.dart';
 
 final helloMsgStyle = TextStyle(
   height: 1.8,
@@ -60,6 +59,16 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  String username = "Loading...";
+  void initState() {
+    super.initState();
+
+    UserService.getUsername().then((fetchedUsername) {
+      setState(() {
+        username = fetchedUsername;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +106,7 @@ class _DashboardState extends State<Dashboard> {
                     "Hello,",
                     style: helloMsgStyle,
                   ),
-                  Text(username, style: usernameStyle),
+                  Text(username,style:usernameStyle,),
                 ],
               ),
               GestureDetector(
@@ -111,8 +120,7 @@ class _DashboardState extends State<Dashboard> {
                     storage.updateSecureData('isLoginDone', 'false');
                     storage.updateSecureData('isPinRequired', 'false');
                   },
-                  child:
-                      ImageImport(width: 56, height: 56).importProfileIcon()),
+                  child: ImageImport(width: 56, height: 56).importProfileIcon()),
             ],
           ),
         ),

@@ -93,11 +93,19 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
   );
 }
 
+TextEditingController register_firstName = TextEditingController();
+TextEditingController register_lastName = TextEditingController();
+TextEditingController register_email = TextEditingController();
+TextEditingController register_password = TextEditingController();
+
+void clearTextFields() {
+  register_firstName.clear();
+  register_lastName.clear();
+  register_email.clear();
+  register_password.clear();
+}
+
 class RegisterScreen extends StatelessWidget {
-  TextEditingController register_firstName = TextEditingController();
-  TextEditingController register_lastName = TextEditingController();
-  TextEditingController register_email = TextEditingController();
-  TextEditingController register_password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +123,7 @@ class RegisterScreen extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(Icons.arrow_back),
                       onPressed: () {
+                        clearTextFields();
                         Navigator.pop(context);
                       },
                     ),
@@ -160,7 +169,7 @@ class RegisterScreen extends StatelessWidget {
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
                         ),
-                        PasswordTextfield(
+                        GrayTextfield(
                           controller: register_password,
                           hintText: passwordHint,
                           topPadding: topPadding,
@@ -219,15 +228,15 @@ class RegisterScreen extends StatelessWidget {
                                   (Route<dynamic> route) => false,
                             );
                           } else if (authValue == "emptyFields") {
-                            authAlert(context,msg: "Fields cannot be empty",icon: Icons.error_outline);
+                            authAlert(context,message: "Fields cannot be empty",icon: Icons.error_outline);
                           } else if (authValue == "emailAlreadyUsed") {
-                            authAlert(context,msg: "Email Already in use.",icon: Icons.email_sharp);
-                          } else if(authValue == "invalidEmailDomain") {
-                            authAlert(context,msg: "Wrong Email syntax.",icon: Icons.error_outline);
+                            authAlert(context,message: "Email Already in use.",icon: Icons.warning_amber,iconColor: Colors.orangeAccent);
+                          } else if(authValue == "invalidEmailSyntax") {
+                            authAlert(context,message: "Invalid Email syntax.",icon: Icons.warning_amber,iconColor: Colors.orangeAccent);
                           }
                           else if (authValue == 'unexpectedError') {
                             authAlert(
-                                context,msg:"Unexpected Error Occured",icon: Icons.error_outline);
+                                context,message:"Unexpected Error Occured",icon: Icons.error_outline);
                           }
                         } else {
                           noInternetAlert(context);
@@ -252,6 +261,7 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
+                            clearTextFields();
                             Navigator.popAndPushNamed(context, '/Login');
                           },
                           child: Text(

@@ -1,8 +1,5 @@
-import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chronicles/services/secure_storage.dart';
-
-import 'email_verification.dart';
 
 Future<bool> isLoginDone() async {
   SecureStorage loginAuth = SecureStorage();
@@ -25,24 +22,27 @@ Future<String> loginAuthentication(
     return 'emptyFields';
   }
 
-  if (!isValidEmail(email)) {
-    return 'invalidEmailDomain';
-  }
-
   SecureStorage storage = SecureStorage();
 
   try {
     UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
+
+    String userId = userCredential.user!.uid;
+
+    await storage.updateSecureData('user_id', userId);
     storage.updateSecureData('isLoginDone', 'true');
     return 'true';
   } on FirebaseAuthException catch (e) {
     if (e.code == 'invalid-credential') {
       storage.updateSecureData('isLoginDone', 'false');
       return "invalidCredentials";
+    }else if(e.code == 'invalid-email'){
+      storage.updateSecureData('isLoginDone', 'false');
+      return "invalidEmailSyntax";
     }
     storage.updateSecureData('isLoginDone', 'false');
     return "unexpectedError";

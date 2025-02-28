@@ -11,6 +11,8 @@
 *
 */
 
+import 'package:chronicles/screens/auth/change_password.dart';
+import 'package:chronicles/screens/auth/forgot_password_screen.dart';
 import 'package:chronicles/screens/auth/login_screen.dart';
 import 'package:chronicles/screens/auth/pin_login_screen.dart';
 import 'package:chronicles/screens/auth/register_screen.dart';
@@ -19,7 +21,6 @@ import 'package:chronicles/screens/dashboard/dashboard.dart';
 import 'package:chronicles/services/login_auth.dart';
 import 'package:chronicles/services/pin_auth.dart';
 import 'package:chronicles/themes/galactic_ocean.dart';
-import 'package:chronicles/screens/waiting_screen/waiting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,6 @@ import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -38,6 +37,12 @@ void main() async {
 
   runApp(
     Chronicles(),
+  );
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [
+      SystemUiOverlay.top,
+    ],
   );
 }
 
@@ -50,12 +55,10 @@ class Chronicles extends StatelessWidget {
       future: _getHomeScreen(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return waitingScreen();
+          return CircularProgressIndicator();
         }
         if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         Widget? homeScreen = snapshot.data;
@@ -66,6 +69,8 @@ class Chronicles extends StatelessWidget {
             '/Login': (context) => LoginScreen(),
             '/Register': (context) => RegisterScreen(),
             '/Dashboard': (context) => Dashboard(),
+            '/ForgotPassword': (context) => ForgotPasswordScreen(),
+            '/ChangePassword': (context) => ChangePasswordScreen(),
           },
           home: homeScreen,
         );
@@ -77,7 +82,8 @@ class Chronicles extends StatelessWidget {
 Future<Widget> _getHomeScreen(BuildContext context) async {
   final bool isUserLoginActive = await isLoginDone();
   final bool isPinLoginRequired = await isPinRequired();
-
+  print(isUserLoginActive);
+  print(isPinLoginRequired);
   if (isUserLoginActive) {
     return isPinLoginRequired ? PinLoginScreen() : Dashboard();
   } else {

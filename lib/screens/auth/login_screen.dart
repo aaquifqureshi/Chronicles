@@ -11,6 +11,7 @@
 *
 */
 
+import 'package:chronicles/screens/auth/forgot_password_screen.dart';
 import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:chronicles/services/login_auth.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
@@ -86,10 +87,15 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
   );
 }
 
-class LoginScreen extends StatelessWidget {
-  TextEditingController login_email = TextEditingController();
-  TextEditingController login_password = TextEditingController();
+TextEditingController login_email = TextEditingController();
+TextEditingController login_password = TextEditingController();
 
+void clearTextFields() {
+  login_email.clear();
+  login_password.clear();
+}
+
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +112,7 @@ class LoginScreen extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(Icons.arrow_back),
                       onPressed: () {
+                        clearTextFields();
                         Navigator.of(context).pop();
                       },
                     ),
@@ -148,7 +155,7 @@ class LoginScreen extends StatelessWidget {
                           passwordText,
                           style: labelTextStyle,
                         ),
-                        PasswordTextfield(
+                        GrayTextfield(
                           controller: login_password,
                           hintText: passwordHint,
                           topPadding: topPadding,
@@ -158,7 +165,13 @@ class LoginScreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordScreen(),
+                                ),
+                              );
+                            },
                             child: Text(
                               forgotPasswordText,
                               style: forgotPasswordStyle,
@@ -181,14 +194,14 @@ class LoginScreen extends StatelessWidget {
                                       (Route<dynamic> route) => false,
                                 );
                               } else if (authValue == "emptyFields") {
-                                authAlert(context,msg: "Fields cannot be empty",icon: Icons.error_outline);
-                              } else if (authValue == "invalidEmailDomain"){
-                                authAlert(context,msg:"Invalid Email",icon: Icons.error_outline);
+                                authAlert(context,message: "Fields cannot be empty",icon: Icons.error_outline);
+                              } else if (authValue == "invalidEmailSyntax"){
+                                authAlert(context,message:"Invalid Email Syntax",icon: Icons.warning_amber,iconColor: Colors.orangeAccent);
                               } else if (authValue == "invalidCredentials") {
-                                authAlert(context,msg:"Email or Password is wrong",icon: Icons.error_outline);
+                                authAlert(context,message:"Email or Password is wrong",icon: Icons.error_outline);
                               }else if (authValue == 'unexpectedError') {
                                 authAlert(
-                                    context, msg:"Unexpected Error Occured",icon: Icons.error_outline);
+                                    context, message:"Unexpected Error Occured",icon: Icons.error_outline);
                               }
                             } else {
                               noInternetAlert(context);
@@ -214,6 +227,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
+                                clearTextFields();
                                 Navigator.popAndPushNamed(context, '/Register');
                               },
                               child: Text(

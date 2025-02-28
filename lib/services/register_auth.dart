@@ -3,9 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chronicles/services/secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../utilities/components/alerts/auth_alerts.dart';
-import 'email_verification.dart';
-
 Future<String> registerAuthentication(BuildContext context, String firstName,
     String lastName, String email, String password) async {
   if (email.isEmpty ||
@@ -15,20 +12,15 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
     return 'emptyFields';
   }
 
-  if (!isValidEmail(email)) {
-    return 'invalidEmailDomain';
-  }
   SecureStorage storage = SecureStorage();
 
   try {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
     String userId = userCredential.user!.uid;
-    print(userId);
 
     try {
       await FirebaseFirestore.instance
@@ -49,15 +41,19 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
     } catch (e) {
       print("Firestore Error: $e");
     }
+
+    await storage.updateSecureData('user_id', userId);
     storage.updateSecureData('isLoginDone', 'true');
     storage.updateSecureData('isPinRequired', 'false');
     return 'true';
   } on FirebaseAuthException catch (e) {
-    //print(e.message);
     if (e.code == 'email-already-in-use') {
       storage.updateSecureData('isLoginDone', 'false');
       storage.updateSecureData('isPinRequired', 'false');
       return 'emailAlreadyUsed';
+    }else if(e.code == 'invalid-email'){
+      storage.updateSecureData('isLoginDone', 'false');
+      return "invalidEmailSyntax";
     }
     // }else if(e.message != null && e.message!.contains("PASSWORD_DOES_NOT_MEET_REQUIREMENTS")){
     //   return 'invalidPasswordFormat';

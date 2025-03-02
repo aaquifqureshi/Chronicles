@@ -15,7 +15,8 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
   SecureStorage storage = SecureStorage();
 
   try {
-    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    UserCredential userCredential =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -51,7 +52,7 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
       storage.updateSecureData('isLoginDone', 'false');
       storage.updateSecureData('isPinRequired', 'false');
       return 'emailAlreadyUsed';
-    }else if(e.code == 'invalid-email'){
+    } else if (e.code == 'invalid-email') {
       storage.updateSecureData('isLoginDone', 'false');
       return "invalidEmailSyntax";
     }

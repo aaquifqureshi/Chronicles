@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:streak_calendar/streak_calendar.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+
+import '../../../services/secure_storage.dart';
 
 class StreakCalender extends StatefulWidget {
   StreakCalender({super.key});
@@ -21,9 +26,21 @@ class _StreakCalenderState extends State<StreakCalender> {
     initDatabase();
   }
 
+  static Future<Directory> _getAppDocumentsDirectory() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory;
+  }
+
   Future<void> initDatabase() async {
+    SecureStorage storage = SecureStorage();
+    String user_id = await storage.readSecureData('user_id');
+
+    Directory appDocDir = await _getAppDocumentsDirectory();
+    String streakDB =
+        '${appDocDir.path}/$user_id/${getDatabasesPath()}/streaks.db';
+
     _database = await openDatabase(
-      join(await getDatabasesPath(), 'streaks.db'),
+      streakDB,
       onCreate: (db, version) {
         return db.execute(
           "CREATE TABLE streaks(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT UNIQUE)",

@@ -1,13 +1,295 @@
+import 'package:chronicles/services/file_database.dart';
+import 'package:chronicles/utilities/components/text_editor/editor_textbox.dart';
 import 'package:flutter/material.dart';
+import 'package:chronicles/utilities/components/date_time/current_datetime.dart';
 
-class TextEditor extends StatelessWidget {
-  const TextEditor({super.key});
+import 'package:chronicles/services/file_manager.dart';
+
+final titleTextStyle = TextStyle(
+  color: Color(0xFF1F1F1F),
+  fontFamily: 'Hind',
+  fontWeight: FontWeight.w600,
+  fontSize: 22.0,
+);
+
+class TextEditor extends StatefulWidget {
+  String? fileName;
+  int? milliSinceEpoch;
+  bool? isModify;
+  TextEditor({super.key, this.fileName, this.isModify});
+
+  @override
+  State<TextEditor> createState() => _TextEditorState();
+}
+
+class _TextEditorState extends State<TextEditor> {
+  List<TextEditingController> controllers = [];
+  List<bool> editModes = [];
+  TextEditingController titleController = TextEditingController();
+
+  final FileDatabase _fileDB = FileDatabase.instance;
+
+  String createdAt = '';
+  String modifiedAt = '';
+  late CurrentDateTime nowTime;
+  @override
+  void initState() {
+    if (widget.fileName == null) {
+      controllers.add(TextEditingController());
+      editModes.add(true);
+
+      nowTime = CurrentDateTime();
+      String weekday = nowTime.getCurrentWeekDay();
+      int day = nowTime.getCurrentDay();
+      String month = nowTime.getCurrentMonth();
+      int year = nowTime.getCurrentYear();
+
+      createdAt = '$weekday, $day-$month-$year';
+      modifiedAt = '$weekday, $day-$month-$year';
+    } else {
+      _loadFile(widget.fileName!);
+    }
+    super.initState();
+  }
+
+  void _saveFileToDB(
+      {required int milliSinceEpoch,
+      required String title,
+      required String content,
+      required String lastModified,
+      required String createdAt}) {
+    _fileDB.saveFileToDatabase(
+        fileNameInMillisSinceEpoch: milliSinceEpoch,
+        title: title,
+        content: content,
+        lastModified: lastModified,
+        createdAt: createdAt);
+  }
+
+  void _updateFileToDB({
+    required int milliSinceEpoch,
+    required String title,
+    required String content,
+    required String lastModified,
+  }) {
+    _fileDB.updateFile(
+      id: milliSinceEpoch,
+      title: title,
+      content: content,
+      modifiedAt: lastModified,
+    );
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final TextEditingController controller = controllers.removeAt(oldIndex);
+      final bool editMode = editModes.removeAt(oldIndex);
+      controllers.insert(newIndex, controller);
+      editModes.insert(newIndex, editMode);
+    });
+  }
+
+  void _insertController() {
+    setState(() {
+      controllers.add(TextEditingController());
+      editModes.add(true);
+    });
+  }
+
+  void _deleteController(int index) {
+    setState(() {
+      controllers.removeAt(index);
+      editModes.removeAt(index);
+    });
+  }
+
+  void _toggleEditMode(int index) {
+    setState(() {
+      editModes[index] = !editModes[index];
+
+      if (index > 0) {
+        _removeController();
+      }
+    });
+  }
+
+  void _removeController() {
+    setState(() {
+      for (int i = 0; i < controllers.length; i++) {
+        if (controllers[i].text.isEmpty) {
+          _deleteController(i);
+        }
+      }
+    });
+  }
+
+  void _saveFile() {
+    setState(() {
+      if (widget.isModify == false) {
+        String fileName = '${nowTime.getMilliSecondSinceEpoch()}.json';
+
+        _saveFileToDB(
+          milliSinceEpoch: nowTime.getMilliSecondSinceEpoch(),
+          title: titleController.text,
+          content: controllers[0].text.length >= 25
+              ? controllers[0].text.substring(0, 25)
+              : controllers[0].text,
+          lastModified: modifiedAt,
+          createdAt: createdAt,
+        );
+        FileManager.saveFileAsJson(
+          title: titleController.text,
+          createDate: createdAt,
+          modifyDate: modifiedAt,
+          controller: controllers,
+          milliSinceEpoch: nowTime.getMilliSecondSinceEpoch(),
+        );
+      } else if (widget.fileName != null) {
+        int milliSinceEpoch =
+            int.parse(widget.fileName!.replaceAll('.json', ''));
+        _updateFileToDB(
+          milliSinceEpoch: milliSinceEpoch,
+          title: titleController.text,
+          content: controllers[0].text.length >= 25
+              ? controllers[0].text.substring(0, 25)
+              : controllers[0].text,
+          lastModified: modifiedAt,
+        );
+
+        FileManager.modifyJsonFile(
+          fileName: widget.fileName!,
+          title: titleController.text,
+          createDate: createdAt,
+          modifyDate: modifiedAt,
+          controller: controllers,
+        );
+      }
+    });
+  }
+
+  void _loadFile(String fileName) {
+    setState(() {
+      FileManager.loadJsonFile(fileName).then((fileData) {
+        if (fileData != null) {
+          setState(() {
+            titleController.text = fileData['title'];
+            createdAt = fileData['createdAt'];
+            modifiedAt = fileData['modifiedAt'];
+            controllers = List.generate(
+              fileData['controllers'].length,
+              (index) =>
+                  TextEditingController(text: fileData['controllers'][index]),
+            );
+            editModes = List.filled(controllers.length, false);
+          });
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Text Editor'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(createdAt),
+            IconButton(
+              onPressed: () {
+                _saveFile();
+              },
+              icon: Icon(Icons.upload, color: Colors.white),
+              style: IconButton.styleFrom(backgroundColor: Color(0xFF4EABCC)),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/Dashboard',
+              (Route<dynamic> route) => false,
+            );
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+              child: TextField(
+                style: titleTextStyle,
+                controller: titleController,
+                decoration: InputDecoration(hintText: 'Title'),
+              ),
+            ),
+            const SizedBox(height: 30.0),
+            ReorderableListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: controllers.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  minVerticalPadding: 0.0,
+                  key: ValueKey(controllers[index]),
+                  leading: Icon(
+                    Icons.drag_indicator,
+                    color: Color(0xFF4EABCC),
+                  ),
+                  title: EditorTextBox(
+                    controller: controllers[index],
+                    editMode: editModes[index],
+                    onToggleEdit: () => _toggleEditMode(index),
+                    onDelete: () => _deleteController(index),
+                  ),
+                );
+              },
+              onReorder: _onReorder,
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Container(
+              padding: EdgeInsets.only(right: 18.0),
+              margin: EdgeInsets.only(bottom: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    color: Color(0x104EABCC),
+                    child: MaterialButton(
+                      onPressed: _insertController,
+                      child: Icon(
+                        Icons.text_fields,
+                        color: Color(0xFF4EABCC),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Container(
+                    color: Color(0x104EABCC),
+                    child: MaterialButton(
+                      onPressed: () {},
+                      child: Icon(
+                        Icons.image,
+                        color: Color(0xFF4EABCC),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

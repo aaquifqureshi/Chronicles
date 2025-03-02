@@ -1,0 +1,15 @@
+class FileData {
+  late int millisecondSinceEpoch;
+  late String title;
+  late String content;
+  late String modifiedAt;
+  late String createdAt;
+
+  FileData({
+    required this.millisecondSinceEpoch,
+    required this.title,
+    required this.content,
+    required this.modifiedAt,
+    required this.createdAt,
+  });
+}

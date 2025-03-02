@@ -9,6 +9,7 @@ import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../utilities/components/profile/fetch_username.dart';
+import '../../utilities/components/text_editor/top_2_recent_diaries.dart';
 
 final helloMsgStyle = TextStyle(
   height: 1.8,
@@ -69,6 +70,7 @@ class _DashboardState extends State<Dashboard> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +82,9 @@ class _DashboardState extends State<Dashboard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TextEditor(),
+              builder: (context) => TextEditor(
+                isModify: false,
+              ),
             ),
           );
         },
@@ -106,7 +110,10 @@ class _DashboardState extends State<Dashboard> {
                     "Hello,",
                     style: helloMsgStyle,
                   ),
-                  Text(username,style:usernameStyle,),
+                  Text(
+                    username,
+                    style: usernameStyle,
+                  ),
                 ],
               ),
               GestureDetector(
@@ -120,7 +127,8 @@ class _DashboardState extends State<Dashboard> {
                     storage.updateSecureData('isLoginDone', 'false');
                     storage.updateSecureData('isPinRequired', 'false');
                   },
-                  child: ImageImport(width: 56, height: 56).importProfileIcon()),
+                  child:
+                      ImageImport(width: 56, height: 56).importProfileIcon()),
             ],
           ),
         ),
@@ -192,6 +200,33 @@ class _DashboardState extends State<Dashboard> {
                   height: 200.0,
                   width: double.infinity,
                   child: Top3ToDoList(),
+                ),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Recent',
+                  style: taskTitleTextField,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 6.0),
+                padding: EdgeInsets.fromLTRB(10.0, 20.0, 20.0, 10.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  border: Border.all(
+                    color: Color(0x40000000),
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                child: SizedBox(
+                  height: 200.0,
+                  width: double.infinity,
+                  child: Top2RecentDiaries(),
                 ),
               ),
             ],

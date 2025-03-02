@@ -70,6 +70,16 @@ class _ToDoListState extends State<ToDoList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('To Do'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/Dashboard',
+              (Route<dynamic> route) => false,
+            );
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -1,6 +1,7 @@
+import 'package:chronicles/services/secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import 'package:chronicles/utilities/components/todo/todo.dart';
 
 class ToDoDatabaseService {
@@ -24,9 +25,19 @@ class ToDoDatabaseService {
     return _db!;
   }
 
+  static Future<Directory> _getAppDocumentsDirectory() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory;
+  }
+
   Future<Database> getDatabase() async {
+    SecureStorage storage = SecureStorage();
+    String user_id = await storage.readSecureData('user_id');
+
+    Directory appDocDir = await _getAppDocumentsDirectory();
+
     final dbDirPath = await getDatabasesPath();
-    final dbPath = join(dbDirPath, "todo_database.db");
+    final dbPath = '${appDocDir.path}/$user_id/$dbDirPath/todo_database.db';
     final database = await openDatabase(
       dbPath,
       version: 1,

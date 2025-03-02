@@ -41,9 +41,19 @@ class _ToDoTextFieldState extends State<ToDoTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _textController,
+      style: TextStyle(
+        fontFamily: "Hind",
+        fontWeight: FontWeight.w500,
+        fontSize: 17,
+      ),
       onChanged: widget.onChanged,
       decoration: const InputDecoration(
         hintText: 'Enter a Task',
+        hintStyle: TextStyle(
+          fontFamily: "Hind",
+          fontSize: 16,
+        ),
+        border: InputBorder.none,
       ),
     );
   }

@@ -1,10 +1,9 @@
 import 'package:chronicles/utilities/components/calender/streak_calender.dart';
-import 'package:chronicles/screens/todo/todo_main.dart';
 import 'package:chronicles/screens/todo/todo_top_three.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/services/secure_storage.dart';
-
+import 'package:chronicles/screens/todo/todo_screen.dart';
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -50,6 +49,7 @@ final taskListTextStyle = TextStyle(
 
 final taskTitleTextField = TextStyle(
   fontSize: 24.0,
+  fontWeight: FontWeight.w500,
   fontFamily: 'Hind',
   color: Color(0xFF1F1F1F),
 );
@@ -172,7 +172,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ToDoList(),
+                          builder: (context) => ToDoScreen(),
                         ),
                       );
                       setState(() {});
@@ -187,7 +187,7 @@ class _DashboardState extends State<Dashboard> {
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 6.0),
-                padding: EdgeInsets.fromLTRB(10.0, 20.0, 20.0, 10.0),
+                padding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                 decoration: BoxDecoration(
                   color: Color(0xFFFFFFFF),
                   border: Border.all(

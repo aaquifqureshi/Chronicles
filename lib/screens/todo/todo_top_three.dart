@@ -47,7 +47,17 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : todos.isEmpty
-              ? const Center(child: Text('Nothing To Do'))
+              ? const Center(
+                  child: Text(
+                    'Nothing To Do',
+                    style: TextStyle(
+                      fontFamily: "Hind",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Color(0x40000000),
+                    ),
+                  ),
+                )
               : ListView.builder(
                   itemCount: todos.length,
                   itemBuilder: (context, index) {

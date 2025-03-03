@@ -10,8 +10,8 @@ final textEditorStyle = TextStyle(
 class EditorTextBox extends StatelessWidget {
   final TextEditingController controller;
   final bool editMode;
-  final VoidCallback onToggleEdit;
-  final VoidCallback onDelete;
+  final void Function() onToggleEdit;
+  final void Function() onDelete;
 
   EditorTextBox({
     super.key,

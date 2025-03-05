@@ -18,6 +18,7 @@ import 'package:chronicles/screens/auth/pin_login_screen.dart';
 import 'package:chronicles/screens/auth/register_screen.dart';
 import 'package:chronicles/screens/auth/welcome_screen.dart';
 import 'package:chronicles/screens/dashboard/dashboard.dart';
+import 'package:chronicles/screens/profile/profile_screen.dart';
 import 'package:chronicles/services/login_auth.dart';
 import 'package:chronicles/services/pin_auth.dart';
 import 'package:chronicles/themes/galactic_ocean.dart';
@@ -71,6 +72,7 @@ class Chronicles extends StatelessWidget {
             '/Dashboard': (context) => Dashboard(),
             '/ForgotPassword': (context) => ForgotPasswordScreen(),
             '/ChangePassword': (context) => ChangePasswordScreen(),
+            '/ProfileScreen': (context) => ProfileScreen(),
           },
           home: homeScreen,
         );

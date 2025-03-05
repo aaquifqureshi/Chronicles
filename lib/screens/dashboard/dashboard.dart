@@ -2,11 +2,9 @@ import 'package:chronicles/utilities/components/calender/streak_calender.dart';
 import 'package:chronicles/screens/todo/todo_top_three.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
-import 'package:chronicles/services/secure_storage.dart';
 import 'package:chronicles/screens/todo/todo_screen.dart';
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../../utilities/components/profile/fetch_username.dart';
 import '../../utilities/components/text_editor/top_2_recent_diaries.dart';
 
@@ -117,18 +115,13 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
               GestureDetector(
-                  onTap: () async {
-                    Navigator.popAndPushNamed(context, '/');
-                    SecureStorage storage = SecureStorage();
-                    GoogleSignIn googleSignIn = GoogleSignIn();
-
-                    await googleSignIn.signOut();
-
-                    storage.updateSecureData('isLoginDone', 'false');
-                    storage.updateSecureData('isPinRequired', 'false');
+                  onTap: () {
+                    Navigator.pushNamed(context, '/ProfileScreen').then((_) {
+                      setState(() {});
+                    });
                   },
                   child:
-                      ImageImport(width: 56, height: 56).importProfileIcon()),
+                  ImageImport(width: 56, height: 56).importProfileIcon()),
             ],
           ),
         ),

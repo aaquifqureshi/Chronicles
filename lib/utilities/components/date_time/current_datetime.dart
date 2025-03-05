@@ -5,6 +5,10 @@ class CurrentDateTime {
     return now.millisecondsSinceEpoch;
   }
 
+  DateTime convertMilliSecondsSinceEpochToDateTime(int milliSecondsSinceEpoch) {
+    return DateTime.fromMillisecondsSinceEpoch(milliSecondsSinceEpoch);
+  }
+
   int getCurrentDay() {
     return now.day;
   }

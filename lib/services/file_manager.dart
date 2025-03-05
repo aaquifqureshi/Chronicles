@@ -95,4 +95,29 @@ class FileManager {
 
     await file.writeAsString(jsonData);
   }
+
+  static Future<void> deleteJsonFile({required String fileName}) async {
+    SecureStorage storage = SecureStorage();
+    String user_id = await storage.readSecureData('user_id');
+
+    Directory appDocDir = await _getAppDocumentsDirectory();
+    Directory diaryDir =
+        Directory('${appDocDir.path}/$user_id/$_diaryFolderName');
+
+    if (!await diaryDir.exists()) {
+      await diaryDir.create(recursive: true);
+    }
+    File file = File('${diaryDir.path}/$fileName');
+
+    if (await file.exists()) {
+      try {
+        await file.delete();
+        print('File Deleted');
+      } catch (e) {
+        print('File Not Deleted');
+      }
+    } else {
+      print('File Not Found');
+    }
+  }
 }

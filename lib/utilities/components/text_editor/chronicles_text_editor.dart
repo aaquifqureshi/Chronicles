@@ -34,11 +34,11 @@ class _TextEditorState extends State<TextEditor> {
   late CurrentDateTime nowTime;
   @override
   void initState() {
+    nowTime = CurrentDateTime();
     if (widget.fileName == null) {
       controllers.add(TextEditingController());
       editModes.add(true);
 
-      nowTime = CurrentDateTime();
       String weekday = nowTime.getCurrentWeekDay();
       int day = nowTime.getCurrentDay();
       String month = nowTime.getCurrentMonth();
@@ -46,7 +46,13 @@ class _TextEditorState extends State<TextEditor> {
 
       createdAt = '$weekday, $day-$month-$year';
       modifiedAt = '$weekday, $day-$month-$year';
+
+      widget.fileName = '${nowTime.getMilliSecondSinceEpoch()}.json';
     } else {
+      String? milliSinceEpochString = widget.fileName?.split('.').first;
+      int milliSinceEpoch = int.parse(milliSinceEpochString!);
+      nowTime.convertMilliSecondsSinceEpochToDateTime(milliSinceEpoch);
+
       _loadFile(widget.fileName!);
     }
     super.initState();
@@ -78,6 +84,10 @@ class _TextEditorState extends State<TextEditor> {
       content: content,
       modifiedAt: lastModified,
     );
+  }
+
+  void _deleteFileToDB({required int milliSinceEpoch}) {
+    _fileDB.deleteFile(milliSinceEpoch);
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -147,7 +157,7 @@ class _TextEditorState extends State<TextEditor> {
           controller: controllers,
           milliSinceEpoch: nowTime.getMilliSecondSinceEpoch(),
         );
-      } else if (widget.fileName != null) {
+      } else if (widget.fileName != null && widget.isModify == true) {
         int milliSinceEpoch =
             int.parse(widget.fileName!.replaceAll('.json', ''));
         _updateFileToDB(
@@ -180,13 +190,22 @@ class _TextEditorState extends State<TextEditor> {
             modifiedAt = fileData['modifiedAt'];
             controllers = List.generate(
               fileData['controllers'].length,
-              (index) =>
-                  TextEditingController(text: fileData['controllers'][index]),
+              (index) => TextEditingController(
+                text: fileData['controllers'][index],
+              ),
             );
-            editModes = List.filled(controllers.length, false);
+            editModes = List.generate(controllers.length, (index) => false);
           });
         }
       });
+    });
+  }
+
+  void _deleteFile() {
+    setState(() {
+      int milliSinceEpoch = int.parse(widget.fileName!.split('.').first);
+      _deleteFileToDB(milliSinceEpoch: milliSinceEpoch);
+      FileManager.deleteJsonFile(fileName: widget.fileName!);
     });
   }
 
@@ -198,12 +217,42 @@ class _TextEditorState extends State<TextEditor> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(createdAt),
-            IconButton(
-              onPressed: () {
-                _saveFile();
-              },
-              icon: Icon(Icons.upload, color: Colors.white),
-              style: IconButton.styleFrom(backgroundColor: Color(0xFF4EABCC)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _saveFile();
+                    });
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/Dashboard',
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  icon: Icon(Icons.save_alt),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _deleteFile();
+                    });
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/Dashboard',
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  icon: Icon(Icons.delete_outline_sharp),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.upload, color: Colors.white),
+                  style:
+                      IconButton.styleFrom(backgroundColor: Color(0xFF4EABCC)),
+                ),
+              ],
             ),
           ],
         ),

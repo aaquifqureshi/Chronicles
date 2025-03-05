@@ -21,7 +21,6 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
 
     setState(() {
       top3Files = fileData.map((file) {
-        print(file.millisecondSinceEpoch);
         return Container(
           child: GestureDetector(
             onTap: () {

@@ -141,6 +141,7 @@ class FileDatabase {
   }
 
   Future<void> deleteFile(int id) async {
+    print(id);
     final db = await database;
     await db.delete(
       _fileTableName,

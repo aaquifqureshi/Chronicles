@@ -2,9 +2,11 @@ import 'package:chronicles/utilities/components/calender/streak_calender.dart';
 import 'package:chronicles/screens/todo/todo_top_three.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
+import 'package:chronicles/services/secure_storage.dart';
 import 'package:chronicles/screens/todo/todo_screen.dart';
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../utilities/components/profile/fetch_username.dart';
 import '../../utilities/components/text_editor/top_2_recent_diaries.dart';
 
@@ -115,10 +117,15 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
               GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/ProfileScreen').then((_) {
-                      setState(() {});
-                    });
+                  onTap: () async {
+                    Navigator.popAndPushNamed(context, '/');
+                    SecureStorage storage = SecureStorage();
+                    GoogleSignIn googleSignIn = GoogleSignIn();
+
+                    await googleSignIn.signOut();
+
+                    storage.updateSecureData('isLoginDone', 'false');
+                    storage.updateSecureData('isPinRequired', 'false');
                   },
                   child:
                   ImageImport(width: 56, height: 56).importProfileIcon()),
@@ -189,9 +196,9 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   borderRadius: BorderRadius.circular(6.0),
                 ),
-                child: SizedBox(
-                  height: 200.0,
-                  width: double.infinity,
+                child: ConstrainedBox(
+                  constraints:
+                  BoxConstraints(minHeight: 50.0, maxHeight: 200.0),
                   child: Top3ToDoList(),
                 ),
               ),

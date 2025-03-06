@@ -37,11 +37,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
     List<ToDo> targetList = isCompleted ? completedTodos : pendingTodos;
 
     if (newText.isEmpty) {
-      _deleteTodo(index, isCompleted);
       return;
     }
 
-    await _todoDB.updateToDoTask(targetList[index].index, newText);
+    await _todoDB.updateToDoTask(targetList[index].id, newText);
     setState(() {
       targetList[index].content = newText;
     });
@@ -51,7 +50,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     List<ToDo> targetList = isCompleted ? completedTodos : pendingTodos;
     ToDo todo = targetList[index];
 
-    await _todoDB.updateTodoStatus(todo.index, isCompleted ? 0 : 1);
+    await _todoDB.updateTodoStatus(todo.id, isCompleted ? 0 : 1);
 
     setState(() {
       if (isCompleted) {
@@ -66,10 +65,16 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   void _deleteTodo(int index, bool isCompleted) async {
     List<ToDo> targetList = isCompleted ? completedTodos : pendingTodos;
-    await _todoDB.deleteToDoTask(targetList[index].index);
+
+    if (index < 0 || index >= targetList.length) return;
+    await _todoDB.deleteToDoTask(targetList[index].id);
     setState(() {
       targetList.removeAt(index);
     });
+    for (int i = 0; i < targetList.length; i++) {
+      targetList[i].index = i;
+      await _todoDB.updateToDoIndex(i, targetList[i].id);
+    }
   }
 
   @override
@@ -132,15 +137,17 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 IconButton(
                   icon: const Icon(Icons.add, size: 26.0),
                   onPressed: () async {
-                    int millisecondsSinceEpoch =
-                        DateTime.now().millisecondsSinceEpoch;
-                    _todoDB.addToDoTask(millisecondsSinceEpoch);
+                    int newIndex =
+                        pendingTodos.isEmpty ? 1 : pendingTodos.last.index + 1;
+
+                    await _todoDB.addToDoTask(newIndex);
 
                     List<ToDo> updatedPending =
                         await _todoDB.fetchPendingToDoTasks();
                     setState(() {
                       pendingTodos = updatedPending;
                     });
+                    print(newIndex);
                   },
                 ),
             ],
@@ -165,19 +172,23 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: todos.length,
-                onReorder: (oldIndex, newIndex) {
+                onReorder: (oldIndex, newIndex) async {
                   setState(() {
                     if (oldIndex < newIndex) {
                       newIndex -= 1;
                     }
-                    final item = todos.removeAt(oldIndex);
+                    final ToDo item = todos.removeAt(oldIndex);
                     todos.insert(newIndex, item);
                   });
+                  for (int i = 0; i < todos.length; i++) {
+                    todos[i].index = i;
+                    await _todoDB.updateToDoIndex(todos[i].index, todos[i].id);
+                  }
                 },
                 itemBuilder: (context, index) {
                   ToDo todo = todos[index];
                   return ListTile(
-                    key: ValueKey(todo.index),
+                    key: ValueKey(todo.id),
                     title: Row(
                       children: [
                         Transform.scale(
@@ -192,10 +203,14 @@ class _ToDoScreenState extends State<ToDoScreen> {
                         ),
                         Expanded(
                           child: ToDoTextField(
-                              text: todo.content.trim(),
-                              onChanged: (newText) {
-                                _updateTodo(index, newText, isCompleted);
-                              }),
+                            text: todo.content.trim(),
+                            onChanged: (newText) {
+                              _updateTodo(index, newText, isCompleted);
+                            },
+                            onEmptyDelete: () {
+                              _deleteTodo(index, isCompleted);
+                            },
+                          ),
                         ),
                       ],
                     ),

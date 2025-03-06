@@ -14,6 +14,7 @@ class ToDoDatabaseService {
   final String _todoContentColumnName = 'content';
   final String _todoStatusColumnName = 'status';
   final String _todoDateTimeName = 'timestamp';
+  final String _todoIndexColumnName = '_todoIndex';
 
   ToDoDatabaseService._constructor();
 
@@ -44,7 +45,8 @@ class ToDoDatabaseService {
       onCreate: (db, version) {
         db.execute('''
         CREATE TABLE $_todoTableName (
-          $_todoIdColumnName INTEGER PRIMARY KEY,
+          $_todoIdColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
+          $_todoIndexColumnName INTEGER NOT NULL,
           $_todoContentColumnName TEXT NOT NULL,
           $_todoStatusColumnName INTEGER NOT NULL,
           $_todoDateTimeName INTEGER
@@ -55,15 +57,26 @@ class ToDoDatabaseService {
     return database;
   }
 
-  void addToDoTask(int millisSinceEpoch) async {
+  Future<void> addToDoTask(int newIndex) async {
     final db = await database;
     await db.insert(
       _todoTableName,
       {
+        _todoIndexColumnName: newIndex,
         _todoContentColumnName: 'Enter Task',
         _todoStatusColumnName: 0,
-        _todoDateTimeName: millisSinceEpoch,
+        _todoDateTimeName: DateTime.now().millisecondsSinceEpoch,
       },
+    );
+  }
+
+  Future<void> updateToDoIndex(int index, int id) async {
+    final db = await database;
+    await db.update(
+      _todoTableName,
+      {_todoIndexColumnName: index},
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 
@@ -73,11 +86,13 @@ class ToDoDatabaseService {
       _todoTableName,
       where: '$_todoStatusColumnName = ?',
       whereArgs: [0],
+      orderBy: '$_todoIndexColumnName ASC',
     );
     List<ToDo> todoList = data
         .map(
           (e) => ToDo(
-              index: e["id"] as int,
+              id: e["id"] as int,
+              index: e["_todoIndex"] as int,
               content: e["content"] as String,
               status: e["status"] as int,
               millisecondSinceEpoch: e["timestamp"] as int),
@@ -97,7 +112,8 @@ class ToDoDatabaseService {
     List<ToDo> todoList = data
         .map(
           (e) => ToDo(
-              index: e["id"] as int,
+              id: e["id"] as int,
+              index: e["_todoIndex"] as int,
               content: e["content"] as String,
               status: e["status"] as int,
               millisecondSinceEpoch: e["timestamp"] as int),
@@ -112,14 +128,15 @@ class ToDoDatabaseService {
       _todoTableName,
       where: '$_todoStatusColumnName = ?',
       whereArgs: [0],
-      orderBy: '$_todoDateTimeName ASC',
+      orderBy: '_todoIndex ASC',
       limit: 3,
     );
 
     List<ToDo> todoList = data
         .map(
           (e) => ToDo(
-            index: e["id"] as int,
+            id: e["id"] as int,
+            index: e["_todoIndex"] as int,
             content: e["content"] as String,
             status: e["status"] as int,
             millisecondSinceEpoch: e["timestamp"] as int,

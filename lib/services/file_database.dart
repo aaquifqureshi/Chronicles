@@ -85,6 +85,7 @@ class FileDatabase {
     final db = await database;
     final data = await db.query(
       _fileTableName,
+      orderBy: '$_fileEpochValue ASC',
     );
     List<FileData> fileList = data
         .map(

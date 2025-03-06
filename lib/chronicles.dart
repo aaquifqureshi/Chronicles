@@ -22,6 +22,7 @@ import 'package:chronicles/screens/profile/profile_screen.dart';
 import 'package:chronicles/services/login_auth.dart';
 import 'package:chronicles/services/pin_auth.dart';
 import 'package:chronicles/themes/galactic_ocean.dart';
+import 'package:chronicles/utilities/components/text_editor/list_all_diaries.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,7 @@ class Chronicles extends StatelessWidget {
             '/ForgotPassword': (context) => ForgotPasswordScreen(),
             '/ChangePassword': (context) => ChangePasswordScreen(),
             '/ProfileScreen': (context) => ProfileScreen(),
+            '/AllDiary': (context) => ListAllDiaries(),
           },
           home: homeScreen,
         );

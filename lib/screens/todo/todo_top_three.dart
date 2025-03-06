@@ -16,10 +16,11 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
   bool _isLoading = true;
 
   void _updateTodoStatus(int index, int status) async {
-    await _todoDB.updateTodoStatus(todos[index].index, status);
+    await _todoDB.updateTodoStatus(todos[index].id, status);
     setState(() {
       todos[index].status = status;
     });
+    _loadTodos();
   }
 
   Future<void> _loadTodos() async {
@@ -59,6 +60,8 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
                   ),
                 )
               : ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: todos.length,
                   itemBuilder: (context, index) {
                     ToDo todo = todos[index];

@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 class ToDoTextField extends StatefulWidget {
   final String text;
   final ValueChanged<String>? onChanged;
+  final VoidCallback? onEmptyDelete;
 
-  const ToDoTextField({super.key, required this.text, this.onChanged});
+  const ToDoTextField({
+    super.key,
+    required this.text,
+    this.onChanged,
+    this.onEmptyDelete,
+  });
 
   @override
   State<ToDoTextField> createState() => _ToDoTextFieldState();
@@ -47,6 +53,12 @@ class _ToDoTextFieldState extends State<ToDoTextField> {
         fontSize: 17,
       ),
       onChanged: widget.onChanged,
+      onEditingComplete: () {
+        FocusScope.of(context).unfocus();
+        if (_textController.text.trim().isEmpty) {
+          widget.onEmptyDelete?.call();
+        }
+      },
       decoration: const InputDecoration(
         hintText: 'Enter a Task',
         hintStyle: TextStyle(

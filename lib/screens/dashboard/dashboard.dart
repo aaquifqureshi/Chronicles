@@ -128,7 +128,7 @@ class _DashboardState extends State<Dashboard> {
                     storage.updateSecureData('isPinRequired', 'false');
                   },
                   child:
-                  ImageImport(width: 56, height: 56).importProfileIcon()),
+                      ImageImport(width: 56, height: 56).importProfileIcon()),
             ],
           ),
         ),
@@ -198,19 +198,33 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 child: ConstrainedBox(
                   constraints:
-                  BoxConstraints(minHeight: 50.0, maxHeight: 200.0),
+                      BoxConstraints(minHeight: 50.0, maxHeight: 200.0),
                   child: Top3ToDoList(),
                 ),
               ),
               SizedBox(
                 height: 20.0,
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Recent',
-                  style: taskTitleTextField,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Recent',
+                      style: taskTitleTextField,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/AllDiary');
+                    },
+                    icon: Icon(
+                      Icons.more_horiz_sharp,
+                      color: Color(0xFF4EABCC),
+                    ),
+                  ),
+                ],
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 6.0),

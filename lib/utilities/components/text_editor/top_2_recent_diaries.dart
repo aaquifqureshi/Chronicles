@@ -59,8 +59,19 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
   @override
   Widget build(BuildContext context) {
     if (top3Files.isEmpty) {
-      return Center(
-        child: Text('No Recent Files!!!'),
+      return Container(
+        height: double.minPositive,
+        child: Center(
+          child: Text(
+            'No Recent Files!!!',
+            style: TextStyle(
+              fontFamily: "Hind",
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
+              color: Color(0x40000000),
+            ),
+          ),
+        ),
       );
     }
 

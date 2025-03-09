@@ -118,7 +118,7 @@ class _DashboardState extends State<Dashboard> {
               ),
               GestureDetector(
                   onTap: () async {
-                    Navigator.popAndPushNamed(context, '/');
+                    Navigator.popAndPushNamed(context, '/ProfileScreen');
                     SecureStorage storage = SecureStorage();
                     GoogleSignIn googleSignIn = GoogleSignIn();
 

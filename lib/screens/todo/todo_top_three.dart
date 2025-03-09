@@ -44,11 +44,14 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : todos.isEmpty
-              ? const Center(
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : todos.isEmpty
+            ? Container(
+                height: double.minPositive,
+                child: const Center(
                   child: Text(
                     'Nothing To Do',
                     style: TextStyle(
@@ -58,37 +61,37 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
                       color: Color(0x40000000),
                     ),
                   ),
-                )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: todos.length,
-                  itemBuilder: (context, index) {
-                    ToDo todo = todos[index];
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          Transform.scale(
-                            scale: 1.1,
-                            child: Checkbox(
-                              value: todo.status == 1,
-                              onChanged: (value) {
-                                setState(() {
-                                  todo.status = value! ? 1 : 0;
-                                  _updateTodoStatus(index, todo.status);
-                                  _loadTodos();
-                                });
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(todo.content),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
                 ),
-    );
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: todos.length,
+                itemBuilder: (context, index) {
+                  ToDo todo = todos[index];
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        Transform.scale(
+                          scale: 1.1,
+                          child: Checkbox(
+                            value: todo.status == 1,
+                            onChanged: (value) {
+                              setState(() {
+                                todo.status = value! ? 1 : 0;
+                                _updateTodoStatus(index, todo.status);
+                                _loadTodos();
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(todo.content),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
   }
 }

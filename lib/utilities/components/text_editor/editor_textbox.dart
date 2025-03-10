@@ -31,13 +31,17 @@ class EditorTextBox extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     style: textEditorStyle,
+
                     decoration: InputDecoration(
                       hintText: 'Write Your Journey!',
                     ),
+
                     controller: controller,
+
                     maxLines: null,
-                    onTapOutside: (_) => onToggleEdit(),
-                    onTapUpOutside: (_) => onToggleEdit(),
+
+                    onTapOutside: (_) =>
+                        onToggleEdit(), // Use onTapOutside only
                   ),
                 ),
                 IconButton(

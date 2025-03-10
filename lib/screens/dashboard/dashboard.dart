@@ -2,13 +2,14 @@ import 'package:chronicles/utilities/components/calender/streak_calender.dart';
 import 'package:chronicles/screens/todo/todo_top_three.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
-import 'package:chronicles/services/secure_storage.dart';
 import 'package:chronicles/screens/todo/todo_screen.dart';
 import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
 import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import '../../utilities/components/profile/fetch_username.dart';
-import '../../utilities/components/text_editor/top_2_recent_diaries.dart';
+import 'package:chronicles/utilities/components/profile/fetch_username.dart';
+import 'package:chronicles/utilities/components/text_editor/top_2_recent_diaries.dart';
+import 'package:chronicles/screens/profile/profile_screen.dart';
+import 'package:chronicles/screens/shared_diaries/view_shared_diaries.dart';
+import 'package:chronicles/utilities/components/buttons/custom_floatingbutton.dart';
 
 final helloMsgStyle = TextStyle(
   height: 1.8,
@@ -74,27 +75,68 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF4EABCC),
-        shape: CircleBorder(),
-        child: Icon(Icons.edit_outlined, color: Color(0xFFFFFFFF)),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TextEditor(
-                isModify: false,
+      floatingActionButton: Container(
+        height: 55,
+        width: 220,
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+            color: Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.circular(50),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(76, 0, 0, 0),
+                offset: const Offset(0, 5),
+                blurRadius: 15,
+                spreadRadius: 0,
               ),
+            ]),
+        child: Row(
+          children: [
+            NavigateFloatingButton(
+              buttonPadding: EdgeInsets.fromLTRB(9.5, 6, 5, 6),
+              buttonIcon: Icons.home,
+              buttonIconColor: Color(0xFF4EABCC),
+              buttonBackgroundColor: Color(0xFFE0F2FC),
+              buttonHeroTag: 'home_button',
+              isDisabled: true,
             ),
-          );
-        },
+            NavigateFloatingButton(
+              buttonPadding: EdgeInsets.fromLTRB(0, 6, 5, 6),
+              buttonIcon: Icons.create_outlined,
+              buttonIconColor: Color(0xFF797C7D),
+              buttonBackgroundColor: Color(0xFFFFFFFF),
+              buttonHeroTag: 'create_button',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TextEditor(
+                      isModify: false,
+                    ),
+                  ),
+                );
+              },
+            ),
+            NavigateFloatingButton(
+              buttonPadding: EdgeInsets.fromLTRB(0, 6, 9.5, 6),
+              buttonIcon: Icons.person,
+              buttonIconColor: Color(0xFF797C7D),
+              buttonBackgroundColor: Color(0xFFFFFFFF),
+              buttonHeroTag: 'user_button',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewSharedDiaries(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xFFD7EFF6),
-        height: 62.0,
-        shape: CircularNotchedRectangle(),
-      ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
       appBar: AppBar(
         backgroundColor: Color(0xFFFFFFFF),
         scrolledUnderElevation: 0.5,
@@ -117,18 +159,16 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
               GestureDetector(
-                  onTap: () async {
-                    Navigator.popAndPushNamed(context, '/ProfileScreen');
-                    SecureStorage storage = SecureStorage();
-                    GoogleSignIn googleSignIn = GoogleSignIn();
-
-                    await googleSignIn.signOut();
-
-                    storage.updateSecureData('isLoginDone', 'false');
-                    storage.updateSecureData('isPinRequired', 'false');
-                  },
-                  child:
-                      ImageImport(width: 56, height: 56).importProfileIcon()),
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(),
+                    ),
+                  );
+                },
+                child: ImageImport(width: 56, height: 56).importProfileIcon(),
+              ),
             ],
           ),
         ),
@@ -197,8 +237,7 @@ class _DashboardState extends State<Dashboard> {
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: ConstrainedBox(
-                  constraints:
-                      BoxConstraints(minHeight: 50.0, maxHeight: 200.0),
+                  constraints: BoxConstraints(maxHeight: 200.0),
                   child: Top3ToDoList(),
                 ),
               ),

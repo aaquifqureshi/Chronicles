@@ -50,8 +50,8 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
           )
         : todos.isEmpty
             ? Container(
-                height: double.minPositive,
-                child: const Center(
+                height: double.minPositive + 25,
+                child: Center(
                   child: Text(
                     'Nothing To Do',
                     style: TextStyle(

@@ -67,7 +67,9 @@ class ViewSharedDiaries extends StatelessWidget {
       ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Shared Diaries"),
+      ),
     );
   }
 }

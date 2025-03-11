@@ -79,40 +79,52 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFFFFFF),
-        scrolledUnderElevation: 0.5,
-        title: Text(
-          "ToDo List",
-          style: const TextStyle(
-            fontFamily: "Hind",
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/Dashboard',
+            (Route<dynamic> route) => false,
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFFFFFFFF),
+          scrolledUnderElevation: 0.5,
+          title: Text(
+            "ToDo List",
+            style: const TextStyle(
+              fontFamily: "Hind",
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/Dashboard',
+                (Route<dynamic> route) => false,
+              );
+            },
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/Dashboard',
-              (Route<dynamic> route) => false,
-            );
-          },
-        ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  _buildSection("Pending Tasks", pendingTodos, false),
-                  _buildSection("Completed Tasks", completedTodos, true),
-                ],
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    _buildSection("Pending Tasks", pendingTodos, false),
+                    _buildSection("Completed Tasks", completedTodos, true),
+                  ],
+                ),
               ),
-            ),
+      ),
     );
   }
 

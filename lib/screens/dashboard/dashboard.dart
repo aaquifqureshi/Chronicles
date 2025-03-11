@@ -124,10 +124,14 @@ class _DashboardState extends State<Dashboard> {
               buttonBackgroundColor: Color(0xFFFFFFFF),
               buttonHeroTag: 'user_button',
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewSharedDiaries(),
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ViewSharedDiaries(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return child;
+                    },
                   ),
                 );
               },
@@ -277,7 +281,7 @@ class _DashboardState extends State<Dashboard> {
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: SizedBox(
-                  height: 200.0,
+                  height: 190.0,
                   width: double.infinity,
                   child: Top2RecentDiaries(),
                 ),

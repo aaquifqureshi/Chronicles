@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import '../../services/register_auth.dart';
 import '../../utilities/components/alerts/auth_alerts.dart';
 import '../../utilities/components/alerts/no_internet_alert.dart';
+import '../../utilities/data/terms_and_conditions.dart';
+import '../../utilities/data/privacy_policy.dart';
 
 final double rightPadding = 25.0;
 final double leftPadding = 25.0;
@@ -35,7 +37,7 @@ final String lastNameHint = 'Last Name';
 final String emailHint = 'Email';
 final String passwordHint = 'Password';
 final String normalMeassageText = 'By Signing up you agree to our ';
-final String termsConditionText = 'Terms Conditions';
+final String termsConditionText = 'Terms & Conditions';
 final String privacyPolicyText = 'Privacy Policy';
 
 final String signUpText = 'Sign Up';
@@ -45,7 +47,7 @@ final double horizontalMargin = 0.0;
 final Color signUpTextColor = Color(0xFFFFFFFF);
 final Color loginRegisterHighlightColor = Color(0xFF35879F);
 final Color loginRegisterSplashColor = Color(0xFF6BC9E2);
-final String accountExistText = "Already have a account? ";
+final String accountExistText = "Already have an account? ";
 final String loginButttonText = "Login";
 
 final createAccountStyle = TextStyle(
@@ -106,7 +108,6 @@ void clearTextFields() {
 }
 
 class RegisterScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,7 +187,15 @@ class RegisterScreen extends StatelessWidget {
                           style: normalMeassageTextStyle,
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    TermsAndConditionsScreen(),
+                              ),
+                            );
+                          },
                           child: Text(
                             termsConditionText,
                             style: gestureButtonStyle,
@@ -202,7 +211,14 @@ class RegisterScreen extends StatelessWidget {
                           style: normalMeassageTextStyle,
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PrivacyPolicyScreen(),
+                              ),
+                            );
+                          },
                           child: Text(
                             privacyPolicyText,
                             style: gestureButtonStyle,
@@ -225,18 +241,26 @@ class RegisterScreen extends StatelessWidget {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/Dashboard',
-                                  (Route<dynamic> route) => false,
+                              (Route<dynamic> route) => false,
                             );
                           } else if (authValue == "emptyFields") {
-                            authAlert(context,message: "Fields cannot be empty",icon: Icons.error_outline);
+                            authAlert(context,
+                                message: "Fields cannot be empty",
+                                icon: Icons.error_outline);
                           } else if (authValue == "emailAlreadyUsed") {
-                            authAlert(context,message: "Email Already in use.",icon: Icons.warning_amber,iconColor: Colors.orangeAccent);
-                          } else if(authValue == "invalidEmailSyntax") {
-                            authAlert(context,message: "Invalid Email syntax.",icon: Icons.warning_amber,iconColor: Colors.orangeAccent);
-                          }
-                          else if (authValue == 'unexpectedError') {
-                            authAlert(
-                                context,message:"Unexpected Error Occured",icon: Icons.error_outline);
+                            authAlert(context,
+                                message: "Email Already in use.",
+                                icon: Icons.warning_amber,
+                                iconColor: Colors.orangeAccent);
+                          } else if (authValue == "invalidEmailSyntax") {
+                            authAlert(context,
+                                message: "Invalid Email syntax.",
+                                icon: Icons.warning_amber,
+                                iconColor: Colors.orangeAccent);
+                          } else if (authValue == 'unexpectedError') {
+                            authAlert(context,
+                                message: "Unexpected Error Occured",
+                                icon: Icons.error_outline);
                           }
                         } else {
                           noInternetAlert(context);

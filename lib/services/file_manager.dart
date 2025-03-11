@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:chronicles/services/secure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chronicles/utilities/components/date_time/current_datetime.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,6 +11,7 @@ import 'file_database.dart';
 
 class FileManager {
   static const String _diaryFolderName = 'diary';
+  static const String _diaryImageFolderName = 'diaryImages';
 
   static Future<Directory> _getAppDocumentsDirectory() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -119,5 +121,24 @@ class FileManager {
     } else {
       print('File Not Found');
     }
+  }
+
+  static Future<String> saveImageFile(
+      {required String filename,
+      required XFile image,
+      required String imageName}) async {
+    SecureStorage storage = SecureStorage();
+    String user_id = await storage.readSecureData('user_id');
+
+    Directory appDocDir = await _getAppDocumentsDirectory();
+    Directory diaryImageDir = Directory(
+        '${appDocDir.path}/$user_id/$_diaryImageFolderName/${filename.split('.').first}');
+    File imageFile = File('${diaryImageDir.path}/$imageName');
+    if (!await imageFile.exists()) {
+      await imageFile.create(recursive: true);
+    }
+    await image.saveTo(imageFile.path);
+
+    return imageFile.path;
   }
 }

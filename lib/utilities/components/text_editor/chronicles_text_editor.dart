@@ -2,7 +2,7 @@ import 'package:chronicles/services/file_database.dart';
 import 'package:chronicles/utilities/components/text_editor/editor_textbox.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/date_time/current_datetime.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:chronicles/services/file_manager.dart';
 
 final titleTextStyle = TextStyle(
@@ -106,6 +106,24 @@ class _TextEditorState extends State<TextEditor> {
     setState(() {
       controllers.add(TextEditingController());
       editModes.add(true);
+    });
+  }
+
+  void _insertImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    int imageMilliSinceEpoch = DateTime.now().millisecondsSinceEpoch;
+    String imagePath = await FileManager.saveImageFile(
+      filename: widget.fileName!,
+      image: image!,
+      imageName: '$imageMilliSinceEpoch.${image.name.split('.').last}',
+    );
+    setState(() {
+      controllers.add(
+        TextEditingController(
+            text: '![Type Image Description Here]($imagePath)'),
+      );
+      editModes.add(false);
     });
   }
 
@@ -327,7 +345,7 @@ class _TextEditorState extends State<TextEditor> {
                   Container(
                     color: Color(0x104EABCC),
                     child: MaterialButton(
-                      onPressed: () {},
+                      onPressed: _insertImage,
                       child: Icon(
                         Icons.image,
                         color: Color(0xFF4EABCC),

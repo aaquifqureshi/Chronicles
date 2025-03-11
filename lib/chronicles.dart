@@ -86,8 +86,7 @@ class Chronicles extends StatelessWidget {
 Future<Widget> _getHomeScreen(BuildContext context) async {
   final bool isUserLoginActive = await isLoginDone();
   final bool isPinLoginRequired = await isPinRequired();
-  print(isUserLoginActive);
-  print(isPinLoginRequired);
+
   if (isUserLoginActive) {
     return isPinLoginRequired ? PinLoginScreen() : Dashboard();
   } else {

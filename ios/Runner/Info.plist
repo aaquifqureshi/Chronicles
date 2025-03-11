@@ -4,6 +4,8 @@
 <dict>
     <key>com.apple.security.network.client</key>
     <true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>to select image from gallery, your app needs permission for the photo library</string>
     <key>keychain-access-groups</key>
     <array/>
 	<key>CFBundleDevelopmentRegion</key>

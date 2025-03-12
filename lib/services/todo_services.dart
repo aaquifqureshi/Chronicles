@@ -1,8 +1,17 @@
-import 'package:chronicles/services/secure_storage.dart';
+/*
+* File Name        : todo_services.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for managing all database
+*                    related queries like storing, retrieving and deleting
+*                    for To-Do List Functionality.
+*/
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:chronicles/utilities/components/todo/todo.dart';
+
+import 'package:chronicles/utilities/data/user_auth_data.dart';
 
 class ToDoDatabaseService {
   static Database? _db;
@@ -32,13 +41,12 @@ class ToDoDatabaseService {
   }
 
   Future<Database> getDatabase() async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
+    String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
 
     final dbDirPath = await getDatabasesPath();
-    final dbPath = '${appDocDir.path}/$user_id/$dbDirPath/todo_database.db';
+    final dbPath = '${appDocDir.path}/$userId/$dbDirPath/todo_database.db';
     final database = await openDatabase(
       dbPath,
       version: 1,
@@ -80,12 +88,12 @@ class ToDoDatabaseService {
     );
   }
 
-  Future<List<ToDo>> fetchPendingToDoTasks() async {
+  Future<List<ToDo>> fetchToDoTasks({required bool isComplete}) async {
     final db = await database;
     final data = await db.query(
       _todoTableName,
       where: '$_todoStatusColumnName = ?',
-      whereArgs: [0],
+      whereArgs: [isComplete ? 1 : 0],
       orderBy: '$_todoIndexColumnName ASC',
     );
     List<ToDo> todoList = data
@@ -98,38 +106,17 @@ class ToDoDatabaseService {
               millisecondSinceEpoch: e["timestamp"] as int),
         )
         .toList();
-    print(todoList);
     return todoList;
   }
 
-  Future<List<ToDo>> fetchCompletedToDoTasks() async {
-    final db = await database;
-    final data = await db.query(
-      _todoTableName,
-      where: '$_todoStatusColumnName = ?',
-      whereArgs: [1],
-    );
-    List<ToDo> todoList = data
-        .map(
-          (e) => ToDo(
-              id: e["id"] as int,
-              index: e["_todoIndex"] as int,
-              content: e["content"] as String,
-              status: e["status"] as int,
-              millisecondSinceEpoch: e["timestamp"] as int),
-        )
-        .toList();
-    return todoList;
-  }
-
-  Future<List<ToDo>> fetchTop3ToDos() async {
+  Future<List<ToDo>> fetchRecentToDos({required int limitRecentToDo}) async {
     final db = await database;
     final data = await db.query(
       _todoTableName,
       where: '$_todoStatusColumnName = ?',
       whereArgs: [0],
       orderBy: '_todoIndex ASC',
-      limit: 3,
+      limit: limitRecentToDo,
     );
 
     List<ToDo> todoList = data

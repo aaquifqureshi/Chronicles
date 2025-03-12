@@ -1,3 +1,9 @@
+/*
+* File Name        : internet_connectivity.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for Internet Connectivity.
+*/
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';

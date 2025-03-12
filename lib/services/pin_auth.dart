@@ -1,3 +1,9 @@
+/*
+* File Name        : pin_auth.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for Pin Authentication.
+*/
+
 import 'package:chronicles/services/secure_storage.dart';
 
 Future<bool> isPinRequired() async {

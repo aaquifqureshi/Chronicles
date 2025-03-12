@@ -1,14 +1,8 @@
 /*
-* File Name     : chronicles.dart
-* Date Created  : 28th January 2025
-* last Modified : 28th January 2025
-* Author        : Mrunal Nirajkumar Shah
-* Group         : trOlsz Group
-* Description   : This file is the start point in this app.
-*                It runs the app and send it to the next Screen
-*                based on the authentication requirements set by
-*                the group.
-*
+* File Name        : logo_import.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for Logo Fetching from
+*                    Assets.
 */
 
 import 'package:flutter/material.dart';

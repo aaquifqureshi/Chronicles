@@ -1,3 +1,10 @@
+/*
+* File Name        : no_internet_alert.dart
+* Group            : trOlsz Group
+* Description      : This file is has Internet Alerts for displaying
+*                    errors.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 

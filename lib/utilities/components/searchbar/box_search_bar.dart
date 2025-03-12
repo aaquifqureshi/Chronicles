@@ -1,3 +1,9 @@
+/*
+* File Name        : box_search_bar.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for custom search bar.
+*/
+
 import 'package:flutter/material.dart';
 
 class BoxSearchBar extends StatefulWidget {

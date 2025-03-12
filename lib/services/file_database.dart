@@ -1,8 +1,18 @@
-import 'package:chronicles/services/secure_storage.dart';
+/*
+* File Name        : file_database.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for all text editor aka
+*                    diary related file database operations like Saving a file metadata,
+*                    loading a file metadata, deleting a file metadata for
+*                    using without reading all file contents. (SQFLITE)
+*/
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-import 'package:chronicles/utilities/components/text_editor/FileData.dart';
+import 'package:chronicles/utilities/components/text_editor/file_data_class.dart';
+
+import '../utilities/data/user_auth_data.dart';
 
 class FileDatabase {
   static Database? _db;
@@ -32,13 +42,12 @@ class FileDatabase {
   }
 
   Future<Database> getDatabase() async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
-    print(user_id);
+    String userId = await UserDataFetcher().fetchUID();
+
     Directory appDocDir = await _getAppDocumentsDirectory();
 
     final dbDirPath = await getDatabasesPath();
-    final dbPath = '${appDocDir.path}/$user_id/$dbDirPath/file_database.db';
+    final dbPath = '${appDocDir.path}/$userId/$dbDirPath/file_database.db';
     final database = await openDatabase(
       dbPath,
       version: 1,
@@ -78,7 +87,6 @@ class FileDatabase {
         _fileCreatedColumnName: createdAt,
       },
     );
-    print('Hello  ${fetchFiles()} ');
   }
 
   Future<List<FileData>> fetchFiles() async {
@@ -142,7 +150,6 @@ class FileDatabase {
   }
 
   Future<void> deleteFile(int id) async {
-    print(id);
     final db = await database;
     await db.delete(
       _fileTableName,

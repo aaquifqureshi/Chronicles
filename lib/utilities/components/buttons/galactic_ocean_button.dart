@@ -1,3 +1,9 @@
+/*
+* File Name        : galactic_ocean_button.dart
+* Group            : trOlsz Group
+* Description      : This file is a custom button.
+*/
+
 import 'package:flutter/material.dart';
 
 class GalacticOceanButton extends StatelessWidget {

@@ -1,8 +1,30 @@
+/*
+* File Name        : view_shared_diaries.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for Shared Diary Screen
+*                    where users can publicly show their writings.
+*/
+
 import 'package:flutter/material.dart';
 
-import '../../utilities/components/buttons/custom_floatingbutton.dart';
+import '../../utilities/components/floating_action_button/navigate_floating_button.dart';
 
-import '../../utilities/components/text_editor/chronicles_text_editor.dart';
+import '../text_editor/chronicles_text_editor.dart';
+
+final double containerHeight = 55.0;
+final double containerWidth = 220.0;
+final EdgeInsetsGeometry containerMargin = EdgeInsets.only(bottom: 10);
+final Color buttonBackgroundColor = Color(0xFFFFFFFF);
+final Color shadowColor = Color.fromARGB(76, 0, 0, 0);
+final BoxShadow boxShadow = BoxShadow(
+  color: shadowColor,
+  offset: Offset(0, 5),
+  blurRadius: 15,
+  spreadRadius: 0,
+);
+final Color buttonIconColorDefault = Color(0xFF797C7D);
+final Color buttonIconColorUser = Color(0xFF4EABCC);
+final Color buttonBackgroundColorUser = Color(0xFFE0F2FC);
 
 class ViewSharedDiaries extends StatelessWidget {
   const ViewSharedDiaries({super.key});
@@ -11,27 +33,21 @@ class ViewSharedDiaries extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        height: 55,
-        width: 220,
-        margin: EdgeInsets.only(bottom: 10),
+        height: containerHeight,
+        width: containerWidth,
+        margin: containerMargin,
         decoration: BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(76, 0, 0, 0),
-                offset: const Offset(0, 5),
-                blurRadius: 15,
-                spreadRadius: 0,
-              ),
-            ]),
+          color: buttonBackgroundColor,
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [boxShadow],
+        ),
         child: Row(
           children: [
             NavigateFloatingButton(
               buttonPadding: EdgeInsets.fromLTRB(9.5, 6, 5, 6),
               buttonIcon: Icons.home,
-              buttonIconColor: Color(0xFF797C7D),
-              buttonBackgroundColor: Color(0xFFFFFFFF),
+              buttonIconColor: buttonIconColorDefault,
+              buttonBackgroundColor: buttonBackgroundColor,
               buttonHeroTag: 'home_button',
               onPressed: () {
                 Navigator.pop(context);
@@ -40,8 +56,8 @@ class ViewSharedDiaries extends StatelessWidget {
             NavigateFloatingButton(
               buttonPadding: EdgeInsets.fromLTRB(0, 6, 5, 6),
               buttonIcon: Icons.create_outlined,
-              buttonIconColor: Color(0xFF797C7D),
-              buttonBackgroundColor: Color(0xFFFFFFFF),
+              buttonIconColor: buttonIconColorDefault,
+              buttonBackgroundColor: buttonBackgroundColor,
               buttonHeroTag: 'create_button',
               onPressed: () {
                 Navigator.push(
@@ -57,8 +73,8 @@ class ViewSharedDiaries extends StatelessWidget {
             NavigateFloatingButton(
               buttonPadding: EdgeInsets.fromLTRB(0, 6, 9.5, 6),
               buttonIcon: Icons.person,
-              buttonIconColor: Color(0xFF4EABCC),
-              buttonBackgroundColor: Color(0xFFE0F2FC),
+              buttonIconColor: buttonIconColorUser,
+              buttonBackgroundColor: buttonBackgroundColorUser,
               buttonHeroTag: 'user_button',
               isDisabled: true,
             ),

@@ -1,3 +1,9 @@
+/*
+* File Name        : file_data_class.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for FileData Class.
+*/
+
 class FileData {
   late int millisecondSinceEpoch;
   late String title;

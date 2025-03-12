@@ -1,3 +1,10 @@
+/*
+* File Name        : search_in_device.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for Storing critical data in
+*                    Androids Keystone, and iOS Keychain.
+*/
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
@@ -21,4 +28,3 @@ class SecureStorage {
     writeSecureData(key, newValue);
   }
 }
-

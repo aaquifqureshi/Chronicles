@@ -1,33 +1,36 @@
-/*
-* File Name     : chronicles.dart
-* Date Created  : 1st February 2025
-* last Modified : 1st February 2025
-* Author        : Aaquif Qureshi
-* Group         : trOlsz Group
-* Description   : This file is the start point in this app.
-*                It runs the app and send it to the next Screen
-*                based on the authentication requirements set by
-*                the group.
+/* D
+* File Name        : login_screen.dart
+* Group            : trOlsz Group
+* Description      : The File has Login Screen Code.
 *
+* NOTE : CODE IS UNSAFE AS WE ARE HARDCORE EMBEDDING THE
+*        VALUES FOR AUTH.
 */
 
+// Import Packages
+import 'package:flutter/material.dart';
 import 'package:chronicles/screens/auth/forgot_password_screen.dart';
 import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:chronicles/services/login_auth.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
 import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
-import 'package:flutter/material.dart';
+import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
+import 'package:chronicles/utilities/components/alerts/no_internet_alert.dart';
 
-import '../../utilities/components/alerts/auth_alerts.dart';
-import '../../utilities/components/alerts/no_internet_alert.dart';
-
+// Logo Values
 final double logoWidth = 130.0;
 final double logoHeight = 130.0;
 final double logoTop = 15.0;
+final double logoLeft = 25.0;
+final double logoRight = 25.0;
 final double accLoginEmailText = 40.0;
 final double topPadding = 0;
 final double bottomPadding = 18;
+
+// Variable Values & TextStyles
+final double overallPadding = 25.0;
+final double rightPaddingInternetConnectionIcon = 20.0;
 
 final String accountLoginText = 'Account Login';
 final String emailHint = 'Enter your email';
@@ -87,21 +90,23 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
   );
 }
 
-TextEditingController login_email = TextEditingController();
-TextEditingController login_password = TextEditingController();
+TextEditingController email = TextEditingController();
+TextEditingController password = TextEditingController();
 
 void clearTextFields() {
-  login_email.clear();
-  login_password.clear();
+  email.clear();
+  password.clear();
 }
 
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 25),
+          padding: EdgeInsets.only(top: overallPadding),
           child: Column(
             children: [
               Row(
@@ -118,13 +123,16 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
+                    padding: EdgeInsets.only(
+                      right: rightPaddingInternetConnectionIcon,
+                    ),
                     child: InternetConnectionStatus(),
                   ),
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(left: 25, right: 25, top: logoTop),
+                padding: EdgeInsets.only(
+                    left: logoLeft, right: logoRight, top: logoTop),
                 child: Column(
                   children: [
                     ImportLogo(width: logoWidth, height: logoHeight)
@@ -146,7 +154,7 @@ class LoginScreen extends StatelessWidget {
                           style: labelTextStyle,
                         ),
                         GrayTextfield(
-                          controller: login_email,
+                          controller: email,
                           hintText: emailHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
@@ -156,7 +164,7 @@ class LoginScreen extends StatelessWidget {
                           style: labelTextStyle,
                         ),
                         GrayTextfield(
-                          controller: login_password,
+                          controller: password,
                           hintText: passwordHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
@@ -182,35 +190,45 @@ class LoginScreen extends StatelessWidget {
                           onPress: () async {
                             var authValue = await loginAuthentication(
                               context,
-                              login_email.text.trim(),
-                              login_password.text.trim(),
+                              email.text.trim(),
+                              password.text.trim(),
                             );
                             bool hasInternet = await getInternetStatus();
-                            if (hasInternet == true) {
-                              if (authValue == 'true') {
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  '/Dashboard',
-                                      (Route<dynamic> route) => false,
-                                );
-                              } else if (authValue == "emptyFields") {
-                                authAlert(context,message: "Fields cannot be empty",icon: Icons.error_outline);
-                              } else if (authValue == "invalidEmailSyntax"){
-                                authAlert(context,message:"Invalid Email Syntax",icon: Icons.warning_amber,iconColor: Colors.orangeAccent);
-                              } else if (authValue == "invalidCredentials") {
-                                authAlert(context,message:"Email or Password is wrong",icon: Icons.error_outline);
-                              }else if (authValue == 'unexpectedError') {
-                                authAlert(
-                                    context, message:"Unexpected Error Occured",icon: Icons.error_outline);
+                            if (context.mounted) {
+                              if (hasInternet == true) {
+                                if (authValue == 'true') {
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    '/Dashboard',
+                                    (Route<dynamic> route) => false,
+                                  );
+                                } else if (authValue == "emptyFields") {
+                                  authAlert(context,
+                                      message: "Fields cannot be empty",
+                                      icon: Icons.error_outline);
+                                } else if (authValue == "invalidEmailSyntax") {
+                                  authAlert(context,
+                                      message: "Invalid Email Syntax",
+                                      icon: Icons.warning_amber,
+                                      iconColor: Colors.orangeAccent);
+                                } else if (authValue == "invalidCredentials") {
+                                  authAlert(context,
+                                      message: "Email or Password is wrong",
+                                      icon: Icons.error_outline);
+                                } else if (authValue == 'unexpectedError') {
+                                  authAlert(context,
+                                      message: "Unexpected Error Occured",
+                                      icon: Icons.error_outline);
+                                }
+                              } else {
+                                noInternetAlert(context);
                               }
-                            } else {
-                              noInternetAlert(context);
                             }
                           },
                           buttonLabel: Text(
                             loginText,
                             style:
-                            buttonLabelTextStyle(textColor: loginTextColor),
+                                buttonLabelTextStyle(textColor: loginTextColor),
                           ),
                           verticalMargin: verticalButtonMargin,
                           height: buttonHeight,

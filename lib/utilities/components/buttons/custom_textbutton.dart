@@ -1,3 +1,9 @@
+/*
+* File Name        : custom_textbutton.dart
+* Group            : trOlsz Group
+* Description      : This file is custom text button.
+*/
+
 import 'package:flutter/material.dart';
 
 final buttonTextStyle = TextStyle(
@@ -14,12 +20,12 @@ class CustomTextButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const CustomTextButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     this.containerColor = Colors.white,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

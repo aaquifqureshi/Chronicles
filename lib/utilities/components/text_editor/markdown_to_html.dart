@@ -1,10 +1,17 @@
+/*
+* File Name        : markdown_to_html.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for converting markdown
+*                    to HTML.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class MarkdownToHtml extends StatefulWidget {
-  late String markdownText;
+  final String markdownText;
 
-  MarkdownToHtml({super.key, required this.markdownText});
+  const MarkdownToHtml({super.key, required this.markdownText});
 
   @override
   State<MarkdownToHtml> createState() => _MarkdownToHtmlState();

@@ -1,7 +1,8 @@
 /*
-* File Name        : auth_alerts.dart
+* File Name        : text_editor_alerts.dart
 * Group            : trOlsz Group
-* Description      : This file is has Auth Alerts for displaying errors.
+* Description      : This file is has Save Alerts for displaying
+*                    errors.
 */
 
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
@@ -33,12 +34,15 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
   );
 }
 
-void authAlert(
+void saveAlert(
   BuildContext context, {
   String message = "",
-  String buttonText = "Try Again!",
+  String buttonTextSave = "Save!",
+  String buttonTextExit = "Exit",
   IconData? icon,
-  Color iconColor = Colors.red,
+  Color iconColor = Colors.yellow,
+  required Function() onPressExit,
+  required Function() onPressSave,
 }) {
   showDialog(
     context: context,
@@ -49,7 +53,7 @@ void authAlert(
           borderRadius: BorderRadius.circular(alertCircularRadius),
         ),
         title: Icon(
-          icon ?? Icons.error,
+          icon ?? Icons.warning_amber_sharp,
           color: iconColor,
           size: iconSize,
         ),
@@ -60,11 +64,25 @@ void authAlert(
         ),
         actions: [
           InfiniteRoundWidthButton(
-            onPress: () {
-              Navigator.pop(context);
-            },
+            onPress: onPressSave,
             buttonLabel: Text(
-              buttonText,
+              buttonTextSave,
+              style: buttonLabelTextStyle(textColor: buttonTextColor),
+            ),
+            verticalPadding: buttonVerticalPadding,
+            horizontalMargin: buttonHorizontalMargin,
+            circularBorderRadius: buttonCircularBorderRadius,
+            height: buttonHeight,
+            highlightColor: buttonHighlightColor,
+            splashColor: buttonSplashColor,
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          InfiniteRoundWidthButton(
+            onPress: onPressExit,
+            buttonLabel: Text(
+              buttonTextExit,
               style: buttonLabelTextStyle(textColor: buttonTextColor),
             ),
             verticalPadding: buttonVerticalPadding,

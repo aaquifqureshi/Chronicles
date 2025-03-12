@@ -1,14 +1,7 @@
 /*
-* File Name     : chronicles.dart
-* Date Created  : 28th January 2025
-* last Modified : 28th January 2025
-* Author        : Mrunal Nirajkumar Shah
-* Group         : trOlsz Group
-* Description   : This file is the start point in this app.
-*                It runs the app and send it to the next Screen
-*                based on the authentication requirements set by
-*                the group.
-*
+* File Name        : infinite_width_button.dart
+* Group            : trOlsz Group
+* Description      : This file is a custom button.
 */
 
 import 'package:flutter/material.dart';
@@ -29,7 +22,8 @@ class InfiniteRoundWidthButton extends StatelessWidget {
   final Widget buttonLabel;
   final void Function()? onPress;
 
-  InfiniteRoundWidthButton({
+  const InfiniteRoundWidthButton({
+    super.key,
     this.height = 50.0,
     this.horizontalMargin = 20.0,
     this.verticalMargin = 0.0,

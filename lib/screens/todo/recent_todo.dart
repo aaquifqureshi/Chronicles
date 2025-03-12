@@ -1,16 +1,23 @@
+/*
+* File Name        : recent_todo.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for To-Do Component
+*                    which can show top x To-do task.
+*/
+
 import 'package:chronicles/utilities/components/todo/todo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chronicles/services/todo_services.dart';
 
-class Top3ToDoList extends StatefulWidget {
-  Top3ToDoList({super.key});
+class RecentToDo extends StatefulWidget {
+  const RecentToDo({super.key});
 
   @override
-  State<Top3ToDoList> createState() => _Top3ToDoListState();
+  State<RecentToDo> createState() => _RecentToDoState();
 }
 
-class _Top3ToDoListState extends State<Top3ToDoList> {
+class _RecentToDoState extends State<RecentToDo> {
   final ToDoDatabaseService _todoDB = ToDoDatabaseService.instance;
   List<ToDo> todos = [];
   bool _isLoading = true;
@@ -28,7 +35,7 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
       _isLoading = true;
     });
     try {
-      todos = await _todoDB.fetchTop3ToDos();
+      todos = await _todoDB.fetchRecentToDos(limitRecentToDo: 3);
     } finally {
       setState(() {
         _isLoading = false;
@@ -49,7 +56,7 @@ class _Top3ToDoListState extends State<Top3ToDoList> {
             child: CircularProgressIndicator(),
           )
         : todos.isEmpty
-            ? Container(
+            ? SizedBox(
                 height: double.minPositive + 25,
                 child: Center(
                   child: Text(

@@ -1,3 +1,9 @@
+/*
+* File Name        : waiting_screen.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for waiting Screen.
+*/
+
 import 'package:flutter/material.dart';
 
 import 'package:chronicles/utilities/image_import/logo_import.dart';

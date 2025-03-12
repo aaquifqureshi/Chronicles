@@ -1,9 +1,16 @@
-import 'package:chronicles/utilities/components/date_time/current_datetime.dart';
-import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
+/*
+* File Name        : diary_archive.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for Listing all diaries
+*                    at one place.
+*/
+
+import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
+import 'package:chronicles/screens/text_editor/chronicles_text_editor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chronicles/services/file_database.dart';
-import 'FileData.dart';
+import 'package:chronicles/utilities/components/text_editor/file_data_class.dart';
 
 TextStyle pageTitleStyle = TextStyle(
   fontFamily: 'Hind',
@@ -54,14 +61,14 @@ TextStyle diaryModifiedAtStyle = TextStyle(
   color: Color(0x601F1F1F),
 );
 
-class ListAllDiaries extends StatefulWidget {
-  const ListAllDiaries({super.key});
+class DiaryArchive extends StatefulWidget {
+  const DiaryArchive({super.key});
 
   @override
-  State<ListAllDiaries> createState() => _ListAllDiariesState();
+  State<DiaryArchive> createState() => _DiaryArchiveState();
 }
 
-class _ListAllDiariesState extends State<ListAllDiaries> {
+class _DiaryArchiveState extends State<DiaryArchive> {
   List<FileData> allDiaries = [];
   Map<String, Map<String, List<FileData>>> groupData = {};
 
@@ -78,11 +85,14 @@ class _ListAllDiariesState extends State<ListAllDiaries> {
     for (var diary in allDiaries) {
       DateTime dateTime =
           DateTime.fromMillisecondsSinceEpoch(diary.millisecondSinceEpoch);
-      String month = getStringMonth(dateTime.month);
-      String year = '${dateTime.year}';
+      ChroniclesDateTime diaryDateTime = ChroniclesDateTime(nowTime: dateTime);
+
+      String month = diaryDateTime.getFullStringMonth();
+      String year = '${diaryDateTime.getIntYear()}';
       String monthYear = '$month-$year';
 
-      String day = '${stringWeekDay(dateTime.weekday)}-${dateTime.day}';
+      String day =
+          '${diaryDateTime.getHalfStringWeekDay()}-${diaryDateTime.getIntDay()}';
 
       if (!tempGroupData.containsKey(monthYear)) {
         tempGroupData[monthYear] = {};
@@ -114,7 +124,7 @@ class _ListAllDiariesState extends State<ListAllDiaries> {
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 7.0),
             child: Text(
-              "Personal Notes",
+              "Archive",
               style: pageTitleStyle,
             ),
           ),
@@ -210,71 +220,68 @@ class _ListAllDiariesState extends State<ListAllDiaries> {
                           List<Widget> dayDiariesWidget = [];
                           for (var diary in dayDiaries) {
                             dayDiariesWidget.add(
-                              Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => TextEditor(
-                                              fileName:
-                                                  '${diary.millisecondSinceEpoch}.json',
-                                              isModify: true,
-                                            ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => TextEditor(
+                                            fileName:
+                                                '${diary.millisecondSinceEpoch}.json',
+                                            isModify: true,
                                           ),
-                                        );
-                                      },
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            diary.title,
-                                            style: TextStyle(
-                                              fontFamily: 'Hind',
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18.0,
-                                              color: Color(0xFF1F1F1F),
-                                            ),
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          diary.title,
+                                          style: TextStyle(
+                                            fontFamily: 'Hind',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0,
+                                            color: Color(0xFF1F1F1F),
                                           ),
-                                          Text(
-                                            diary.content,
-                                            style: TextStyle(
-                                              fontFamily: 'Hind',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.0,
-                                              color: Color(0xFF1F1F1F),
-                                            ),
+                                        ),
+                                        Text(
+                                          diary.content,
+                                          style: TextStyle(
+                                            fontFamily: 'Hind',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16.0,
+                                            color: Color(0xFF1F1F1F),
                                           ),
-                                          Text(
-                                            diary.modifiedAt,
-                                            style: TextStyle(
-                                              fontFamily: 'Hind',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.0,
-                                              color: Color(0x991F1F1F),
-                                            ),
+                                        ),
+                                        Text(
+                                          diary.modifiedAt,
+                                          style: TextStyle(
+                                            fontFamily: 'Hind',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16.0,
+                                            color: Color(0x991F1F1F),
                                           ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (dayDiaries.last != diary)
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Container(
+                                        color: Color(0xFFC1CCD6),
+                                        height: 1,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                150,
                                       ),
                                     ),
-                                    if (dayDiaries.last != diary)
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Container(
-                                          color: Color(0xFFC1CCD6),
-                                          height: 1,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              150,
-                                        ),
-                                      ),
-                                  ],
-                                ),
+                                ],
                               ),
                             );
                           }

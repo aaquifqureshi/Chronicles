@@ -1,7 +1,23 @@
-import 'package:flutter/material.dart';
+/* D
+* File Name        : change_password.dart
+* Group            : trOlsz Group
+* Description      : This file has code for the Register Screen
+*/
 
-import '../../utilities/components/buttons/infinite_width_button.dart';
-import '../../utilities/components/textfields/gray_textfield.dart';
+// Importing Packages
+import 'package:flutter/material.dart';
+import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
+import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
+
+// Variable Values & TextStyles
+final double leftRightOverallPadding = 25.0;
+final double topOverallPadding = 60.0;
+final double iconBorderRadiusFingerprint = 6.0;
+final double iconWidthFingerprint = 2.0;
+final double passwordResetTextTopPadding = 15.0;
+final double passwordResetTextBottomPadding = 42.0;
+
+final Color iconColorFingerprint = Color(0xFFDDDFE5);
 
 final String passwordResetText = 'Set new password';
 final String normalMessageText = 'Must be at least 8 characters.';
@@ -9,7 +25,7 @@ final String passwordHint = 'Enter password';
 final String confirmPasswordHint = 'Enter password';
 final String passwordText = 'Password';
 final String confirmPasswordText = 'Confirm Password';
-final String ResetPasswordButtonText = 'Reset Password';
+final String resetPasswordButtonText = 'Reset Password';
 final double iconSize = 80;
 final double verticalButtonMargin = 30.0;
 final double buttonHeight = 50.0;
@@ -19,6 +35,8 @@ final double bottomPadding = 13;
 final Color loginTextColor = Color(0xFFFFFFFF);
 final Color loginRegisterHighlightColor = Color(0xFF35879F);
 final Color loginRegisterSplashColor = Color(0xFF6BC9E2);
+
+final bool isPasswordVisible = true;
 
 final passwordResetTextStyle = TextStyle(
   height: 1.2,
@@ -51,6 +69,7 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
     height: 0.5,
   );
 }
+
 TextEditingController newPassword = TextEditingController();
 TextEditingController confirmNewPassword = TextEditingController();
 
@@ -60,112 +79,105 @@ void clearTextFields() {
 }
 
 class ChangePasswordScreen extends StatelessWidget {
+  const ChangePasswordScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            clearTextFields();
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: SingleChildScrollView(
-        child:Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding:EdgeInsets.only(top: 20.0),
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        clearTextFields();
-                        Navigator.of(context).pop();
-                      },
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: leftRightOverallPadding,
+            right: leftRightOverallPadding,
+            top: topOverallPadding,
+          ),
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius:
+                            BorderRadius.circular(iconBorderRadiusFingerprint),
+                        border: Border.all(
+                          color: iconColorFingerprint,
+                          width: iconWidthFingerprint,
+                        ),
+                      ),
+                      child: Icon(Icons.fingerprint, size: iconSize),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 25, right: 25,top: 60),
-              child: Column(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(6.0),
-                            border: Border.all(color: Color(0xFFDDDFE5), width: 2),
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: passwordResetTextTopPadding,
+                        bottom: passwordResetTextBottomPadding),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            passwordResetText,
+                            style: passwordResetTextStyle,
                           ),
-                          child:
-                          Icon(Icons.fingerprint,size:iconSize),
-                        ),
-                      ),
-
-                      Container(
-                        padding: EdgeInsets.only(top: 15,bottom: 42),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text(
-                                passwordResetText,
-                                style: passwordResetTextStyle,
-                              ),
-                              Text(
-                                normalMessageText,
-                                style: normalMessageStyle,
-                              ),
-                            ],
+                          Text(
+                            normalMessageText,
+                            style: normalMessageStyle,
                           ),
-                        ),
+                        ],
                       ),
-
-                      Text(
-                        passwordText,
-                        style: labelTextStyle,
-                      ),
-                      GrayTextfield(
-                        controller: newPassword,
-                        hintText: passwordHint,
-                        topPadding: topPadding,
-                        bottomPadding: bottomPadding,
-                      ),
-
-                      Text(
-                        confirmPasswordText,
-                        style: labelTextStyle,
-                      ),
-                      GrayTextfield(
-                        controller: confirmNewPassword,
-                        hintText: confirmPasswordHint,
-                        topPadding: topPadding,
-                        bottomPadding: bottomPadding,
-                        isPassword: true,
-                      ),
-
-                      InfiniteRoundWidthButton(
-                        onPress: () {
-                          clearTextFields();
-                          Navigator.pop(context);
-                        },
-                        buttonLabel: Text(
-                          ResetPasswordButtonText,
-                          style:
-                          buttonLabelTextStyle(textColor: loginTextColor),
-                        ),
-                        verticalMargin: verticalButtonMargin,
-                        height: buttonHeight,
-                        highlightColor: loginRegisterHighlightColor,
-                        splashColor: loginRegisterSplashColor,
-                        horizontalMargin: horizontalMargin,
-                      ),
-                    ],
+                    ),
+                  ),
+                  Text(
+                    passwordText,
+                    style: labelTextStyle,
+                  ),
+                  GrayTextfield(
+                    controller: newPassword,
+                    hintText: passwordHint,
+                    topPadding: topPadding,
+                    bottomPadding: bottomPadding,
+                  ),
+                  Text(
+                    confirmPasswordText,
+                    style: labelTextStyle,
+                  ),
+                  GrayTextfield(
+                    controller: confirmNewPassword,
+                    hintText: confirmPasswordHint,
+                    topPadding: topPadding,
+                    bottomPadding: bottomPadding,
+                    isPassword: isPasswordVisible,
+                  ),
+                  InfiniteRoundWidthButton(
+                    onPress: () {
+                      clearTextFields();
+                      Navigator.pop(context);
+                    },
+                    buttonLabel: Text(
+                      resetPasswordButtonText,
+                      style: buttonLabelTextStyle(textColor: loginTextColor),
+                    ),
+                    verticalMargin: verticalButtonMargin,
+                    height: buttonHeight,
+                    highlightColor: loginRegisterHighlightColor,
+                    splashColor: loginRegisterSplashColor,
+                    horizontalMargin: horizontalMargin,
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

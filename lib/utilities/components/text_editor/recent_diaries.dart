@@ -1,7 +1,15 @@
+/*
+* File Name        : recent_diaries.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for showing top 2 latest
+*                   modified recent diaries.
+*/
+
 import 'package:chronicles/services/file_database.dart';
 import 'package:flutter/material.dart';
-import 'FileData.dart';
-import 'chronicles_text_editor.dart';
+import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
+import 'package:chronicles/utilities/components/text_editor/file_data_class.dart';
+import 'package:chronicles/screens/text_editor/chronicles_text_editor.dart';
 import 'package:intl/intl.dart';
 
 class Top2RecentDiaries extends StatefulWidget {
@@ -23,33 +31,28 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
     setState(() {
       top3Files = fileData.asMap().entries.map((entry) {
         int index = entry.key;
-
         FileData file = entry.value;
-
         Color containerColor = _getColorByIndex(index);
-
-        String modifiedDate = file.modifiedAt ?? '';
-
-        modifiedDate = modifiedDate
-            .replaceAll("Tues", "Tue")
-            .replaceAll("Thurs", "Thu")
-            .replaceAll("June", "Jun")
-            .replaceAll("July", "Jul")
-            .replaceAll("Sept", "Sep")
-            .trim();
-
-        String displayDate = " ";
+        String modifiedDate = file.modifiedAt;
+        String displayDate = "";
 
         try {
           DateTime formatDate =
               DateFormat("EEE, dd-MMM-yyyy").parseStrict(modifiedDate);
+          ChroniclesDateTime nowTime = ChroniclesDateTime(nowTime: formatDate);
 
-          displayDate = DateFormat("EEEE,\ndd MMMM yyyy").format(formatDate);
+          String weekday = nowTime.getFullStringWeekDay();
+          int day = nowTime.getIntDay();
+          int year = nowTime.getIntYear();
+          String month = nowTime.getFullStringMonth();
+
+          displayDate = "$weekday,\n$day $month $year";
         } catch (e) {
           print("Error formatting date: $modifiedDate");
         }
 
         return Container(
+          padding: EdgeInsets.all(0.0),
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).push(
@@ -74,7 +77,7 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    displayDate ?? '',
+                    displayDate,
                     style: TextStyle(
                       fontFamily: "Hind",
                       fontWeight: FontWeight.w600,
@@ -85,7 +88,7 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
                   Padding(
                     padding: EdgeInsets.only(top: 10.0, bottom: 5.0),
                     child: Text(
-                      file.title ?? '',
+                      file.title,
                       style: TextStyle(
                         fontFamily: "hind",
                         fontWeight: FontWeight.w600,
@@ -95,7 +98,9 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
                     ),
                   ),
                   Text(
-                    file.content,
+                    file.content.length > 25
+                        ? "${file.content.substring(0, 40)}..."
+                        : file.content,
                     style: TextStyle(
                       fontFamily: "Hind",
                       fontWeight: FontWeight.w400,
@@ -131,8 +136,8 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
   @override
   Widget build(BuildContext context) {
     if (top3Files.isEmpty) {
-      return Container(
-        height: double.minPositive,
+      return SizedBox(
+        height: double.minPositive + 30.0,
         child: Center(
           child: Text(
             'No Recent Files!!!',
@@ -150,7 +155,7 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: top3Files,
       ),
     );

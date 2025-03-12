@@ -1,3 +1,9 @@
+/*
+* File Name        : todo_screen.dart
+* Group            : trOlsz Group
+* Description      : This file has code for To-do List Screen.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/todo/todo.dart';
 import 'package:chronicles/services/todo_services.dart';
@@ -24,8 +30,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
   Future<void> _loadTodos() async {
     setState(() => _isLoading = true);
     try {
-      pendingTodos = await _todoDB.fetchPendingToDoTasks();
-      completedTodos = await _todoDB.fetchCompletedToDoTasks();
+      pendingTodos = await _todoDB.fetchToDoTasks(isComplete: false);
+      completedTodos = await _todoDB.fetchToDoTasks(isComplete: true);
     } finally {
       setState(() => _isLoading = false);
     }
@@ -155,11 +161,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     await _todoDB.addToDoTask(newIndex);
 
                     List<ToDo> updatedPending =
-                        await _todoDB.fetchPendingToDoTasks();
+                        await _todoDB.fetchToDoTasks(isComplete: false);
                     setState(() {
                       pendingTodos = updatedPending;
                     });
-                    print(newIndex);
                   },
                 ),
             ],

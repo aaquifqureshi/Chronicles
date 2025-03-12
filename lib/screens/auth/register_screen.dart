@@ -1,35 +1,38 @@
-/*
-* File Name     : chronicles.dart
-* Date Created  : 1st February 2025
-* last Modified : 1st February 2025
-* Author        : Aaquif Qureshi
-* Group         : trOlsz Group
-* Description   : This file is the start point in this app.
-*                It runs the app and send it to the next Screen
-*                based on the authentication requirements set by
-*                the group.
+/* D
+* File Name        : register_screen.dart
+* Group            : trOlsz Group
+* Description      : This file has code for the Register Screen
 *
+* NOTE : CODE IS UNSAFE AS WE ARE HARDCORE EMBEDDING THE
+*        VALUES FOR AUTH.
 */
 
+// Importing Packages
+import 'package:flutter/material.dart';
 import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
 import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
-import 'package:flutter/material.dart';
+import 'package:chronicles/services/register_auth.dart';
+import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
+import 'package:chronicles/utilities/components/alerts/no_internet_alert.dart';
+import 'package:chronicles/utilities/data/app_policy/terms_and_conditions.dart';
+import 'package:chronicles/utilities/data/app_policy/privacy_policy.dart';
 
-import '../../services/register_auth.dart';
-import '../../utilities/components/alerts/auth_alerts.dart';
-import '../../utilities/components/alerts/no_internet_alert.dart';
-import '../../utilities/data/terms_and_conditions.dart';
-import '../../utilities/data/privacy_policy.dart';
+// Variable Values & TextStyles
+final double overallPadding = 25.0;
 
 final double rightPadding = 25.0;
 final double leftPadding = 25.0;
 final double logoWidth = 130.0;
 final double logoHeight = 130.0;
 final double logoTop = 15.0;
+final double firstTopPadding = 41.0;
 final double topPadding = 0;
 final double bottomPadding = 12.0;
+final double lastBottomPadding = 13.0;
+final double rightPaddingInternetConnectionIcon = 20.0;
+final bool isPasswordVisible = true;
 
 final String createAccountText = 'Create Account';
 final String firstNameHint = 'First Name';
@@ -38,6 +41,7 @@ final String emailHint = 'Email';
 final String passwordHint = 'Password';
 final String normalMeassageText = 'By Signing up you agree to our ';
 final String termsConditionText = 'Terms & Conditions';
+final String textBetweenTCandPrivayPolicy = "& ";
 final String privacyPolicyText = 'Privacy Policy';
 
 final String signUpText = 'Sign Up';
@@ -95,25 +99,27 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
   );
 }
 
-TextEditingController register_firstName = TextEditingController();
-TextEditingController register_lastName = TextEditingController();
-TextEditingController register_email = TextEditingController();
-TextEditingController register_password = TextEditingController();
+TextEditingController firstName = TextEditingController();
+TextEditingController lastName = TextEditingController();
+TextEditingController email = TextEditingController();
+TextEditingController password = TextEditingController();
 
 void clearTextFields() {
-  register_firstName.clear();
-  register_lastName.clear();
-  register_email.clear();
-  register_password.clear();
+  firstName.clear();
+  lastName.clear();
+  email.clear();
+  password.clear();
 }
 
 class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 25),
+          padding: EdgeInsets.only(top: overallPadding),
           child: Column(
             children: [
               Row(
@@ -130,7 +136,8 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
+                    padding: EdgeInsets.only(
+                        right: rightPaddingInternetConnectionIcon),
                     child: InternetConnectionStatus(),
                   ),
                 ],
@@ -153,29 +160,29 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                         GrayTextfield(
-                          controller: register_firstName,
+                          controller: firstName,
                           hintText: firstNameHint,
-                          topPadding: 41,
+                          topPadding: firstTopPadding,
                           bottomPadding: bottomPadding,
                         ),
                         GrayTextfield(
-                          controller: register_lastName,
+                          controller: lastName,
                           hintText: lastNameHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
                         ),
                         GrayTextfield(
-                          controller: register_email,
+                          controller: email,
                           hintText: emailHint,
                           topPadding: topPadding,
                           bottomPadding: bottomPadding,
                         ),
                         GrayTextfield(
-                          controller: register_password,
+                          controller: password,
                           hintText: passwordHint,
                           topPadding: topPadding,
-                          isPassword: true,
-                          bottomPadding: 13,
+                          isPassword: isPasswordVisible,
+                          bottomPadding: lastBottomPadding,
                         ),
                       ],
                     ),
@@ -207,7 +214,7 @@ class RegisterScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "& ",
+                          textBetweenTCandPrivayPolicy,
                           style: normalMeassageTextStyle,
                         ),
                         GestureDetector(
@@ -230,40 +237,42 @@ class RegisterScreen extends StatelessWidget {
                       onPress: () async {
                         var authValue = await registerAuthentication(
                           context,
-                          register_firstName.text.trim(),
-                          register_lastName.text.trim(),
-                          register_email.text.trim(),
-                          register_password.text.trim(),
+                          firstName.text.trim(),
+                          lastName.text.trim(),
+                          email.text.trim(),
+                          password.text.trim(),
                         );
                         bool hasInternet = await getInternetStatus();
-                        if (hasInternet == true) {
-                          if (authValue == 'true') {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              '/Dashboard',
-                              (Route<dynamic> route) => false,
-                            );
-                          } else if (authValue == "emptyFields") {
-                            authAlert(context,
-                                message: "Fields cannot be empty",
-                                icon: Icons.error_outline);
-                          } else if (authValue == "emailAlreadyUsed") {
-                            authAlert(context,
-                                message: "Email Already in use.",
-                                icon: Icons.warning_amber,
-                                iconColor: Colors.orangeAccent);
-                          } else if (authValue == "invalidEmailSyntax") {
-                            authAlert(context,
-                                message: "Invalid Email syntax.",
-                                icon: Icons.warning_amber,
-                                iconColor: Colors.orangeAccent);
-                          } else if (authValue == 'unexpectedError') {
-                            authAlert(context,
-                                message: "Unexpected Error Occured",
-                                icon: Icons.error_outline);
+                        if (context.mounted) {
+                          if (hasInternet == true) {
+                            if (authValue == 'true') {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/Dashboard',
+                                (Route<dynamic> route) => false,
+                              );
+                            } else if (authValue == "emptyFields") {
+                              authAlert(context,
+                                  message: "Fields cannot be empty",
+                                  icon: Icons.error_outline);
+                            } else if (authValue == "emailAlreadyUsed") {
+                              authAlert(context,
+                                  message: "Email Already in use.",
+                                  icon: Icons.warning_amber,
+                                  iconColor: Colors.orangeAccent);
+                            } else if (authValue == "invalidEmailSyntax") {
+                              authAlert(context,
+                                  message: "Invalid Email syntax.",
+                                  icon: Icons.warning_amber,
+                                  iconColor: Colors.orangeAccent);
+                            } else if (authValue == 'unexpectedError') {
+                              authAlert(context,
+                                  message: "Unexpected Error Occured",
+                                  icon: Icons.error_outline);
+                            }
+                          } else {
+                            noInternetAlert(context);
                           }
-                        } else {
-                          noInternetAlert(context);
                         }
                       },
                       buttonLabel: Text(

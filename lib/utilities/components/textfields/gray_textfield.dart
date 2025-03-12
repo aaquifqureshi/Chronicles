@@ -1,14 +1,7 @@
 /*
-* File Name     : chronicles.dart
-* Date Created  : 1st February 2025
-* last Modified : 1st February 2025
-* Author        : Aaquif Qureshi
-* Group         : trOlsz Group
-* Description   : This file is the start point in this app.
-*                It runs the app and send it to the next Screen
-*                based on the authentication requirements set by
-*                the group.
-*
+* File Name        : gray_textfield.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for custom textfield.
 */
 
 import 'package:flutter/material.dart';
@@ -21,6 +14,7 @@ class GrayTextfield extends StatefulWidget {
   final bool isPassword;
 
   const GrayTextfield({
+    super.key,
     this.topPadding = 0,
     this.bottomPadding = 0,
     this.isPassword = false,
@@ -40,6 +34,7 @@ class _GrayTextfieldState extends State<GrayTextfield> {
     super.initState();
     obscureText = widget.isPassword;
   }
+
   @override
   Widget build(BuildContext context) {
     final hintStyle = TextStyle(
@@ -55,7 +50,8 @@ class _GrayTextfieldState extends State<GrayTextfield> {
     );
 
     return Padding(
-      padding: EdgeInsets.only(top: widget.topPadding, bottom: widget.bottomPadding),
+      padding:
+          EdgeInsets.only(top: widget.topPadding, bottom: widget.bottomPadding),
       child: TextField(
         controller: widget.controller,
         style: textFieldStyle,
@@ -82,21 +78,23 @@ class _GrayTextfieldState extends State<GrayTextfield> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: Color(0xFFFDDDFE5),
+              color: Color(0xFFDDDFE5),
               width: 1.2,
             ),
           ),
-          suffixIcon: widget.isPassword ? IconButton(
-            icon: Icon(
-              obscureText ? Icons.visibility_off : Icons.visibility,
-              color: Color(0xFF1F1F1F),
-            ),
-            onPressed: () {
-              setState(() {
-                obscureText = !obscureText;
-              });
-            },
-          ) : null,
+          suffixIcon: widget.isPassword
+              ? IconButton(
+                  icon: Icon(
+                    obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: Color(0xFF1F1F1F),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      obscureText = !obscureText;
+                    });
+                  },
+                )
+              : null,
         ),
       ),
     );

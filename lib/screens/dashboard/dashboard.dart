@@ -1,15 +1,78 @@
+/*
+* File Name        : dashboard.dart
+* Group            : trOlsz Group
+* Description      : This file has code for the Dashboard Screen
+*
+* NOTE: Fetching Username should be from secureData.
+*/
+
+// Importing Packages
 import 'package:chronicles/utilities/components/calender/streak_calender.dart';
-import 'package:chronicles/screens/todo/todo_top_three.dart';
+import 'package:chronicles/screens/todo/recent_todo.dart';
+import 'package:chronicles/utilities/data/user_auth_data.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/screens/todo/todo_screen.dart';
-import 'package:chronicles/utilities/components/searchbar/boxSearchBar.dart';
-import 'package:chronicles/utilities/components/text_editor/chronicles_text_editor.dart';
-import 'package:chronicles/utilities/components/profile/fetch_username.dart';
-import 'package:chronicles/utilities/components/text_editor/top_2_recent_diaries.dart';
+import 'package:chronicles/utilities/components/searchbar/box_search_bar.dart';
+import 'package:chronicles/utilities/components/text_editor/recent_diaries.dart';
 import 'package:chronicles/screens/profile/profile_screen.dart';
-import 'package:chronicles/screens/shared_diaries/view_shared_diaries.dart';
-import 'package:chronicles/utilities/components/buttons/custom_floatingbutton.dart';
+
+import 'package:chronicles/utilities/components/floating_action_button/dashboard_fab.dart';
+
+// Variable Values and TextStyles
+final double scrolledUnderElevationValue = 0.5;
+final double appBarTopPadding = 8.0;
+final double profileIconWidth = 56.0;
+final double profileIconHeight = 56.0;
+final double bodyTopPadding = 5.0;
+final double bodyBottomPadding = 20.0;
+final double bodyLeftPadding = 15.0;
+final double bodyRightPadding = 15.0;
+final double searchBarTopPadding = 20.0;
+final double searchBarLeftPadding = 5.0;
+final double searchBarRightPadding = 5.0;
+final double streakHorizontalMargin = 6.0;
+final double streakTopPadding = 30.0;
+final double streakBottomPaddin = 20.0;
+final double streakInsidePaddingAll = 10.0;
+final double streakBorderWidth = 2.0;
+final double streakBorderRadius = 6.0;
+final double todoIconButtonMaxHeight = 36.0;
+final double todoIconSize = 24.0;
+final double todoIconPadding = 0.0;
+final double recentTodoHorizontalMargin = 6.0;
+final double recentTodoLeftPadding = 10.0;
+final double recentTodoTopPadding = 10.0;
+final double recentTodoRightPadding = 20.0;
+final double recentTodoBottomPadding = 10.0;
+final double recentTodoBorderWidth = 2.0;
+final double recentTodoBorderRadius = 6.0;
+final double recentTodoMaxHeight = 200.0;
+final double sizedBoxBetweenTodoAndRecent = 20.0;
+final double recentDiariesHorizontalMargin = 6.0;
+final double recentDiariesLeftPadding = 10.0;
+final double recentDiariesTopPadding = 20.0;
+final double recentDiariesRightPadding = 20.0;
+final double recentDiariesBottomPadding = 10.0;
+final double recentDiaryBorderWidth = 2.0;
+final double recentDiaryBorderRadius = 6.0;
+final double recentDiaryContainerHeight = 190.0;
+
+final Color appBarBGColor = Color(0xFFFFFFFF);
+final Color streakContainerColor = Color(0xFFFFFFFF);
+final Color streakBorderColor = Color(0x40000000);
+final Color todoIconColor = Color(0xFFFFFFFF);
+final Color todoIconBGColor = Color(0xFF4EABCC);
+final Color recentTodoBGColor = Color(0xFFFFFFFF);
+final Color recentTodoBorderColor = Color(0x40000000);
+final Color diaryArchiveIconColor = Color(0xFF4EABCC);
+final Color recentDiaryBGColor = Color(0xFFFFFFFF);
+final Color recentDiaryBorderColor = Color(0x40000000);
+
+final String appBarMessage = "Hello,";
+final String taskTextString = "Task";
+final String recentTextString = "Recent";
+String username = "Loading...";
 
 final helloMsgStyle = TextStyle(
   height: 1.8,
@@ -56,96 +119,38 @@ final taskTitleTextField = TextStyle(
 );
 
 class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
+
   @override
   State<Dashboard> createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  String username = "Loading...";
+  @override
   void initState() {
+    fetchUsername();
     super.initState();
+  }
 
-    UserService.getUsername().then((fetchedUsername) {
-      setState(() {
-        username = fetchedUsername;
-      });
+  void fetchUsername() async {
+    String uname = await UserDataFetcher().fetchUsername();
+
+    setState(() {
+      username = uname;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Container(
-        height: 55,
-        width: 220,
-        margin: EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(76, 0, 0, 0),
-                offset: const Offset(0, 5),
-                blurRadius: 15,
-                spreadRadius: 0,
-              ),
-            ]),
-        child: Row(
-          children: [
-            NavigateFloatingButton(
-              buttonPadding: EdgeInsets.fromLTRB(9.5, 6, 5, 6),
-              buttonIcon: Icons.home,
-              buttonIconColor: Color(0xFF4EABCC),
-              buttonBackgroundColor: Color(0xFFE0F2FC),
-              buttonHeroTag: 'home_button',
-              isDisabled: true,
-            ),
-            NavigateFloatingButton(
-              buttonPadding: EdgeInsets.fromLTRB(0, 6, 5, 6),
-              buttonIcon: Icons.create_outlined,
-              buttonIconColor: Color(0xFF797C7D),
-              buttonBackgroundColor: Color(0xFFFFFFFF),
-              buttonHeroTag: 'create_button',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TextEditor(
-                      isModify: false,
-                    ),
-                  ),
-                );
-              },
-            ),
-            NavigateFloatingButton(
-              buttonPadding: EdgeInsets.fromLTRB(0, 6, 9.5, 6),
-              buttonIcon: Icons.person,
-              buttonIconColor: Color(0xFF797C7D),
-              buttonBackgroundColor: Color(0xFFFFFFFF),
-              buttonHeroTag: 'user_button',
-              onPressed: () {
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        ViewSharedDiaries(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return child;
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      floatingActionButton: DashboardFab(),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFFFFF),
-        scrolledUnderElevation: 0.5,
+        backgroundColor: appBarBGColor,
+        scrolledUnderElevation: scrolledUnderElevationValue,
         title: Padding(
-          padding: EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: appBarTopPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -153,7 +158,7 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Hello,",
+                    appBarMessage,
                     style: helloMsgStyle,
                   ),
                   Text(
@@ -171,7 +176,10 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   );
                 },
-                child: ImageImport(width: 56, height: 56).importProfileIcon(),
+                child: ImageImport(
+                  width: profileIconWidth,
+                  height: profileIconHeight,
+                ).importProfileIcon(),
               ),
             ],
           ),
@@ -179,25 +187,39 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 5, bottom: 20, left: 15, right: 15),
+          padding: EdgeInsets.only(
+            top: bodyTopPadding,
+            bottom: bodyBottomPadding,
+            left: bodyLeftPadding,
+            right: bodyRightPadding,
+          ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 20.0, left: 5, right: 5),
+                padding: EdgeInsets.only(
+                  top: searchBarTopPadding,
+                  left: searchBarLeftPadding,
+                  right: searchBarRightPadding,
+                ),
                 child: BoxSearchBar(),
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 6.0),
-                padding: EdgeInsets.only(top: 30.0, bottom: 20.0),
+                margin:
+                    EdgeInsets.symmetric(horizontal: streakHorizontalMargin),
+                padding: EdgeInsets.only(
+                  top: streakTopPadding,
+                  bottom: streakBottomPaddin,
+                ),
                 child: Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(streakInsidePaddingAll),
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
+                    color: streakContainerColor,
                     border: Border.all(
-                      color: Color(0x40000000),
-                      width: 2.0,
+                      color: streakBorderColor,
+                      width: streakBorderWidth,
                     ),
-                    borderRadius: BorderRadius.circular(6.0),
+                    borderRadius: BorderRadius.circular(streakBorderRadius),
                   ),
                   child: StreakCalender(),
                 ),
@@ -206,12 +228,13 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Task',
+                    taskTextString,
                     style: taskTitleTextField,
                   ),
                   IconButton(
-                    constraints: BoxConstraints(maxHeight: 36),
-                    color: Color(0xFFFFFFFF),
+                    constraints:
+                        BoxConstraints(maxHeight: todoIconButtonMaxHeight),
+                    color: todoIconColor,
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -221,32 +244,38 @@ class _DashboardState extends State<Dashboard> {
                       );
                       setState(() {});
                     },
-                    icon: Icon(Icons.add_rounded, size: 24.0),
+                    icon: Icon(Icons.add_rounded, size: todoIconSize),
                     style: IconButton.styleFrom(
-                      backgroundColor: Color(0xFF4EABCC),
-                      padding: EdgeInsets.all(0.0),
+                      backgroundColor: todoIconBGColor,
+                      padding: EdgeInsets.all(todoIconPadding),
                     ),
                   ),
                 ],
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 6.0),
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                margin: EdgeInsets.symmetric(
+                    horizontal: recentTodoHorizontalMargin),
+                padding: EdgeInsets.only(
+                  left: recentTodoLeftPadding,
+                  top: recentTodoTopPadding,
+                  right: recentTodoRightPadding,
+                  bottom: recentTodoBottomPadding,
+                ),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: recentTodoBGColor,
                   border: Border.all(
-                    color: Color(0x40000000),
-                    width: 2.0,
+                    color: recentTodoBorderColor,
+                    width: recentTodoBorderWidth,
                   ),
-                  borderRadius: BorderRadius.circular(6.0),
+                  borderRadius: BorderRadius.circular(recentTodoBorderRadius),
                 ),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 200.0),
-                  child: Top3ToDoList(),
+                  constraints: BoxConstraints(maxHeight: recentTodoMaxHeight),
+                  child: RecentToDo(),
                 ),
               ),
               SizedBox(
-                height: 20.0,
+                height: sizedBoxBetweenTodoAndRecent,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,37 +283,41 @@ class _DashboardState extends State<Dashboard> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Recent',
+                      recentTextString,
                       style: taskTitleTextField,
                     ),
                   ),
                   IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/AllDiary');
+                      Navigator.pushNamed(context, '/DiaryArchive');
                     },
                     icon: Icon(
                       Icons.more_horiz_sharp,
-                      color: Color(0xFF4EABCC),
+                      color: diaryArchiveIconColor,
                     ),
                   ),
                 ],
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 6.0),
-                padding: EdgeInsets.fromLTRB(10.0, 20.0, 20.0, 10.0),
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(
+                  horizontal: recentDiariesHorizontalMargin,
+                ),
+                padding: EdgeInsets.only(
+                  left: recentDiariesLeftPadding,
+                  top: recentDiariesTopPadding,
+                  right: recentDiariesRightPadding,
+                  bottom: recentDiariesBottomPadding,
+                ),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: recentDiaryBGColor,
                   border: Border.all(
-                    color: Color(0x40000000),
-                    width: 2.0,
+                    color: recentDiaryBorderColor,
+                    width: recentDiaryBorderWidth,
                   ),
-                  borderRadius: BorderRadius.circular(6.0),
+                  borderRadius: BorderRadius.circular(recentDiaryBorderRadius),
                 ),
-                child: SizedBox(
-                  height: 190.0,
-                  width: double.infinity,
-                  child: Top2RecentDiaries(),
-                ),
+                child: Top2RecentDiaries(),
               ),
             ],
           ),

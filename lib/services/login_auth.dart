@@ -1,5 +1,14 @@
+/*
+* File Name        : login_auth.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for Login Authentication.
+*/
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chronicles/services/secure_storage.dart';
+
+import 'package:chronicles/utilities/data/user_auth_data.dart';
 
 Future<bool> isLoginDone() async {
   SecureStorage loginAuth = SecureStorage();
@@ -26,25 +35,47 @@ Future<String> loginAuthentication(
 
   try {
     UserCredential userCredential =
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    String userId = userCredential.user!.uid;
+    String uid = userCredential.user!.uid;
+    UserData data;
 
-    await storage.updateSecureData('user_id', userId);
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    data = UserData(
+      uid: uid,
+      email: userDoc['firstName'],
+      username: userDoc['username'],
+      firstName: userDoc['firstname'],
+      lastName: userDoc['lastname'],
+      joinDate: userDoc['join_date'],
+    );
+
+    String dataString = data.toJson();
+
+    await storage.updateSecureData('UserData', dataString);
     storage.updateSecureData('isLoginDone', 'true');
+    storage.updateSecureData('isPinRequired', 'false');
+
     return 'true';
   } on FirebaseAuthException catch (e) {
     if (e.code == 'invalid-credential') {
       storage.updateSecureData('isLoginDone', 'false');
+      storage.updateSecureData('isPinRequired', 'false');
+
       return "invalidCredentials";
-    }else if(e.code == 'invalid-email'){
+    } else if (e.code == 'invalid-email') {
       storage.updateSecureData('isLoginDone', 'false');
+      storage.updateSecureData('isPinRequired', 'false');
+
       return "invalidEmailSyntax";
     }
     storage.updateSecureData('isLoginDone', 'false');
+    storage.updateSecureData('isPinRequired', 'false');
+
     return "unexpectedError";
   }
 }

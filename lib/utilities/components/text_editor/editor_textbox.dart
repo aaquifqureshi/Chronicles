@@ -1,3 +1,10 @@
+/*
+* File Name        : editor_textbox.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for our text editor's
+*                   text box.
+*/
+
 import 'package:flutter/material.dart';
 import 'markdown_to_html.dart';
 
@@ -30,20 +37,19 @@ class EditorTextBox extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
-                    style: textEditorStyle,
-
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Write Your Journey!',
-                    ),
-
-                    controller: controller,
-
-                    maxLines: null,
-
-                    onTapOutside: (_) =>
-                        onToggleEdit(), // Use onTapOutside only
-                  ),
+                      style: textEditorStyle,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Write Your Journey!',
+                      ),
+                      controller: controller,
+                      maxLines: null,
+                      onTapUpOutside: (event) {
+                        onToggleEdit();
+                      },
+                      onTapOutside: (event) {
+                        onToggleEdit();
+                      }),
                 ),
                 IconButton(
                   onPressed: onDelete,

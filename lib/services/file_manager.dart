@@ -1,13 +1,18 @@
+/*
+* File Name        : file_manager.dart
+* Group            : trOlsz Group
+* Description      : This file is has code for all text editor aka
+*                    diary related file operations like Saving a file,
+*                    loading a file, deleting a file (AS JSON).
+*/
+
 import 'dart:convert';
 import 'dart:io';
-import 'package:chronicles/services/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:chronicles/utilities/components/date_time/current_datetime.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'file_database.dart';
+import 'package:chronicles/utilities/data/user_auth_data.dart';
 
 class FileManager {
   static const String _diaryFolderName = 'diary';
@@ -24,18 +29,16 @@ class FileManager {
       required String createDate,
       required String modifyDate,
       required List<TextEditingController> controller}) async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
+    String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
     Directory diaryDir =
-        Directory('${appDocDir.path}/$user_id/$_diaryFolderName');
+        Directory('${appDocDir.path}/$userId/$_diaryFolderName');
 
     if (!await diaryDir.exists()) {
       await diaryDir.create(recursive: true);
     }
     String fileName = '$milliSinceEpoch.json';
-    print(fileName);
     File file = File('${diaryDir.path}/$fileName');
 
     Map<String, dynamic> fileData = {
@@ -51,20 +54,17 @@ class FileManager {
   }
 
   static Future<Map<String, dynamic>?> loadJsonFile(String fileName) async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
+    String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
     Directory diaryDir =
-        Directory('${appDocDir.path}/$user_id/$_diaryFolderName');
+        Directory('${appDocDir.path}/$userId/$_diaryFolderName');
 
     File file = File('${diaryDir.path}/$fileName');
     if (await file.exists()) {
       String jsonData = await file.readAsString();
       return jsonDecode(jsonData);
-    } else {
-      print("File does not exist!");
-    }
+    } else {}
     return null;
   }
 
@@ -74,12 +74,11 @@ class FileManager {
       required String createDate,
       required String modifyDate,
       required List<TextEditingController> controller}) async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
+    String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
     Directory diaryDir =
-        Directory('${appDocDir.path}/$user_id/$_diaryFolderName');
+        Directory('${appDocDir.path}/$userId/$_diaryFolderName');
 
     if (!await diaryDir.exists()) {
       await diaryDir.create(recursive: true);
@@ -99,12 +98,11 @@ class FileManager {
   }
 
   static Future<void> deleteJsonFile({required String fileName}) async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
+    String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
     Directory diaryDir =
-        Directory('${appDocDir.path}/$user_id/$_diaryFolderName');
+        Directory('${appDocDir.path}/$userId/$_diaryFolderName');
 
     if (!await diaryDir.exists()) {
       await diaryDir.create(recursive: true);
@@ -114,7 +112,6 @@ class FileManager {
     if (await file.exists()) {
       try {
         await file.delete();
-        print('File Deleted');
       } catch (e) {
         print('File Not Deleted');
       }
@@ -127,12 +124,11 @@ class FileManager {
       {required String filename,
       required XFile image,
       required String imageName}) async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
+    String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
     Directory diaryImageDir = Directory(
-        '${appDocDir.path}/$user_id/$_diaryImageFolderName/${filename.split('.').first}');
+        '${appDocDir.path}/$userId/$_diaryImageFolderName/${filename.split('.').first}');
     File imageFile = File('${diaryImageDir.path}/$imageName');
     if (!await imageFile.exists()) {
       await imageFile.create(recursive: true);

@@ -1,16 +1,19 @@
+/*
+* File Name        : streak_calender.dart
+* Group            : trOlsz Group
+* Description      : This file contains code for our streak calender.
+*/
+
 import 'dart:io';
 
+import 'package:chronicles/utilities/data/user_auth_data.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:streak_calendar/streak_calendar.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-
-import '../../../services/secure_storage.dart';
 
 class StreakCalender extends StatefulWidget {
-  StreakCalender({super.key});
-  late List<DateTime> _activeDates;
+  const StreakCalender({super.key});
 
   @override
   State<StreakCalender> createState() => _StreakCalenderState();
@@ -32,12 +35,11 @@ class _StreakCalenderState extends State<StreakCalender> {
   }
 
   Future<void> initDatabase() async {
-    SecureStorage storage = SecureStorage();
-    String user_id = await storage.readSecureData('user_id');
+    String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
     String streakDB =
-        '${appDocDir.path}/$user_id/${getDatabasesPath()}/streaks.db';
+        '${appDocDir.path}/$userId/${getDatabasesPath()}/streaks.db';
 
     _database = await openDatabase(
       streakDB,

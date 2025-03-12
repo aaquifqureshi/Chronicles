@@ -42,12 +42,14 @@ Future<String> loginAuthentication(
 
     String uid = userCredential.user!.uid;
     UserData data;
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('user_account')
+        .doc(uid)
+        .get();
 
-    DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     data = UserData(
       uid: uid,
-      email: userDoc['firstName'],
+      email: userDoc['email'],
       username: userDoc['username'],
       firstName: userDoc['firstname'],
       lastName: userDoc['lastname'],

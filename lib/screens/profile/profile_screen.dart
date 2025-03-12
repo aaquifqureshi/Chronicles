@@ -245,7 +245,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: padding10, left: padding15, right: padding15),
+                        top: padding10,
+                        left: padding15,
+                        right: padding15,
+                        bottom: padding15,
+                      ),
                       child: CustomTextButton(
                         text: optionTemplateText,
                         icon: Icons.design_services,

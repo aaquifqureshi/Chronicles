@@ -33,6 +33,7 @@ Future<bool> isGoogleAuthenticationDone() async {
 
     String uid = userCredential.user!.uid;
     UserData data;
+    DateTime nowTime = DateTime.now();
 
     if (user == null) {
       return false;
@@ -41,27 +42,25 @@ Future<bool> isGoogleAuthenticationDone() async {
     storage.updateSecureData('isLoginDone', 'true');
     storage.updateSecureData('isPinRequired', 'false');
 
-    await FirebaseFirestore.instance
-        .collection('user_account')
-        .doc(user.uid)
-        .set({
-      'user_id': user.uid,
+    await FirebaseFirestore.instance.collection('user_account').doc(uid).set({
+      'uid': uid,
       'username': user.displayName?.split(" ").first ?? "",
-      'user_email': user.email ?? "",
-      'user_firstname': user.displayName?.split(" ").first ?? "",
-      'user_lastname': user.displayName?.split(" ").last ?? "",
-      'user_gender': '',
-      'user_dob': '',
-      'user_pfp_url': '',
-      'join_date': Timestamp.now(),
-      'theme_id': '',
+      'email': user.email ?? "",
+      'firstname': user.displayName?.split(" ").first ?? "",
+      'lastname': user.displayName?.split(" ").last ?? "",
+      'gender': 3,
+      'dob': '',
+      'pfp_url': '',
+      'join_date': nowTime.millisecondsSinceEpoch,
     }, SetOptions(merge: true));
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('user_account')
+        .doc(uid)
+        .get();
 
-    DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     data = UserData(
       uid: uid,
-      email: userDoc['firstName'],
+      email: userDoc['email'],
       username: userDoc['username'],
       firstName: userDoc['firstname'],
       lastName: userDoc['lastname'],

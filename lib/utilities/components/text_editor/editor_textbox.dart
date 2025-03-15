@@ -20,7 +20,7 @@ class EditorTextBox extends StatelessWidget {
   final void Function() onToggleEdit;
   final void Function() onDelete;
 
-  EditorTextBox({
+  const EditorTextBox({
     super.key,
     required this.controller,
     required this.editMode,

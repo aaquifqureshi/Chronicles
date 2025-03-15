@@ -155,7 +155,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       try {
                         var userDoc = await FirebaseFirestore.instance
                             .collection("user_account")
-                            .where("user_email", isEqualTo: email)
+                            .where("email", isEqualTo: email)
                             .get();
                         if (context.mounted) {
                           if (userDoc.docs.isNotEmpty) {

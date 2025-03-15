@@ -98,7 +98,7 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
                     ),
                   ),
                   Text(
-                    file.content.length > 25
+                    file.content.length > 40
                         ? "${file.content.substring(0, 40)}..."
                         : file.content,
                     style: TextStyle(

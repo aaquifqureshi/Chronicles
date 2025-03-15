@@ -4,13 +4,9 @@
 * Description      : This file contains code for our streak calender.
 */
 
-import 'dart:io';
-
-import 'package:chronicles/utilities/data/user_auth_data.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:streak_calendar/streak_calendar.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:chronicles/services/streak_services.dart';
 
 class StreakCalender extends StatefulWidget {
   const StreakCalender({super.key});
@@ -21,7 +17,6 @@ class StreakCalender extends StatefulWidget {
 
 class _StreakCalenderState extends State<StreakCalender> {
   List<DateTime> listStreakDates = [];
-  Database? _database;
 
   @override
   void initState() {
@@ -29,67 +24,26 @@ class _StreakCalenderState extends State<StreakCalender> {
     initDatabase();
   }
 
-  static Future<Directory> _getAppDocumentsDirectory() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory;
-  }
-
   Future<void> initDatabase() async {
-    String userId = await UserDataFetcher().fetchUID();
-
-    Directory appDocDir = await _getAppDocumentsDirectory();
-    String streakDB =
-        '${appDocDir.path}/$userId/${getDatabasesPath()}/streaks.db';
-
-    _database = await openDatabase(
-      streakDB,
-      onCreate: (db, version) {
-        return db.execute(
-          "CREATE TABLE streaks(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT UNIQUE)",
-        );
-      },
-      version: 1,
-    );
-
     await loadStreakDates();
     await didUserLogin();
   }
 
   Future<void> loadStreakDates() async {
-    if (_database == null) return;
-
-    final List<Map<String, dynamic>> results =
-        await _database!.query('streaks');
-
+    List<DateTime> streakDates =
+        await StreakDatabaseService.instance.loadStreakDates();
     setState(() {
-      listStreakDates = results
-          .map((e) => DateTime.parse(e['date'])) // Convert string to DateTime
-          .toList();
+      listStreakDates = streakDates;
     });
   }
 
   Future<void> didUserLogin() async {
-    if (_database == null) return;
-
     String today = DateTime.now().toIso8601String().split('T')[0];
+    await StreakDatabaseService.instance.addStreakDate(today);
 
-    List<Map<String, dynamic>> result = await _database!.query(
-      'streaks',
-      where: 'date = ?',
-      whereArgs: [today],
-    );
-
-    if (result.isEmpty) {
-      await _database!.insert(
-        'streaks',
-        {'date': today},
-        conflictAlgorithm: ConflictAlgorithm.ignore,
-      );
-
-      setState(() {
-        listStreakDates.add(DateTime.now());
-      });
-    }
+    setState(() {
+      listStreakDates.add(DateTime.now());
+    });
   }
 
   @override

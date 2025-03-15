@@ -1,6 +1,7 @@
 import 'package:chronicles/utilities/data/user_auth_data.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
+import 'package:chronicles/services/streak_services.dart';
 
 class ProfileAvatar extends StatefulWidget {
   const ProfileAvatar({super.key});
@@ -10,18 +11,37 @@ class ProfileAvatar extends StatefulWidget {
 }
 
 class _ProfileAvatarState extends State<ProfileAvatar> {
-  int streak = 0;
+  int currentStreak = 0;
+  int maxStreak = 0;
+
+  @override
+  void initState() {
+    fetchStreak();
+    super.initState();
+  }
 
   Future<void> fetchStreak() async {
-    int streakValue = await UserDataFetcher().fetchStreak();
+    int streakValueFromUserData = await UserDataFetcher().fetchStreak();
+    int maxStreakValueFromUserData = await UserDataFetcher().fetchMaxStreak();
+
+    int calculatedMaxStreak =
+        await StreakDatabaseService.instance.calculateMaxStreak();
+    int calculatedCurrentStreak =
+        await StreakDatabaseService.instance.calculateCurrentStreak();
+
     setState(() {
-      streak = streakValue;
+      currentStreak = calculatedCurrentStreak > streakValueFromUserData
+          ? calculatedCurrentStreak
+          : streakValueFromUserData;
+
+      maxStreak = calculatedMaxStreak > maxStreakValueFromUserData
+          ? calculatedMaxStreak
+          : maxStreakValueFromUserData;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    fetchStreak();
     return Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -45,7 +65,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
           top: 10,
           left: 200,
           child: Text(
-            streak.toString(),
+            currentStreak.toString(),
             style: TextStyle(
               fontSize: 30.0,
               color: Colors.red,

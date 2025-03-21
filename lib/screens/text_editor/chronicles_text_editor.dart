@@ -37,6 +37,9 @@ class TextEditor extends StatefulWidget {
 
 class _TextEditorState extends State<TextEditor> {
   List<TextEditingController> controllers = [];
+  List<TextEditingController> noEditController = [];
+  TextEditingController noEditTitleController = TextEditingController();
+
   List<bool> editModes = [];
   TextEditingController titleController = TextEditingController();
 
@@ -45,11 +48,44 @@ class _TextEditorState extends State<TextEditor> {
   String createdAt = '';
   String modifiedAt = '';
   late ChroniclesDateTime nowTime;
+
+  void noSaveClose() {
+    if (noEditController == controllers &&
+        titleController.text == noEditTitleController.text) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/Dashboard',
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      saveAlert(
+        context,
+        message: noSaveLeaveMessage,
+        onPressExit: () {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/Dashboard',
+            (Route<dynamic> route) => false,
+          );
+        },
+        onPressSave: () {
+          _saveFile();
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/Dashboard',
+            (Route<dynamic> route) => false,
+          );
+        },
+      );
+    }
+  }
+
   @override
   void initState() {
     nowTime = ChroniclesDateTime(nowTime: DateTime.now());
     if (widget.fileName == null) {
       controllers.add(TextEditingController());
+      noEditController = controllers;
       editModes.add(true);
 
       String weekday = nowTime.getHalfStringWeekDay();
@@ -221,6 +257,7 @@ class _TextEditorState extends State<TextEditor> {
                 text: fileData['controllers'][index],
               ),
             );
+            noEditController = controllers;
             editModes = List.generate(controllers.length, (index) => false);
           });
         }
@@ -242,25 +279,7 @@ class _TextEditorState extends State<TextEditor> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
-          saveAlert(
-            context,
-            message: noSaveLeaveMessage,
-            onPressExit: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                '/Dashboard',
-                (Route<dynamic> route) => false,
-              );
-            },
-            onPressSave: () {
-              _saveFile();
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                '/Dashboard',
-                (Route<dynamic> route) => false,
-              );
-            },
-          );
+          noSaveClose();
         }
       },
       child: Scaffold(
@@ -314,25 +333,7 @@ class _TextEditorState extends State<TextEditor> {
           ),
           leading: IconButton(
             onPressed: () {
-              saveAlert(
-                context,
-                message: noSaveLeaveMessage,
-                onPressExit: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/Dashboard',
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                onPressSave: () {
-                  _saveFile();
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/Dashboard',
-                    (Route<dynamic> route) => false,
-                  );
-                },
-              );
+              noSaveClose();
             },
             icon: Icon(Icons.arrow_back),
           ),

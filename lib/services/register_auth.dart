@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chronicles/services/secure_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:chronicles/services/user_service.dart';
 
 Future<String> registerAuthentication(BuildContext context, String firstName,
     String lastName, String email, String password) async {
@@ -31,10 +32,13 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
     UserData data;
     String uid = userCredential.user!.uid;
     DateTime nowTime = DateTime.now();
+    int nextIndex = await getNextUserIndex();
+    String username = 'user${nextIndex.toString().padLeft(4, '0')}';
+
     try {
       await FirebaseFirestore.instance.collection('user_account').doc(uid).set({
         'uid': uid,
-        'username': firstName,
+        'username': username,
         'email': email,
         'firstname': firstName,
         'lastname': lastName,
@@ -50,7 +54,7 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
     data = UserData(
       uid: uid,
       email: email,
-      username: firstName,
+      username: username,
       firstName: firstName,
       lastName: lastName,
       joinDate: nowTime.millisecondsSinceEpoch,
@@ -60,6 +64,9 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
 
     storage.updateSecureData('isLoginDone', 'true');
     storage.updateSecureData('isPinRequired', 'false');
+
+    updateUserIndex(nextIndex);
+
     return 'true';
   } on FirebaseAuthException catch (e) {
     if (e.code == 'email-already-in-use') {

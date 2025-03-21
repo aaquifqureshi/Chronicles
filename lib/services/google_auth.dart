@@ -4,14 +4,16 @@
 * Description      : This file is has code for google Authentication.
 */
 
+import 'package:flutter/material.dart';
 import 'package:chronicles/services/secure_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:chronicles/services/user_service.dart';
 import 'package:chronicles/utilities/data/user_auth_data.dart';
+import 'package:chronicles/services/pfp_services.dart';
 
-Future<bool> isGoogleAuthenticationDone() async {
+Future<bool> isGoogleAuthenticationDone(BuildContext context) async {
   SecureStorage storage = SecureStorage();
   try {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -35,24 +37,38 @@ Future<bool> isGoogleAuthenticationDone() async {
     UserData data;
     DateTime nowTime = DateTime.now();
 
+    DocumentSnapshot Doc = await FirebaseFirestore.instance
+        .collection('user_account')
+        .doc(uid)
+        .get();
+
+    String username;
+    int nextIndex;
+
     if (user == null) {
       return false;
     }
 
-    storage.updateSecureData('isLoginDone', 'true');
-    storage.updateSecureData('isPinRequired', 'false');
+    if (Doc.exists) {
+      username = Doc['username'];
+      await updateSaveImage();
+      await getSavedImagePath();
+    } else {
+      nextIndex = await getNextUserIndex();
+      username = 'user${nextIndex.toString().padLeft(4, '0')}';
 
-    await FirebaseFirestore.instance.collection('user_account').doc(uid).set({
-      'uid': uid,
-      'username': user.displayName?.split(" ").first ?? "",
-      'email': user.email ?? "",
-      'firstname': user.displayName?.split(" ").first ?? "",
-      'lastname': user.displayName?.split(" ").last ?? "",
-      'gender': 3,
-      'dob': '',
-      'pfp_url': '',
-      'join_date': nowTime.millisecondsSinceEpoch,
-    }, SetOptions(merge: true));
+      await FirebaseFirestore.instance.collection('user_account').doc(uid).set({
+        'uid': uid,
+        'username': username,
+        'email': user.email ?? "",
+        'firstname': user.displayName?.split(" ").first ?? "",
+        'lastname': user.displayName?.split(" ").last ?? "",
+        'gender': 3,
+        'dob': '',
+        'pfp_url': '',
+        'join_date': nowTime.millisecondsSinceEpoch,
+      }, SetOptions(merge: true));
+    }
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection('user_account')
         .doc(uid)
@@ -66,6 +82,14 @@ Future<bool> isGoogleAuthenticationDone() async {
       lastName: userDoc['lastname'],
       joinDate: userDoc['join_date'],
     );
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      Doc.exists ? '/Dashboard' : '/UsernameScreen',
+      (Route<dynamic> route) => false,
+    );
+
+    storage.updateSecureData('isLoginDone', 'true');
+    storage.updateSecureData('isPinRequired', 'false');
 
     String dataString = data.toJson();
     await storage.updateSecureData('UserData', dataString);

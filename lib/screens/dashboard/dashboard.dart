@@ -10,14 +10,15 @@
 import 'package:chronicles/utilities/components/calender/streak_calender.dart';
 import 'package:chronicles/screens/todo/recent_todo.dart';
 import 'package:chronicles/utilities/data/user_auth_data.dart';
-import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/screens/todo/todo_screen.dart';
 import 'package:chronicles/utilities/components/searchbar/box_search_bar.dart';
 import 'package:chronicles/utilities/components/text_editor/recent_diaries.dart';
 import 'package:chronicles/screens/profile/profile_screen.dart';
-
 import 'package:chronicles/utilities/components/floating_action_button/dashboard_fab.dart';
+import 'dart:io';
+import 'package:chronicles/services/pfp_services.dart';
+import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
 
 // Variable Values and TextStyles
 final double scrolledUnderElevationValue = 0.5;
@@ -73,6 +74,7 @@ final String appBarMessage = "Hello,";
 final String taskTextString = "Task";
 final String recentTextString = "Recent";
 String username = "Loading...";
+File? profileImage;
 
 final helloMsgStyle = TextStyle(
   height: 1.8,
@@ -128,15 +130,20 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
-    fetchUsername();
+    fetchUserDetail();
     super.initState();
   }
 
-  void fetchUsername() async {
+  void fetchUserDetail() async {
     String uname = await UserDataFetcher().fetchUsername();
 
+    uname = uname[0].toUpperCase() + uname.substring(1);
+    String? imagePath = await getSavedImagePath();
     setState(() {
       username = uname;
+      if (imagePath != null) {
+        profileImage = File(imagePath);
+      }
     });
   }
 
@@ -176,10 +183,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   );
                 },
-                child: ImageImport(
-                  width: profileIconWidth,
-                  height: profileIconHeight,
-                ).importProfileIcon(),
+                child: ProfileAvatar(),
               ),
             ],
           ),

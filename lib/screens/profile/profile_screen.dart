@@ -5,6 +5,8 @@
 */
 
 // Importing Packages
+
+import 'dart:io';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
 import 'package:chronicles/utilities/data/app_policy/terms_and_conditions.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,7 @@ import 'package:chronicles/utilities/data/app_policy/help.dart';
 import 'package:chronicles/utilities/data/app_policy/privacy_policy.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:chronicles/utilities/data/user_auth_data.dart';
-
-import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
+import 'package:chronicles/services/pfp_services.dart';
 
 // Variable Values & TextStyles
 final double buttonHeight = 50.0;
@@ -26,6 +27,7 @@ final double buttonHorizontalMargin = 120.0;
 final double scrolledUnderElevationValue = 0.5;
 final double bodyHorizontalPadding = 20.0;
 final double height20 = 20.0;
+final double height25 = 25.0;
 final double sizedBoxBetweenProfilePicAndSetting = 13.0;
 final double profileIconWidth = 150.0;
 final double profileIconHeight = 150.0;
@@ -93,11 +95,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  File? profileImage;
+
   @override
   void initState() {
     fetchUserData();
-
+    pfpDisplay();
     super.initState();
+  }
+
+  Future<void> pfpDisplay() async {
+    String? imagePath = await getSavedImagePath();
+    setState(() {
+      if (imagePath != null) {
+        profileImage = File(imagePath);
+      }
+    });
   }
 
   void fetchUserData() async {
@@ -168,22 +181,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: height20,
+              height: height25,
             ),
-            Center(
-              child: ProfileAvatar(),
-            ),
-            SizedBox(height: height20),
-            Text(
-              "$firstName $lastName",
-              style: firstNameLastNameStyle,
-            ),
-            Text(
-              "@${username.toLowerCase()}",
-              style: usernameStyle,
-            ),
+            Stack(clipBehavior: Clip.none, children: [
+              Container(
+                height: 230,
+                width: 355,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color(0xFFF4F4F4),
+                ),
+              ),
+              Positioned(
+                top: -20,
+                right: 0,
+                left: 0,
+                child: Container(
+                  height: 180,
+                  width: 180,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFF4F4F4),
+                      border: Border.all(
+                        color: Color(0xFFF4F4F4),
+                      )),
+                  child: Center(
+                    child: CircleAvatar(
+                      radius: 80,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: profileImage != null
+                          ? FileImage(profileImage!)
+                          : AssetImage(
+                                  'assets/images/icons/new_profile_icon.png')
+                              as ImageProvider,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 20.0,
+                left: 0,
+                right: 0,
+                child: Column(children: [
+                  Text(
+                    "$firstName $lastName",
+                    style: firstNameLastNameStyle,
+                  ),
+                  Text(
+                    "@${username.toLowerCase()}",
+                    style: usernameStyle,
+                  ),
+                ]),
+              ),
+            ]),
             SizedBox(
-              height: height60,
+              height: height25,
             ),
             Container(
               height: height60,

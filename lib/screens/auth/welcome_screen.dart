@@ -147,16 +147,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 InfiniteRoundWidthButton(
                   onPress: () async {
-                    bool success = await isGoogleAuthenticationDone();
-                    if (success) {
-                      if (context.mounted) {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          '/Dashboard',
-                          (Route<dynamic> route) => false,
-                        );
-                      }
-                    }
+                    await isGoogleAuthenticationDone(context);
                   },
                   backgroundColor: continueWithGoogleBGColor,
                   borderWidth: googleButtonBorderWidth,

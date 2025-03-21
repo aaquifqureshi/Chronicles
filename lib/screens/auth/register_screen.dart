@@ -20,10 +20,10 @@ import 'package:chronicles/utilities/data/app_policy/terms_and_conditions.dart';
 import 'package:chronicles/utilities/data/app_policy/privacy_policy.dart';
 
 // Variable Values & TextStyles
-final double overallPadding = 25.0;
+final double overallPadding = 20.0;
 
-final double rightPadding = 25.0;
-final double leftPadding = 25.0;
+final double rightPadding = 15.0;
+final double leftPadding = 15.0;
 final double logoWidth = 130.0;
 final double logoHeight = 130.0;
 final double logoTop = 15.0;
@@ -248,7 +248,7 @@ class RegisterScreen extends StatelessWidget {
                             if (authValue == 'true') {
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
-                                '/Dashboard',
+                                '/UsernameScreen',
                                 (Route<dynamic> route) => false,
                               );
                             } else if (authValue == "emptyFields") {

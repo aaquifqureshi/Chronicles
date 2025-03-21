@@ -17,6 +17,7 @@ import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
 import 'package:chronicles/utilities/components/alerts/no_internet_alert.dart';
+import 'package:chronicles/services/pfp_services.dart';
 
 // Logo Values
 final double logoWidth = 130.0;
@@ -197,6 +198,8 @@ class LoginScreen extends StatelessWidget {
                             if (context.mounted) {
                               if (hasInternet == true) {
                                 if (authValue == 'true') {
+                                  await updateSaveImage();
+                                  await getSavedImagePath();
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
                                     '/Dashboard',

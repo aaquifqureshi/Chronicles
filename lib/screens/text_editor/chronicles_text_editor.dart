@@ -258,6 +258,7 @@ class _TextEditorState extends State<TextEditor> {
               ),
             );
             noEditController = controllers;
+            noEditTitleController = titleController;
             editModes = List.generate(controllers.length, (index) => false);
           });
         }

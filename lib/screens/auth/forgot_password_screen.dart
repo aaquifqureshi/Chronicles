@@ -160,8 +160,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         if (context.mounted) {
                           if (userDoc.docs.isNotEmpty) {
                             clearTextFields();
-                            Navigator.popAndPushNamed(
-                                context, '/ChangePassword');
+                            Navigator.popAndPushNamed(context, '/OtpScreen');
                           } else {
                             authAlert(context,
                                 message: "Email not found", icon: Icons.error);

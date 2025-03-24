@@ -78,7 +78,7 @@ File? profileImage;
 
 final helloMsgStyle = TextStyle(
   height: 1.8,
-  fontSize: 32.0,
+  fontSize: 28.0,
   fontFamily: 'Abyssinica_SIL',
   fontWeight: FontWeight.w500,
   color: Color(0xFF1F1F1F),
@@ -86,7 +86,7 @@ final helloMsgStyle = TextStyle(
 
 final usernameStyle = TextStyle(
   height: 1.8,
-  fontSize: 32.0,
+  fontSize: 28.0,
   fontFamily: 'Abyssinica_SIL',
   fontWeight: FontWeight.w500,
   color: Color(0xFF4EABCC),

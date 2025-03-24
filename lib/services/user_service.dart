@@ -51,7 +51,7 @@ Future<String> updateUsername(BuildContext context, String username) async {
     return "invalidUsername";
   }
 
-  if (username.length < 4 || username.length > 8 || username.contains(' ')) {
+  if (username.length < 4 || username.length > 12 || username.contains(' ')) {
     return "invalidLength";
   }
 

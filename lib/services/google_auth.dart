@@ -51,8 +51,8 @@ Future<bool> isGoogleAuthenticationDone(BuildContext context) async {
 
     if (Doc.exists) {
       username = Doc['username'];
-      await updateSaveImage();
-      await getSavedImagePath();
+      updateSaveImage();
+      getSavedImagePath();
     } else {
       nextIndex = await getNextUserIndex();
       username = 'user${nextIndex.toString().padLeft(4, '0')}';

@@ -8,6 +8,7 @@
 */
 
 // Importing Packages
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:chronicles/screens/auth/user_detail_screen.dart';
@@ -17,6 +18,7 @@ import 'package:chronicles/screens/auth/login_screen.dart';
 import 'package:chronicles/screens/auth/pin_login_screen.dart';
 import 'package:chronicles/screens/auth/register_screen.dart';
 import 'package:chronicles/screens/auth/welcome_screen.dart';
+import 'package:chronicles/screens/auth/otp_screen.dart';
 import 'package:chronicles/screens/dashboard/dashboard.dart';
 import 'package:chronicles/screens/profile/profile_screen.dart';
 import 'package:chronicles/services/login_auth.dart';
@@ -81,6 +83,7 @@ class Chronicles extends StatelessWidget {
             '/WelcomeScreen': (context) => WelcomeScreen(),
             '/Login': (context) => LoginScreen(),
             '/Register': (context) => RegisterScreen(),
+            '/OtpScreen': (context) => OtpScreen(),
             '/Dashboard': (context) => Dashboard(),
             '/ForgotPassword': (context) => ForgotPasswordScreen(),
             '/ChangePassword': (context) => ChangePasswordScreen(),

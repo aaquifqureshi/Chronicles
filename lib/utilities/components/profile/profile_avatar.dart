@@ -3,6 +3,7 @@ import 'package:chronicles/services/pfp_services.dart';
 import 'package:chronicles/utilities/data/user_auth_data.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/services/streak_services.dart';
+import 'package:lottie/lottie.dart';
 
 final double circleAvatarRadius = 25.0;
 final double circlePositionTop = 0.0;
@@ -78,11 +79,11 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
         Positioned(
           top: circlePositionTop,
           right: circlePositionRight,
-          child: Icon(
-            Icons.circle,
-            color: Color(0xFF4EABCC),
-            size: circleIconSize,
-          ),
+          child: currentStreak > 2
+              ? Lottie.asset('assets/lottie/streak_4eabcc.json',
+                  height: 20.0, width: 20.0)
+              : Lottie.asset('assets/lottie/streak_red.json',
+                  height: 20.0, width: 20.0),
         ),
         Positioned(
           top: streakPositionTop,

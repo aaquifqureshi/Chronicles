@@ -49,15 +49,25 @@ class _TextEditorState extends State<TextEditor> {
   String modifiedAt = '';
   late ChroniclesDateTime nowTime;
 
+  bool hasUnsavedChanged() {
+    if (noEditTitleController.text != titleController.text) {
+      return true;
+    }
+    if (noEditController.length != controllers.length) {
+      return true;
+    }
+
+    for (int i = 0; i < controllers.length; i++) {
+      if (noEditController[i].text != controllers[i].text) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   void noSaveClose() {
-    if (noEditController == controllers &&
-        titleController.text == noEditTitleController.text) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/Dashboard',
-        (Route<dynamic> route) => false,
-      );
-    } else {
+    if (hasUnsavedChanged()) {
       saveAlert(
         context,
         message: noSaveLeaveMessage,
@@ -77,6 +87,12 @@ class _TextEditorState extends State<TextEditor> {
           );
         },
       );
+    } else {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/Dashboard',
+        (Route<dynamic> route) => false,
+      );
     }
   }
 
@@ -85,7 +101,7 @@ class _TextEditorState extends State<TextEditor> {
     nowTime = ChroniclesDateTime(nowTime: DateTime.now());
     if (widget.fileName == null) {
       controllers.add(TextEditingController());
-      noEditController = controllers;
+      noEditController.add(TextEditingController());
       editModes.add(true);
 
       String weekday = nowTime.getHalfStringWeekDay();
@@ -257,8 +273,11 @@ class _TextEditorState extends State<TextEditor> {
                 text: fileData['controllers'][index],
               ),
             );
-            noEditController = controllers;
-            noEditTitleController = titleController;
+            for (int i = 0; i < controllers.length; i++) {
+              noEditController
+                  .add(TextEditingController(text: controllers[i].text));
+            }
+            noEditTitleController.text = titleController.text;
             editModes = List.generate(controllers.length, (index) => false);
           });
         }

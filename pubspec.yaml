@@ -31,6 +31,7 @@ dependencies:
   intl: ^0.20.2
   font_awesome_flutter: ^10.8.0
   supabase_flutter: ^2.8.4
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -44,7 +45,7 @@ flutter:
   assets:
     - assets/images/logo/
     - assets/images/icons/
-
+    - assets/lottie/
 
   fonts:
     - family: Abyssinica_SIL

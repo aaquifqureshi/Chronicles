@@ -19,6 +19,9 @@ import 'package:chronicles/utilities/components/floating_action_button/dashboard
 import 'dart:io';
 import 'package:chronicles/services/pfp_services.dart';
 import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
+import 'package:lottie/lottie.dart';
+
+import '../../services/streak_services.dart';
 
 // Variable Values and TextStyles
 final double scrolledUnderElevationValue = 0.5;
@@ -128,6 +131,9 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  int currentStreak = 0;
+  int maxStreak = 0;
+
   @override
   void initState() {
     fetchUserDetail();
@@ -144,6 +150,26 @@ class _DashboardState extends State<Dashboard> {
       if (imagePath != null) {
         profileImage = File(imagePath);
       }
+    });
+  }
+
+  Future<void> fetchStreak() async {
+    int streakValueFromUserData = await UserDataFetcher().fetchStreak();
+    int maxStreakValueFromUserData = await UserDataFetcher().fetchMaxStreak();
+
+    int calculatedMaxStreak =
+        await StreakDatabaseService.instance.calculateMaxStreak();
+    int calculatedCurrentStreak =
+        await StreakDatabaseService.instance.calculateCurrentStreak();
+
+    setState(() {
+      currentStreak = calculatedCurrentStreak > streakValueFromUserData
+          ? calculatedCurrentStreak
+          : streakValueFromUserData;
+
+      maxStreak = calculatedMaxStreak > maxStreakValueFromUserData
+          ? calculatedMaxStreak
+          : maxStreakValueFromUserData;
     });
   }
 
@@ -174,16 +200,31 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ],
               ),
-              GestureDetector(
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileScreen(),
-                    ),
-                  );
-                },
-                child: ProfileAvatar(),
+              Row(
+                children: [
+                  Container(
+                    width: double.minPositive + 50,
+                    height: double.minPositive + 50,
+                    child: currentStreak > 2
+                        ? Lottie.asset(
+                            'assets/lottie/streak_4eabcc.json',
+                          )
+                        : Lottie.asset(
+                            'assets/lottie/streak_red.json',
+                          ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        ),
+                      );
+                    },
+                    child: ProfileAvatar(),
+                  ),
+                ],
               ),
             ],
           ),

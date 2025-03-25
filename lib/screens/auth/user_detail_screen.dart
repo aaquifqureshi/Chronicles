@@ -194,8 +194,11 @@ class _UsernameScreenState extends State<UsernameScreen> {
                       if (!hasInternet) {
                         noInternetAlert(context);
                       }
-                      await saveProfileImage();
-                      await saveProfileImageOnline();
+                      bool isImageUploaded = _selectedImage != null;
+                      if (isImageUploaded) {
+                        await saveProfileImage();
+                        await saveProfileImageOnline();
+                      }
 
                       var checkUsername =
                           await updateUsername(context, username.text.trim());

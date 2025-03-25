@@ -52,6 +52,7 @@ class _ToDoTextFieldState extends State<ToDoTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLines: null,
       controller: _textController,
       style: TextStyle(
         fontFamily: "Hind",

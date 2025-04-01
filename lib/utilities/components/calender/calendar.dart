@@ -380,30 +380,28 @@ class _CalendarState extends State<Calendar> {
               }
 
               return Container(
+                margin: EdgeInsets.symmetric(vertical: 6.0),
                 decoration: BoxDecoration(
                   color: isFirstInStreak || isLastInStreak
                       ? Color(0xFF4EABCC)
                       : Colors.transparent,
-                  borderRadius: BorderRadius.horizontal(
-                      left: isFirstInStreak || isLastInStreak
-                          ? Radius.circular(50.0)
-                          : Radius.zero,
-                      right: isFirstInStreak || isLastInStreak
-                          ? Radius.circular(50.0)
-                          : Radius.zero),
+                  shape: BoxShape.circle,
                 ),
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 6.0),
                   decoration: BoxDecoration(
+                      shape:
+                          isSingleStreak ? BoxShape.circle : BoxShape.rectangle,
                       borderRadius: isSingleStreak
-                          ? BorderRadius.circular(50.0)
-                          : isFirstInStreak
-                              ? BorderRadius.horizontal(
-                                  left: Radius.circular(50.0))
-                              : isLastInStreak
-                                  ? BorderRadius.horizontal(
-                                      right: Radius.circular(50.0))
-                                  : null,
+                          ? null
+                          : BorderRadius.horizontal(
+                              left: isFirstInStreak
+                                  ? Radius.circular(50.0) // Rounded left
+                                  : Radius.zero,
+                              right: isLastInStreak
+                                  ? Radius.circular(50.0) // Rounded right
+                                  : Radius.zero,
+                            ),
                       color: isStreak
                           ? isSingleStreak
                               ? Color(0xFF4EABCC)
@@ -603,26 +601,28 @@ class _CalendarState extends State<Calendar> {
                           },
                         );
                       },
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: isCurrentMonth
-                              ? isStreak
-                                  ? isSingleStreak
-                                      ? Color(0xFFFFFFFF)
-                                      : isFirstInStreak || isLastInStreak
-                                          ? Color(0xFFFFFFFF)
-                                          : Color(0xFF1F1F1F)
-                                  : Color(0xFF1F1F1F)
-                              : isStreak
-                                  ? isSingleStreak
-                                      ? Color(0xFFFFFFFF)
-                                      : isFirstInStreak || isLastInStreak
-                                          ? Color(0xFFFFFFFF)
-                                          : Color(0xFF1F1F1F)
-                                  : Colors.grey,
+                      child: Center(
+                        child: Text(
+                          date.day.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: isCurrentMonth
+                                ? isStreak
+                                    ? isSingleStreak
+                                        ? Color(0xFFFFFFFF)
+                                        : isFirstInStreak || isLastInStreak
+                                            ? Color(0xFFFFFFFF)
+                                            : Color(0xFF1F1F1F)
+                                    : Color(0xFF1F1F1F)
+                                : isStreak
+                                    ? isSingleStreak
+                                        ? Color(0xFFFFFFFF)
+                                        : isFirstInStreak || isLastInStreak
+                                            ? Color(0xFFFFFFFF)
+                                            : Color(0xFF1F1F1F)
+                                    : Colors.grey,
+                          ),
                         ),
                       ),
                     ),

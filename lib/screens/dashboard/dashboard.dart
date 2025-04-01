@@ -7,7 +7,6 @@
 */
 
 // Importing Packages
-import 'package:chronicles/utilities/components/calender/streak_calender.dart';
 import 'package:chronicles/screens/todo/recent_todo.dart';
 import 'package:chronicles/utilities/data/user_auth_data.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,7 @@ import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../services/streak_services.dart';
+import '../../utilities/components/calender/calendar.dart';
 
 // Variable Values and TextStyles
 final double scrolledUnderElevationValue = 0.5;
@@ -153,26 +153,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  Future<void> fetchStreak() async {
-    int streakValueFromUserData = await UserDataFetcher().fetchStreak();
-    int maxStreakValueFromUserData = await UserDataFetcher().fetchMaxStreak();
-
-    int calculatedMaxStreak =
-        await StreakDatabaseService.instance.calculateMaxStreak();
-    int calculatedCurrentStreak =
-        await StreakDatabaseService.instance.calculateCurrentStreak();
-
-    setState(() {
-      currentStreak = calculatedCurrentStreak > streakValueFromUserData
-          ? calculatedCurrentStreak
-          : streakValueFromUserData;
-
-      maxStreak = calculatedMaxStreak > maxStreakValueFromUserData
-          ? calculatedMaxStreak
-          : maxStreakValueFromUserData;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -200,31 +180,16 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Container(
-                    width: double.minPositive + 50,
-                    height: double.minPositive + 50,
-                    child: currentStreak > 2
-                        ? Lottie.asset(
-                            'assets/lottie/streak_4eabcc.json',
-                          )
-                        : Lottie.asset(
-                            'assets/lottie/streak_red.json',
-                          ),
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(),
-                        ),
-                      );
-                    },
-                    child: ProfileAvatar(),
-                  ),
-                ],
+              GestureDetector(
+                onTap: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(),
+                    ),
+                  );
+                },
+                child: ProfileAvatar(),
               ),
             ],
           ),
@@ -266,7 +231,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     borderRadius: BorderRadius.circular(streakBorderRadius),
                   ),
-                  child: StreakCalender(),
+                  child: Calendar(),
                 ),
               ),
               Row(

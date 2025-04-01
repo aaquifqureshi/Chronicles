@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:chronicles/services/streak_services.dart';
 import 'package:lottie/lottie.dart';
 
-final double circleAvatarRadius = 25.0;
+final double circleAvatarRadius = 40.0;
 final double circlePositionTop = 0.0;
 final double circlePositionRight = 0.0;
 final double circleIconSize = 20.0;
@@ -63,40 +63,19 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Center(
-          child: CircleAvatar(
-            radius: circleAvatarRadius,
-            backgroundColor: Colors.transparent,
-            backgroundImage: profileImage != null
-                ? FileImage(profileImage!)
-                : AssetImage('assets/images/icons/new_profile_icon.png')
-                    as ImageProvider,
-          ),
+    return ClipOval(
+      child: SizedBox(
+        width: circleAvatarRadius * 2,
+        height: circleAvatarRadius * 2,
+        child: CircleAvatar(
+          radius: circleAvatarRadius,
+          backgroundColor: Colors.transparent,
+          backgroundImage: profileImage != null
+              ? FileImage(profileImage!)
+              : AssetImage('assets/images/icons/new_profile_icon.png')
+                  as ImageProvider,
         ),
-        Positioned(
-          top: circlePositionTop,
-          right: circlePositionRight,
-          child: currentStreak > 2
-              ? Lottie.asset('assets/lottie/streak_4eabcc.json',
-                  height: 20.0, width: 20.0)
-              : Lottie.asset('assets/lottie/streak_red.json',
-                  height: 20.0, width: 20.0),
-        ),
-        Positioned(
-          top: streakPositionTop,
-          right: streakPositionRight,
-          child: Text(
-            currentStreak.toString(),
-            style: TextStyle(
-              fontSize: streakNumberSize,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

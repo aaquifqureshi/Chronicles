@@ -108,6 +108,30 @@ class FileDatabase {
     return fileList;
   }
 
+  Future<List<FileData>> fetchFilesByDate(String date) async {
+    final db = await database;
+    final data = await db.query(
+      _fileTableName,
+      where: '$_fileCreatedColumnName = ?',
+      whereArgs: [date],
+      orderBy: '$_fileEpochValue ASC',
+    );
+
+    List<FileData> fileList = data
+        .map(
+          (e) => FileData(
+            millisecondSinceEpoch: e["epochvalue"] as int,
+            title: e["title"] as String,
+            content: e["content"] as String,
+            modifiedAt: e["modified"] as String,
+            createdAt: e["created"] as String,
+          ),
+        )
+        .toList();
+
+    return fileList;
+  }
+
   Future<List<FileData>> fetchTop3Files() async {
     final db = await database;
     final data = await db.query(

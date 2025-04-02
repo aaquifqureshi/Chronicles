@@ -380,15 +380,20 @@ class _CalendarState extends State<Calendar> {
               }
 
               return Container(
-                margin: EdgeInsets.symmetric(vertical: 6.0),
+                margin: EdgeInsets.symmetric(vertical: 8.0),
                 decoration: BoxDecoration(
-                  color: isFirstInStreak || isLastInStreak
+                  color: isSingleStreak || isFirstInStreak || isLastInStreak
                       ? Color(0xFF4EABCC)
                       : Colors.transparent,
                   shape: BoxShape.circle,
                 ),
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 6.0),
+                  margin: EdgeInsets.only(
+                    top: 6.0,
+                    bottom: 6.0,
+                    left: isFirstInStreak ? 6.0 : 0.0,
+                    right: isLastInStreak ? 6.0 : 0.0,
+                  ),
                   decoration: BoxDecoration(
                       shape:
                           isSingleStreak ? BoxShape.circle : BoxShape.rectangle,

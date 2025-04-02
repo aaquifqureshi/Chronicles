@@ -8,17 +8,11 @@ import 'package:flutter/material.dart';
 
 class NavigateFloatingButton extends StatelessWidget {
   final EdgeInsets buttonPadding;
-
   final IconData buttonIcon;
-
   final Color buttonBackgroundColor;
-
   final Color buttonIconColor;
-
   final String buttonHeroTag;
-
   final VoidCallback? onPressed;
-
   final bool isDisabled;
 
   const NavigateFloatingButton({

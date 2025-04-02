@@ -329,6 +329,9 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 child: Top2RecentDiaries(),
               ),
+              SizedBox(
+                height: 100.0,
+              ),
             ],
           ),
         ),

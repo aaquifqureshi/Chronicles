@@ -7,6 +7,7 @@
 */
 
 import 'package:chronicles/services/file_database.dart';
+import 'package:chronicles/utilities/components/floating_action_button/text_editor_fab.dart';
 import 'package:chronicles/utilities/components/text_editor/editor_textbox.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
@@ -303,6 +304,12 @@ class _TextEditorState extends State<TextEditor> {
         }
       },
       child: Scaffold(
+        floatingActionButton: TextEditorFab(
+          reactionFunction: () {},
+          sttFunction: () {},
+          ttsFunction: () {},
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -441,6 +448,9 @@ class _TextEditorState extends State<TextEditor> {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 100.0,
               ),
             ],
           ),

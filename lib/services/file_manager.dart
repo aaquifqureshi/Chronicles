@@ -23,12 +23,14 @@ class FileManager {
     return directory;
   }
 
-  static Future<void> saveFileAsJson(
-      {required int milliSinceEpoch,
-      required String title,
-      required String createDate,
-      required String modifyDate,
-      required List<TextEditingController> controller}) async {
+  static Future<void> saveFileAsJson({
+    required int milliSinceEpoch,
+    required String title,
+    required String createDate,
+    required String modifyDate,
+    required List<TextEditingController> controller,
+    required String reactionType,
+  }) async {
     String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
@@ -46,6 +48,7 @@ class FileManager {
       'createdAt': createDate,
       'modifiedAt': modifyDate,
       'controllers': controller.map((controller) => controller.text).toList(),
+      'reaction': reactionType,
     };
 
     String jsonData = jsonEncode(fileData);
@@ -68,12 +71,14 @@ class FileManager {
     return null;
   }
 
-  static Future<void> modifyJsonFile(
-      {required String fileName,
-      required String title,
-      required String createDate,
-      required String modifyDate,
-      required List<TextEditingController> controller}) async {
+  static Future<void> modifyJsonFile({
+    required String fileName,
+    required String title,
+    required String createDate,
+    required String modifyDate,
+    required List<TextEditingController> controller,
+    required String reactionType,
+  }) async {
     String userId = await UserDataFetcher().fetchUID();
 
     Directory appDocDir = await _getAppDocumentsDirectory();
@@ -90,6 +95,7 @@ class FileManager {
       'createdAt': createDate,
       'modifiedAt': modifyDate,
       'controllers': controller.map((controller) => controller.text).toList(),
+      'reaction': reactionType,
     };
 
     String jsonData = jsonEncode(fileData);

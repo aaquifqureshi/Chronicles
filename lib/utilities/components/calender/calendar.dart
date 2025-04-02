@@ -2,6 +2,7 @@ import 'package:chronicles/screens/text_editor/chronicles_text_editor.dart';
 import 'package:chronicles/services/file_database.dart';
 import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:chronicles/services/streak_services.dart';
@@ -9,6 +10,8 @@ import 'package:chronicles/services/streak_services.dart';
 import '../../data/user_auth_data.dart';
 import '../text_editor/file_data_class.dart';
 import 'package:flutter_custom_month_picker/flutter_custom_month_picker.dart';
+
+import '../text_editor/reaction_type_data.dart';
 
 TextStyle monthYearStyle = TextStyle(
   fontFamily: 'Hind',
@@ -30,6 +33,7 @@ class _CalendarState extends State<Calendar> {
   List<DateTime> streaks = [];
   int currentStreak = 0;
   int maxStreak = 0;
+  int reactionAverage = 0;
 
   Future<void> initDatabase() async {
     await loadStreakDates();
@@ -200,6 +204,62 @@ class _CalendarState extends State<Calendar> {
     return 0;
   }
 
+  int fetchReactionValue(FileData file) {
+    ReactionType reactionType = ReactionType.none;
+
+    reactionType = ReactionType.values.firstWhere(
+      (element) => element.toString() == file.reactionType,
+      orElse: () => ReactionType.none,
+    );
+
+    if (reactionType == ReactionType.crying) {
+      return 1;
+    } else if (reactionType == ReactionType.sad) {
+      return 2;
+    } else if (reactionType == ReactionType.noSadNoHappy) {
+      return 3;
+    } else if (reactionType == ReactionType.smile) {
+      return 4;
+    } else if (reactionType == ReactionType.happy) {
+      return 5;
+    }
+    return 0;
+  }
+
+  IconData fetchAverageIcon(int reactionAverage) {
+    if (reactionAverage == 1) {
+      return FontAwesomeIcons.faceSadCry;
+    } else if (reactionAverage == 2) {
+      return FontAwesomeIcons.faceSadTear;
+    } else if (reactionAverage == 3) {
+      return FontAwesomeIcons.faceMeh;
+    } else if (reactionAverage == 4) {
+      return FontAwesomeIcons.faceSmile;
+    } else if (reactionAverage == 5) {
+      return FontAwesomeIcons.faceLaugh;
+    }
+    return Icons.add_reaction_rounded;
+  }
+
+  IconData fetchCurrentIcon(FileData file) {
+    int value = fetchReactionValue(file);
+
+    reactionAverage = reactionAverage + value;
+
+    if (value == 1) {
+      return FontAwesomeIcons.faceSadCry;
+    } else if (value == 2) {
+      return FontAwesomeIcons.faceSadTear;
+    } else if (value == 3) {
+      return FontAwesomeIcons.faceMeh;
+    } else if (value == 4) {
+      return FontAwesomeIcons.faceSmile;
+    } else if (value == 5) {
+      return FontAwesomeIcons.faceLaugh;
+    }
+    return Icons.add_reaction_rounded;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -285,7 +345,7 @@ class _CalendarState extends State<Calendar> {
                   icon: DateTime.now().month != currentDate.month ||
                           DateTime.now().year != currentDate.year
                       ? Icon(
-                          Icons.calendar_today,
+                          Icons.calendar_today_rounded,
                           color: Color(0xFF4EABCC),
                         )
                       : Icon(
@@ -352,7 +412,7 @@ class _CalendarState extends State<Calendar> {
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
-              childAspectRatio: 1.0,
+              childAspectRatio: 1.2,
             ),
             itemCount: datesGrid.length,
             itemBuilder: (context, index) {
@@ -380,7 +440,7 @@ class _CalendarState extends State<Calendar> {
               }
 
               return Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0),
+                margin: EdgeInsets.symmetric(vertical: 6.0),
                 decoration: BoxDecoration(
                   color: isSingleStreak || isFirstInStreak || isLastInStreak
                       ? Color(0xFF4EABCC)
@@ -391,8 +451,8 @@ class _CalendarState extends State<Calendar> {
                   margin: EdgeInsets.only(
                     top: 6.0,
                     bottom: 6.0,
-                    left: isFirstInStreak ? 6.0 : 0.0,
-                    right: isLastInStreak ? 6.0 : 0.0,
+                    left: isFirstInStreak ? 9.0 : 0.0,
+                    right: isLastInStreak ? 9.0 : 0.0,
                   ),
                   decoration: BoxDecoration(
                       shape:
@@ -434,6 +494,20 @@ class _CalendarState extends State<Calendar> {
                         showDialog(
                           context: context,
                           builder: (context) {
+                            reactionAverage = 0;
+                            int localAverage = 0;
+                            int fileCount = 0;
+                            int value;
+                            for (var file in files) {
+                              value = fetchReactionValue(file);
+                              if (value != 0) {
+                                fileCount++;
+                              }
+                              localAverage += value;
+                            }
+                            reactionAverage =
+                                (localAverage / fileCount).round();
+
                             return Dialog(
                               backgroundColor: Color(0xFFFFFFFF),
                               insetPadding: EdgeInsets.symmetric(
@@ -461,6 +535,10 @@ class _CalendarState extends State<Calendar> {
                                               fontSize: 18.0,
                                               fontWeight: FontWeight.w600,
                                             ),
+                                          ),
+                                          Icon(
+                                            fetchAverageIcon((reactionAverage)),
+                                            color: Color(0xFF4EABCC),
                                           ),
                                         ],
                                       ),
@@ -503,7 +581,7 @@ class _CalendarState extends State<Calendar> {
                                             ],
                                           ),
                                           Container(
-                                            height: 300,
+                                            height: 350,
                                             child: TabBarView(
                                               children: [
                                                 Center(
@@ -519,60 +597,65 @@ class _CalendarState extends State<Calendar> {
                                                               (context, index) {
                                                             return Column(
                                                               children: [
-                                                                ListTile(
-                                                                  title: Text(
-                                                                    files[index]
-                                                                        .title,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Hind',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      fontSize:
-                                                                          18.0,
-                                                                      color: Color(
-                                                                          0xFF1F1F1F),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) {
+                                                                          return TextEditor(
+                                                                            isModify:
+                                                                                true,
+                                                                            fileName:
+                                                                                '${files[index].millisecondSinceEpoch}.json',
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      ListTile(
+                                                                    title: Text(
+                                                                      files[index]
+                                                                          .title,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Hind',
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                        fontSize:
+                                                                            18.0,
+                                                                        color: Color(
+                                                                            0xFF1F1F1F),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                  subtitle:
-                                                                      Text(
-                                                                    files[index]
-                                                                        .content,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Hind',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400,
-                                                                      fontSize:
-                                                                          16.0,
-                                                                      color: Color(
-                                                                          0xFF1F1F1F),
+                                                                    subtitle:
+                                                                        Text(
+                                                                      files[index]
+                                                                          .content,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Hind',
+                                                                        fontWeight:
+                                                                            FontWeight.w400,
+                                                                        fontSize:
+                                                                            16.0,
+                                                                        color: Color(
+                                                                            0xFF1F1F1F),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                  trailing:
-                                                                      IconButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator
-                                                                          .push(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                          builder:
-                                                                              (context) {
-                                                                            return TextEditor(
-                                                                              isModify: true,
-                                                                              fileName: '${files[index].millisecondSinceEpoch}.json',
-                                                                            );
-                                                                          },
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                    icon: Icon(Icons
-                                                                        .arrow_forward_ios_rounded),
+                                                                    trailing:
+                                                                        Icon(
+                                                                      fetchCurrentIcon(
+                                                                          files[
+                                                                              index]),
+                                                                      color: Color(
+                                                                          0xFF4EABCC),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                                 if (index !=
@@ -606,12 +689,13 @@ class _CalendarState extends State<Calendar> {
                           },
                         );
                       },
-                      child: Center(
+                      child: Align(
+                        alignment: Alignment.center,
                         child: Text(
                           date.day.toString(),
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
                             color: isCurrentMonth
                                 ? isStreak
                                     ? isSingleStreak

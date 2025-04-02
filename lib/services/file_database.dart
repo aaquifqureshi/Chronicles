@@ -25,6 +25,7 @@ class FileDatabase {
   final String _fileContentColumnName = 'content';
   final String _fileLastModifiedColumnName = 'modified';
   final String _fileCreatedColumnName = 'created';
+  final String _fileReactionColumnName = 'reaction';
 
   FileDatabase._constructor();
 
@@ -60,7 +61,8 @@ class FileDatabase {
           $_fileTitleColumnName TEXT NOT NULL,
           $_fileContentColumnName TEXT NOT NULL,
           $_fileLastModifiedColumnName TEXT NOT NULL,
-          $_fileCreatedColumnName TEXT NOT NULL
+          $_fileCreatedColumnName TEXT NOT NULL,
+          $_fileReactionColumnName TEXT NOT NULL
         );
         ''',
         );
@@ -75,6 +77,7 @@ class FileDatabase {
     required String content,
     required String lastModified,
     required String createdAt,
+    required String reactionType,
   }) async {
     final db = await database;
     await db.insert(
@@ -85,6 +88,7 @@ class FileDatabase {
         _fileContentColumnName: content,
         _fileLastModifiedColumnName: lastModified,
         _fileCreatedColumnName: createdAt,
+        _fileReactionColumnName: reactionType,
       },
     );
   }
@@ -98,11 +102,13 @@ class FileDatabase {
     List<FileData> fileList = data
         .map(
           (e) => FileData(
-              millisecondSinceEpoch: e["epochvalue"] as int,
-              title: e["title"] as String,
-              content: e["content"] as String,
-              modifiedAt: e["modified"] as String,
-              createdAt: e["created"] as String),
+            millisecondSinceEpoch: e["epochvalue"] as int,
+            title: e["title"] as String,
+            content: e["content"] as String,
+            modifiedAt: e["modified"] as String,
+            createdAt: e["created"] as String,
+            reactionType: e["reaction"] as String,
+          ),
         )
         .toList();
     return fileList;
@@ -125,6 +131,7 @@ class FileDatabase {
             content: e["content"] as String,
             modifiedAt: e["modified"] as String,
             createdAt: e["created"] as String,
+            reactionType: e["reaction"] as String,
           ),
         )
         .toList();
@@ -143,11 +150,13 @@ class FileDatabase {
     List<FileData> fileList = data
         .map(
           (e) => FileData(
-              millisecondSinceEpoch: e["epochvalue"] as int,
-              title: e["title"] as String,
-              content: e["content"] as String,
-              modifiedAt: e["modified"] as String,
-              createdAt: e["created"] as String),
+            millisecondSinceEpoch: e["epochvalue"] as int,
+            title: e["title"] as String,
+            content: e["content"] as String,
+            modifiedAt: e["modified"] as String,
+            createdAt: e["created"] as String,
+            reactionType: e["reaction"] as String,
+          ),
         )
         .toList();
 
@@ -159,6 +168,7 @@ class FileDatabase {
     required String content,
     required String title,
     required String modifiedAt,
+    required String reactionType,
   }) async {
     final db = await database;
     await db.update(
@@ -167,6 +177,7 @@ class FileDatabase {
         _fileTitleColumnName: title,
         _fileContentColumnName: content,
         _fileLastModifiedColumnName: modifiedAt,
+        _fileReactionColumnName: reactionType,
       },
       where: '$_fileEpochValue = ?',
       whereArgs: [id],

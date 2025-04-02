@@ -11,10 +11,12 @@ import 'package:chronicles/utilities/components/floating_action_button/text_edit
 import 'package:chronicles/utilities/components/text_editor/editor_textbox.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:chronicles/services/file_manager.dart';
 
 import '../../utilities/components/alerts/text_editor_alerts.dart';
+import '../../utilities/components/text_editor/reaction_type_data.dart';
 
 String noSaveLeaveMessage = "You are leaving this editor without saving...";
 
@@ -23,6 +25,12 @@ final titleTextStyle = TextStyle(
   fontFamily: 'Hind',
   fontWeight: FontWeight.w500,
   fontSize: 22.0,
+);
+
+TextStyle emojiTextStyle = TextStyle(
+  fontFamily: 'Hind',
+  fontSize: 14.0,
+  fontWeight: FontWeight.w400,
 );
 
 class TextEditor extends StatefulWidget {
@@ -48,6 +56,8 @@ class _TextEditorState extends State<TextEditor> {
 
   String createdAt = '';
   String modifiedAt = '';
+  ReactionType reactionType = ReactionType.none;
+
   late ChroniclesDateTime nowTime;
 
   bool hasUnsavedChanged() {
@@ -112,6 +122,7 @@ class _TextEditorState extends State<TextEditor> {
 
       createdAt = '$weekday, $day-$month-$year';
       modifiedAt = '$weekday, $day-$month-$year';
+      reactionType = ReactionType.none;
 
       widget.fileName = '${nowTime.getMilliSecondSinceEpoch()}.json';
     } else {
@@ -124,18 +135,22 @@ class _TextEditorState extends State<TextEditor> {
     super.initState();
   }
 
-  void _saveFileToDB(
-      {required int milliSinceEpoch,
-      required String title,
-      required String content,
-      required String lastModified,
-      required String createdAt}) {
+  void _saveFileToDB({
+    required int milliSinceEpoch,
+    required String title,
+    required String content,
+    required String lastModified,
+    required String createdAt,
+    required String reactionType,
+  }) {
     _fileDB.saveFileToDatabase(
-        fileNameInMillisSinceEpoch: milliSinceEpoch,
-        title: title,
-        content: content,
-        lastModified: lastModified,
-        createdAt: createdAt);
+      fileNameInMillisSinceEpoch: milliSinceEpoch,
+      title: title,
+      content: content,
+      lastModified: lastModified,
+      createdAt: createdAt,
+      reactionType: reactionType,
+    );
   }
 
   void _updateFileToDB({
@@ -143,12 +158,14 @@ class _TextEditorState extends State<TextEditor> {
     required String title,
     required String content,
     required String lastModified,
+    required String reactionType,
   }) {
     _fileDB.updateFile(
       id: milliSinceEpoch,
       title: title,
       content: content,
       modifiedAt: lastModified,
+      reactionType: reactionType,
     );
   }
 
@@ -229,6 +246,7 @@ class _TextEditorState extends State<TextEditor> {
           content: controllers[0].text,
           lastModified: modifiedAt,
           createdAt: createdAt,
+          reactionType: reactionType.toString(),
         );
         FileManager.saveFileAsJson(
           title: titleController.text,
@@ -236,6 +254,7 @@ class _TextEditorState extends State<TextEditor> {
           modifyDate: modifiedAt,
           controller: controllers,
           milliSinceEpoch: nowTime.getMilliSecondSinceEpoch(),
+          reactionType: reactionType.toString(),
         );
       } else if (widget.fileName != null && widget.isModify == true) {
         int milliSinceEpoch =
@@ -247,6 +266,7 @@ class _TextEditorState extends State<TextEditor> {
               ? controllers[0].text.substring(0, 25)
               : controllers[0].text,
           lastModified: modifiedAt,
+          reactionType: reactionType.toString(),
         );
 
         FileManager.modifyJsonFile(
@@ -255,6 +275,7 @@ class _TextEditorState extends State<TextEditor> {
           createDate: createdAt,
           modifyDate: modifiedAt,
           controller: controllers,
+          reactionType: reactionType.toString(),
         );
       }
     });
@@ -268,6 +289,14 @@ class _TextEditorState extends State<TextEditor> {
             titleController.text = fileData['title'];
             createdAt = fileData['createdAt'];
             modifiedAt = fileData['modifiedAt'];
+            if (fileData['reaction'] != null) {
+              reactionType = ReactionType.values.firstWhere(
+                (element) => element.toString() == fileData['reaction'],
+                orElse: () => ReactionType.none,
+              );
+            } else {
+              reactionType = ReactionType.none;
+            }
             controllers = List.generate(
               fileData['controllers'].length,
               (index) => TextEditingController(
@@ -294,6 +323,114 @@ class _TextEditorState extends State<TextEditor> {
     });
   }
 
+  void reactionFunction() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Color(0xFFFFFFFF),
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 80,
+              vertical: 300,
+            ),
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        reactionType = ReactionType.crying;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.faceSadCry,
+                        color: Color(0xFF4EABCC),
+                      ),
+                      title: Text(
+                        'Crying!',
+                        style: emojiTextStyle,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        reactionType = ReactionType.sad;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.faceSadTear,
+                        color: Color(0xFF4EABCC),
+                      ),
+                      title: Text(
+                        'Sad!',
+                        style: emojiTextStyle,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        reactionType = ReactionType.noSadNoHappy;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.faceMeh,
+                        color: Color(0xFF4EABCC),
+                      ),
+                      title: Text(
+                        'Ah No Expressions...!',
+                        style: emojiTextStyle,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        reactionType = ReactionType.smile;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.faceSmile,
+                        color: Color(0xFF4EABCC),
+                      ),
+                      title: Text(
+                        'Smile Please!',
+                        style: emojiTextStyle,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        reactionType = ReactionType.happy;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.faceLaugh,
+                        color: Color(0xFF4EABCC),
+                      ),
+                      title: Text('Show Teeth!'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -305,7 +442,8 @@ class _TextEditorState extends State<TextEditor> {
       },
       child: Scaffold(
         floatingActionButton: TextEditorFab(
-          reactionFunction: () {},
+          reactionType: reactionType,
+          reactionFunction: reactionFunction,
           sttFunction: () {},
           ttsFunction: () {},
         ),

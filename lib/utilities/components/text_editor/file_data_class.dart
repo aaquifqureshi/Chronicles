@@ -10,6 +10,7 @@ class FileData {
   late String content;
   late String modifiedAt;
   late String createdAt;
+  late String reactionType;
 
   FileData({
     required this.millisecondSinceEpoch,
@@ -17,5 +18,6 @@ class FileData {
     required this.content,
     required this.modifiedAt,
     required this.createdAt,
+    required this.reactionType,
   });
 }

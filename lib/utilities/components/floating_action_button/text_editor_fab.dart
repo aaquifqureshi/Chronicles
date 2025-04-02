@@ -1,19 +1,36 @@
+import 'package:chronicles/utilities/components/text_editor/reaction_type_data.dart';
 import 'package:flutter/material.dart';
-
-import 'package:chronicles/screens/shared_diaries/view_shared_diaries.dart';
-import 'package:chronicles/screens/text_editor/chronicles_text_editor.dart';
 import 'package:chronicles/utilities/components/floating_action_button/navigate_floating_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TextEditorFab extends StatelessWidget {
   Function() reactionFunction;
   Function() ttsFunction;
   Function() sttFunction;
+  ReactionType reactionType;
 
-  TextEditorFab(
-      {super.key,
-      required this.reactionFunction,
-      required this.sttFunction,
-      required this.ttsFunction});
+  TextEditorFab({
+    super.key,
+    required this.reactionFunction,
+    required this.sttFunction,
+    required this.ttsFunction,
+    required this.reactionType,
+  });
+
+  IconData fetchIcon() {
+    if (reactionType == ReactionType.crying) {
+      return FontAwesomeIcons.faceSadCry;
+    } else if (reactionType == ReactionType.sad) {
+      return FontAwesomeIcons.faceSadTear;
+    } else if (reactionType == ReactionType.noSadNoHappy) {
+      return FontAwesomeIcons.faceMeh;
+    } else if (reactionType == ReactionType.smile) {
+      return FontAwesomeIcons.faceSmile;
+    } else if (reactionType == ReactionType.happy) {
+      return FontAwesomeIcons.faceLaugh;
+    }
+    return Icons.add_reaction_rounded;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +53,7 @@ class TextEditorFab extends StatelessWidget {
         children: [
           NavigateFloatingButton(
             buttonPadding: EdgeInsets.fromLTRB(9.5, 6, 5, 6),
-            buttonIcon: Icons.add_reaction_rounded,
+            buttonIcon: fetchIcon(),
             buttonIconColor: Color(0xFF4EABCC),
             buttonBackgroundColor: Color(0xFFFFFFFF),
             buttonHeroTag: 'Add Reaction',

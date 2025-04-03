@@ -412,7 +412,7 @@ class _CalendarState extends State<Calendar> {
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
-              childAspectRatio: 1.2,
+              childAspectRatio: 1.0,
             ),
             itemCount: datesGrid.length,
             itemBuilder: (context, index) {

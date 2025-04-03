@@ -8,85 +8,123 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 String privacyPolicy = """
-## Privacy Policy
+**Chronicles - Diary Writing App**
 
-This privacy policy applies to the **Chronicles** app (hereby referred to as "Application") for mobile devices that was created by **trOlsz** (hereby referred to as "Service Provider") as an Open Source service. This service is intended for use **'AS IS'**.
 
----
+**Effective Date:** [28 August 1938]
 
-## Information Collection and Use
-
-The Application collects information when you download and use it. This information may include:
-
-- Your device's Internet Protocol address (e.g. IP address)
-- The pages of the Application that you visit, the time and date of your visit, and the time spent on those pages
-- The operating system you use on your mobile device
-
-The Application does **not** gather precise information about the location of your mobile device.
-
-The Service Provider may use the information you provided to contact you from time to time to provide you with important information, required notices, and marketing promotions.
-
-For a better experience, while using the Application, the Service Provider may require you to provide certain personally identifiable information. The information that the Service Provider requests will be retained and used as described in this privacy policy.
+Hey there, diary enthusiast! 📖✨ We know privacy policies can be dull, but don’t worry—we’re keeping this one light, clear, and just the right amount of fun. At **Chronicles**, your privacy is sacred (like that embarrassing crush entry from high school). This Privacy Policy breaks down what we collect, why we collect it, and how we protect your data.
 
 ---
 
-## Third-Party Access
+### 1. What We Collect (No, Not Your Secrets, don't worry!)
 
-Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application and their service. The Service Provider may share your information with third parties in the ways described in this privacy statement.
+We collect some info to make your **Chronicles** experience smooth. But don’t worry—we won’t peek at your diary!(At all!)
 
-### Third-Party Services Used:
-- [Google Play Services](https://policies.google.com/privacy)
-- [Google Analytics for Firebase](https://firebase.google.com/support/privacy/)
-- [Firebase Crashlytics](https://firebase.google.com/support/privacy/)
+#### a. Personal Information
 
-The Service Provider may disclose User Provided and Automatically Collected Information:
-- As required by law, such as to comply with a subpoena or similar legal process.
-- When they believe in good faith that disclosure is necessary to protect their rights, protect your safety or the safety of others, investigate fraud, or respond to a government request.
-- With their trusted service providers who work on their behalf, do not have an independent use of the information disclosed to them, and have agreed to adhere to this privacy policy.
+- Your name, email, and profile details (if you create an account, ofc!)
+- Contact info (only if you add friends or share entries—because diaries are more fun with buddies!)
+- Authentication data (if you log in with Google, Apple, or some other magic portal)
 
----
+#### b. Your Diary Entries & Content
 
-## Opt-Out Rights
+- Your thoughts, dreams, and random rants are stored **locally** on your device.(don't worry, we won't read them!)
+- Photos, voice notes, and other media you attach stay with you—unless you **choose** to back them up.
+- Metadata like timestamps and tags help keep things organized.
 
-You can stop all collection of information by the Application easily by **uninstalling it**. You may use the standard uninstall processes available as part of your mobile device or via the mobile application marketplace.
+#### c. App Usage Data
 
----
-
-## Data Retention Policy
-
-The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at **chroniclesbytrolsz@gmail.com**, and they will respond in a reasonable time.
+- How often you write, which features you love, and general app interactions (purely for making **Chronicles** better, not to judge your late-night overthinking sessions).
+- Device info (like OS version) to keep things running smoothly.
+- Error logs (so we can fix bugs and make sure your diary doesn’t vanish into the void).
 
 ---
 
-## Children
+### 2. Why We Need Your Data (Hint: To Make Chronicles Awesome!)
 
-The Application does **not** address anyone under the age of **13**. The Service Provider does **not** knowingly collect personally identifiable information from children under **13 years of age**. If they discover that a child under 13 has provided personal information, they will immediately delete it from their servers. If you are a parent or guardian and you are aware that your child has provided personal information, please contact the Service Provider at **chroniclesbytrolsz@gmail.com** so necessary actions can be taken.
+We use your info to:
 
----
-
-## Security
-
-The Service Provider is concerned about safeguarding the confidentiality of your information. They provide physical, electronic, and procedural safeguards to protect the information processed and maintained.
-
----
-
-## Changes to This Policy
-
-This Privacy Policy may be updated from time to time for any reason. The Service Provider will notify you of any changes by updating this page with the new Privacy Policy. You are advised to review this Privacy Policy **regularly** for any changes. Continued use of the Application is deemed as **approval** of all changes.
-
-This privacy policy is effective as of **March 10, 2025**.
+- Keep **Chronicles** up and running
+- Help you switch between **private** and **public** entries seamlessly
+- Let you share entries with friends (if you’re feeling bold)
+- Fix bugs and make things work better
+- Stop the bad guys (a.k.a. fraud and security threats)
+- Send you reminders (because we know how easy it is to forget to journal!)
 
 ---
 
-## Your Consent
+### 3. Your Diary’s Fort Knox: Data Security & Storage 🔒
 
-By using the Application, you are **consenting** to the processing of your information as set forth in this Privacy Policy now and as amended in the future.
+- **Local Storage:** Your diary stays **on your device** unless you back it up.
+- **Encryption:** Fancy tech magic keeps your data safe.
+- **No Creepy Ads:** We don’t sell your info. Period.
+- **Cloud Backup (Optional):** If you choose, you can sync your entries to a secure cloud service like Google Drive or iCloud.
+- **Breach Protection:** If something shady happens, we’ll let you know ASAP.
 
 ---
 
-## Contact Us
+### 4. Privacy Controls (You’re the Boss!)
 
-If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at **chroniclesbytrolsz@gmail.com**.
+- Keep your entries **private** or **public**—your call!
+- Control who sees your shared entries.
+- No one (not even us) can snoop on your private diary.
+- We never, ever sell your data.
+
+---
+
+### 5. Your Rights (Because You’re in Charge!)
+
+- **Read, Edit, Delete:** Your data, your rules.
+- **Nuke Your Account:** Want to disappear? We’ll wipe everything upon request.
+- **Change Permissions:** Adjust what we can access anytime.
+- **No Tracking:** We don’t follow you around the internet.
+
+---
+
+### 6. Third-Party Stuff (No Shady Business)
+
+If you back up to Google Drive, iCloud, Firebase, or another service, their privacy rules apply. Please review their policies before enabling backups, as we use Firebase for some of our services.
+
+---
+
+### 7. Kids & Chronicles 🚸
+
+If you’re under 13, sorry—you’ll have to wait to spill your teenage angst here. We don’t collect info from kids, and if we find out we have, we’ll delete it immediately.
+
+---
+
+### 8. Cookies? No Thanks! 🍪
+
+Unlike websites, we don’t use cookies to track you. But we may use analytics to see which features are most loved (or ignored 😢).
+
+---
+
+### 9. Your Responsibilities
+
+- Keep your login info safe (we don’t want hackers reading your diary!)
+- Set up backups properly if you want extra security(and while changing your device ofc)
+- Be mindful of what you share publicly
+
+---
+
+### 10. Legal Mumbo Jumbo
+
+We follow data laws to keep your info safe. If a government ever asks for your data, we’ll make sure to explain them why can't we do so.
+
+---
+
+### 11. Updates to This Policy 📢
+
+We may tweak this policy from time to time. If we make major changes, we’ll notify you via the app (because no one likes surprise policy updates).
+
+---
+
+### 12. Questions? Hit Us Up! 💌
+
+Got questions, concerns, or just want to chat about how cool **Chronicles** is? Reach out(we'll respond ASAP):
+
+**Email:** [chroniclesbytroslz@gmail.com]
 """;
 
 class PrivacyPolicyDialog extends StatelessWidget {

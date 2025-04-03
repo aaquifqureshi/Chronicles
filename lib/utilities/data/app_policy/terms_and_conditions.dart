@@ -8,75 +8,118 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 String termsAndConditions = """
-## Terms & Conditions
+**Chronicles - Diary Writing App**
 
-These terms and conditions apply to the **Chronicles** app (hereby referred to as "Application") for mobile devices that was created by **trOlsz** (hereby referred to as "Service Provider") as an Open Source service.
 
----
+**Effective Date:** [28 August 1938]
 
-## Agreement
-
-Upon downloading or utilizing the Application, you are automatically agreeing to the following terms. Unauthorized copying, modification, or extraction of source code is strictly prohibited. All intellectual property rights remain with the Service Provider.
+Hey there, wordsmith! 📝✨ Welcome to **Chronicles**, the app where you can pour your heart out, make lists, and store all those deep (or super random) thoughts. But before you dive into your journaling adventure, let’s lay down some ground rules. Don’t worry—we’ll keep it fun and simple! 🎉
 
 ---
 
-## Modification of Services
+### 1. Accepting These Terms (Yup, You Gotta Read Them)
 
-The Service Provider reserves the right to modify the Application or charge for its services at any time. Any charges will be clearly communicated.
-
----
-
-## Security and Device Integrity
-
-The Application processes personal data provided by you. The Service Provider strongly advises against jailbreaking or rooting your device, as it may compromise security and app functionality.
+By using **Chronicles**, you agree to follow these terms. If you don’t agree, we totally understand—but you can’t use the app. Simple as that!
 
 ---
 
-## Third-Party Services
+### 2. What You Can & Can’t Do (Play Nice!)
 
-The Application uses third-party services that have their own Terms and Conditions:
+You **can**:
+- Write freely (it’s your diary, after all!).
+- Choose to keep entries private or share them with friends.
+- Back up your data for safekeeping.
+- Use the app as long as you follow these terms.
 
-- Google Play Services
-- Google Analytics for Firebase
-- Firebase Crashlytics
-
----
-
-## Network and Data Charges
-
-Some functions require an active internet connection. The Service Provider is not responsible for connectivity issues or data charges from your provider.
-
----
-
-## User Responsibility
-
-It is your responsibility to ensure your device remains charged and operational while using the Application.
+You **can’t**:
+- Use the app for anything illegal, harmful, or just plain mean (cyberbullying isn’t cool).
+- Try to hack, modify, or mess with the app in weird ways.
+- Post stuff that breaks copyright laws (your original poetry = great, someone else’s novel = not so great).
+- Spam other users (this isn’t an ad board, it’s a diary app!).
 
 ---
 
-## Liability Limitations
+### 3. Your Data, Your Rules (But Read This!)
 
-The Service Provider relies on third parties for information and does not accept liability for losses due to reliance on the Application's functionality.
-
----
-
-## Updates and Termination
-
-The Service Provider may update or discontinue the Application without prior notice. You must accept updates to continue usage.
+- Your entries stay **yours**. We don’t own your content, and we don’t snoop.
+- Private entries stay private unless you **choose** to share them.
+- If you back up your diary, make sure your cloud service is secure.
+- We may collect some **anonymous** data to improve the app (see our Privacy Policy for the full scoop).
 
 ---
 
-## Changes to These Terms and Conditions
+### 4. Account & Security (Keep It Safe!)
 
-These terms may be updated periodically. It is your responsibility to review them regularly.
-
-**Effective Date:** March 11, 2025
+- You’re responsible for keeping your login details safe (because nobody wants a hacked diary).
+- If you suspect someone else is accessing your account, **change your password ASAP**.
+- We can’t recover your private entries if they’re lost and not backed up, so be careful!
 
 ---
 
-## Contact Us
+### 5. Age Restrictions (Sorry, Kids!)
 
-For any questions, contact us at **chroniclesbytrolsz@gmail.com**.
+If you’re under **13**, you’ll need to wait to start your **Chronicles** journey. If we find out someone under 13 is using the app, we’ll have to remove their account (nothing personal!).
+
+---
+
+### 6. Paid Features (Because We Gotta Keep the Lights On)
+
+- Chronicles may introduce premium features in the futures (no plans to do so right now!)
+- If you subscribe to premium, payments are handled by the app store (Google Play or Apple).
+- No refunds for partially used subscriptions, so choose wisely!
+
+---
+
+### 7. Bugs & Glitches (Hey, It Happens!)
+
+We work hard to keep **Chronicles** running smoothly, but sometimes bugs sneak in. 🐞 If you find one, let us know! We’ll do our best to fix it.
+
+---
+
+### 8. Termination (No Hard Feelings, We Hope!)
+
+- You can delete your account whenever you want (though we’ll miss you!).
+- If you break these rules, we **may** suspend or delete your account.
+- We won’t delete accounts without a good reason (so don’t worry, we’re not trigger-happy!).
+
+---
+
+### 9. Third-Party Services (Read Their Rules Too!)
+
+If you back up your diary to Google Drive, iCloud, or another service, their privacy policies apply. We’re not responsible if their systems have a bad day.
+
+---
+
+### 10. Updates to These Terms (We’ll Keep You Posted!)
+
+- We may update these Terms & Conditions occasionally.
+- If we make major changes, we’ll let you know through the app.
+- Keep checking back so you’re always in the loop!
+
+---
+
+### 11. Legal Stuff (The Boring but Important Part)
+
+- We’re not responsible if you lose your data due to device failure, accidental deletion, or some other unfortunate event.
+- We’re also not responsible for what you post (your thoughts, your responsibility!).
+- If there’s ever a legal dispute, we’ll try to resolve it in a friendly way first.
+
+---
+
+### 12. Need Help? Reach Out! 💌
+
+Got questions? Technical issues? Just want to say hi? Contact us!
+
+**Email:** : chroniclesbytroslz@gmail.com
+
+
+
+
+---
+
+That’s it! Now go forth and write your heart out. 📖✨
+
+
 """;
 
 class TermsConditionsDialog extends StatelessWidget {

@@ -460,7 +460,7 @@ class _TextEditorState extends State<TextEditor> {
       }
     }
     if (isPlaying) {
-      ttsController.text = 'YOUR CHRONICLES IS SPOKEN.';
+      ttsController.text = 'YOUR CHRONICLES HAS SPOKEN, YOU CAN REPLAY IT...';
       await flutterTts.speak(ttsController.text);
     }
   }
@@ -551,6 +551,9 @@ class _TextEditorState extends State<TextEditor> {
                               ],
                             ),
                           ),
+                          SizedBox(
+                            height: 40.0,
+                          ),
                           Expanded(
                             flex: 2,
                             child: SingleChildScrollView(
@@ -605,13 +608,21 @@ class _TextEditorState extends State<TextEditor> {
                                       playTts(setStateDialog);
                                     }
                                   },
-                                  icon: Icon(Icons.play_arrow),
+                                  icon: Icon(
+                                    Icons.play_arrow,
+                                    color: Color(0xFF4EABCC),
+                                    size: 40,
+                                  ),
                                 ),
                                 IconButton(
                                   onPressed: () {
                                     pauseTts();
                                   },
-                                  icon: Icon(Icons.pause),
+                                  icon: Icon(
+                                    Icons.pause,
+                                    color: Color(0xFF4EABCC),
+                                    size: 40,
+                                  ),
                                 ),
                               ],
                             ),
@@ -678,12 +689,13 @@ class _TextEditorState extends State<TextEditor> {
                       ),
                     ),
                     SizedBox(
-                      height: 30.0,
+                      height: 50.0,
                     ),
                     Expanded(
                       flex: 2,
                       child: Center(
                         child: Text(
+                          softWrap: true,
                           sttController.text,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -710,11 +722,16 @@ class _TextEditorState extends State<TextEditor> {
                                   ? Icons.mic
                                   : Icons.mic_off,
                               color: Color(0xFF4EABCC),
+                              size: 40,
                             ),
                           ),
                           IconButton(
                             onPressed: addSttToController,
-                            icon: Icon(Icons.add),
+                            icon: Icon(
+                              Icons.add,
+                              color: Color(0xFF4EABCC),
+                              size: 40,
+                            ),
                           ),
                         ],
                       ),

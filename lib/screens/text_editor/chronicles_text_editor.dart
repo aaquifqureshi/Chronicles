@@ -7,13 +7,16 @@
 */
 
 import 'package:chronicles/services/file_database.dart';
+import 'package:chronicles/utilities/components/buttons/galactic_ocean_button.dart';
 import 'package:chronicles/utilities/components/floating_action_button/text_editor_fab.dart';
 import 'package:chronicles/utilities/components/text_editor/editor_textbox.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:chronicles/services/file_manager.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../utilities/components/alerts/text_editor_alerts.dart';
 import '../../utilities/components/text_editor/reaction_type_data.dart';
@@ -60,6 +63,19 @@ class _TextEditorState extends State<TextEditor> {
 
   late ChroniclesDateTime nowTime;
 
+  FlutterTts flutterTts = FlutterTts();
+  TextEditingController ttsController = TextEditingController();
+  List<dynamic> languages = [];
+  String? selectedLanguage;
+  List<Map> voices = [];
+  Object? selectedVoice;
+  bool isPlaying = false;
+  int ttsIndex = 0;
+
+  final SpeechToText flutterStt = SpeechToText();
+  bool speechEnabled = false;
+  TextEditingController sttController = TextEditingController();
+
   bool hasUnsavedChanged() {
     if (noEditTitleController.text != titleController.text) {
       return true;
@@ -105,34 +121,6 @@ class _TextEditorState extends State<TextEditor> {
         (Route<dynamic> route) => false,
       );
     }
-  }
-
-  @override
-  void initState() {
-    nowTime = ChroniclesDateTime(nowTime: DateTime.now());
-    if (widget.fileName == null) {
-      controllers.add(TextEditingController());
-      noEditController.add(TextEditingController());
-      editModes.add(true);
-
-      String weekday = nowTime.getHalfStringWeekDay();
-      int day = nowTime.getIntDay();
-      String month = nowTime.getHalfStringMonth();
-      int year = nowTime.getIntYear();
-
-      createdAt = '$weekday, $day-$month-$year';
-      modifiedAt = '$weekday, $day-$month-$year';
-      reactionType = ReactionType.none;
-
-      widget.fileName = '${nowTime.getMilliSecondSinceEpoch()}.json';
-    } else {
-      String? milliSinceEpochString = widget.fileName?.split('.').first;
-      int milliSinceEpoch = int.parse(milliSinceEpochString!);
-      nowTime.convertMilliSecondsSinceEpochToDateTime(milliSinceEpoch);
-
-      _loadFile(widget.fileName!);
-    }
-    super.initState();
   }
 
   void _saveFileToDB({
@@ -431,6 +419,383 @@ class _TextEditorState extends State<TextEditor> {
         });
   }
 
+  Future<void> loadLanguages() async {
+    languages = await flutterTts.getLanguages;
+
+    setState(() {
+      selectedLanguage = null;
+    });
+  }
+
+  Future<void> loadVoices() async {
+    List<dynamic> rawVoices = await flutterTts.getVoices;
+    voices = rawVoices.whereType<Map<dynamic, dynamic>>().toList();
+
+    setState(() {
+      selectedVoice = null;
+    });
+  }
+
+  Future<void> playTts(StateSetter setStateDialog) async {
+    while (ttsIndex < controllers.length && isPlaying) {
+      setState(() {
+        ttsController.text = controllers[ttsIndex].text;
+      });
+
+      setStateDialog(() {
+        ttsController.text = controllers[ttsIndex].text;
+      });
+
+      try {
+        int value = await flutterTts.speak(ttsController.text);
+        await flutterTts.awaitSpeakCompletion(true);
+
+        if (value == 1) {
+          setStateDialog(() {
+            ttsIndex++;
+          });
+        }
+      } catch (e) {
+        print("Speaking problem $e");
+      }
+    }
+    if (isPlaying) {
+      ttsController.text = 'YOUR CHRONICLES IS SPOKEN.';
+      await flutterTts.speak(ttsController.text);
+    }
+  }
+
+  Future<void> pauseTts() async {
+    setState(() {
+      isPlaying = false;
+    });
+
+    await flutterTts.pause();
+  }
+
+  Future<void> ttsFunction() async {
+    await loadLanguages();
+    await loadVoices();
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Color(0xFFFFFFFF),
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: 30,
+            vertical: 60,
+          ),
+          child: languages.isEmpty
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setStateDialog) {
+                    List<Map<dynamic, dynamic>> filteredVoices =
+                        selectedLanguage != null
+                            ? voices
+                                .where((voice) =>
+                                    voice["name"].contains(selectedLanguage))
+                                .toList()
+                            : voices;
+                    return Container(
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                DropdownButton<String>(
+                                  value: selectedLanguage,
+                                  hint: Text("Select language"),
+                                  items: languages.map((language) {
+                                    return DropdownMenuItem<String>(
+                                      child: Text(language),
+                                      value: language,
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setStateDialog(() {
+                                      selectedLanguage = value;
+                                    });
+                                  },
+                                ),
+                                filteredVoices.isNotEmpty
+                                    ? DropdownButton<Object>(
+                                        value: selectedVoice != null &&
+                                                filteredVoices
+                                                    .contains(selectedVoice)
+                                            ? selectedVoice
+                                            : null,
+                                        hint: Text("Select Voice"),
+                                        items: filteredVoices
+                                            .map<DropdownMenuItem<Object>>(
+                                                (voice) {
+                                          return DropdownMenuItem<Object>(
+                                            value: voice,
+                                            child: Text(voice["name"]),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setStateDialog(() {
+                                            selectedVoice = value;
+                                          });
+                                        },
+                                      )
+                                    : Text(
+                                        softWrap: true,
+                                        "No voices available for selected language."),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: SingleChildScrollView(
+                              child: RichText(
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18.0,
+                                    color: Color(0xFF1F1F1F),
+                                  ),
+                                  text: ttsController.text,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    if (selectedLanguage != null &&
+                                        selectedVoice != null) {
+                                      flutterTts.setLanguage(
+                                          selectedLanguage ?? 'en-US');
+
+                                      final voiceMap = selectedVoice
+                                          as Map<dynamic, dynamic>;
+                                      if (voiceMap.containsKey("name") &&
+                                          voiceMap.containsKey("locale")) {
+                                        flutterTts.setVoice({
+                                          "name": voiceMap["name"],
+                                          "locale": voiceMap["locale"]
+                                        });
+                                      }
+                                      setState(() {
+                                        ttsIndex = 0;
+                                        isPlaying = true;
+                                      });
+                                      playTts(setStateDialog);
+                                    } else {
+                                      flutterTts.setLanguage('en-US');
+                                      flutterTts.setVoice(
+                                          {"name": "Karen", "locale": "en-US"});
+
+                                      setState(() {
+                                        ttsIndex = 0;
+                                        isPlaying = true;
+                                      });
+                                      playTts(setStateDialog);
+                                    }
+                                  },
+                                  icon: Icon(Icons.play_arrow),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    pauseTts();
+                                  },
+                                  icon: Icon(Icons.pause),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GalacticOceanButton(
+                            onPress: () {
+                              pauseTts();
+                              Navigator.pop(context);
+                            },
+                            buttonLabel: Text(
+                              'Close',
+                              style: TextStyle(
+                                fontFamily: 'Hind',
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+        );
+      },
+    );
+  }
+
+  void sttFunction() async {
+    speechEnabled = await flutterStt.initialize();
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setStateDialog) {
+            return Dialog(
+              backgroundColor: Color(0xFFFFFFFF),
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 60,
+              ),
+              child: Container(
+                margin: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        maxLines: null,
+                        flutterStt.isListening
+                            ? 'Listening...'
+                            : speechEnabled
+                                ? 'Press the Mic Button, to let me hear your inner voice.'
+                                : 'Speech is not available.',
+                        style: TextStyle(
+                          fontFamily: 'Hind',
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF1F1F1F),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: Text(
+                          sttController.text,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18.0,
+                            color: Color(0xFF1F1F1F),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              if (flutterStt.isListening) {
+                                stopListening(setStateDialog);
+                              } else {
+                                startListening(setStateDialog);
+                              }
+                            },
+                            icon: Icon(
+                              flutterStt.isListening
+                                  ? Icons.mic
+                                  : Icons.mic_off,
+                              color: Color(0xFF4EABCC),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: addSttToController,
+                            icon: Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    GalacticOceanButton(
+                      onPress: () {
+                        Navigator.pop(context);
+                      },
+                      buttonLabel: Text('Close'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  void startListening(StateSetter setStateDialog) async {
+    await flutterStt.listen(onResult: (result) {
+      setStateDialog(() {
+        sttController.text = result.recognizedWords;
+      });
+    });
+    setStateDialog(() {});
+  }
+
+  void stopListening(StateSetter setStateDialog) async {
+    await flutterStt.stop();
+    setStateDialog(() {});
+  }
+
+  void addSttToController() {
+    final String recognizedText = sttController.text;
+
+    if (recognizedText.isNotEmpty) {
+      setState(() {
+        if (controllers.isNotEmpty && controllers.first.text.isEmpty) {
+          controllers.first.text = recognizedText;
+        } else {
+          controllers.add(TextEditingController(text: recognizedText));
+          editModes.add(true);
+        }
+      });
+      sttController.clear();
+    }
+  }
+
+  @override
+  void initState() {
+    nowTime = ChroniclesDateTime(nowTime: DateTime.now());
+    if (widget.fileName == null) {
+      controllers.add(TextEditingController());
+      noEditController.add(TextEditingController());
+      editModes.add(true);
+
+      String weekday = nowTime.getHalfStringWeekDay();
+      int day = nowTime.getIntDay();
+      String month = nowTime.getHalfStringMonth();
+      int year = nowTime.getIntYear();
+
+      createdAt = '$weekday, $day-$month-$year';
+      modifiedAt = '$weekday, $day-$month-$year';
+      reactionType = ReactionType.none;
+
+      widget.fileName = '${nowTime.getMilliSecondSinceEpoch()}.json';
+    } else {
+      String? milliSinceEpochString = widget.fileName?.split('.').first;
+      int milliSinceEpoch = int.parse(milliSinceEpochString!);
+      nowTime.convertMilliSecondsSinceEpochToDateTime(milliSinceEpoch);
+
+      _loadFile(widget.fileName!);
+    }
+
+    loadLanguages();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -444,8 +809,8 @@ class _TextEditorState extends State<TextEditor> {
         floatingActionButton: TextEditorFab(
           reactionType: reactionType,
           reactionFunction: reactionFunction,
-          sttFunction: () {},
-          ttsFunction: () {},
+          sttFunction: sttFunction,
+          ttsFunction: ttsFunction,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(

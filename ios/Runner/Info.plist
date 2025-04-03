@@ -6,6 +6,10 @@
     <true/>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>to select image from gallery, your app needs permission for the photo library</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>For Speech to Text</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>For Speech to Text</string>
     <key>keychain-access-groups</key>
     <array/>
 	<key>CFBundleDevelopmentRegion</key>

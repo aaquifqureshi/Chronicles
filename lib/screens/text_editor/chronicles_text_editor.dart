@@ -319,11 +319,12 @@ class _TextEditorState extends State<TextEditor> {
             backgroundColor: Color(0xFFFFFFFF),
             insetPadding: EdgeInsets.symmetric(
               horizontal: 80,
-              vertical: 300,
+              vertical: 250,
             ),
             child: Container(
               margin: EdgeInsets.all(10.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -849,7 +850,7 @@ class _TextEditorState extends State<TextEditor> {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    icon: Icon(Icons.save_alt),
+                    icon: Icon(Icons.save, color: Color(0xFF4EABCC)),
                   ),
                   IconButton(
                     onPressed: () {
@@ -862,17 +863,10 @@ class _TextEditorState extends State<TextEditor> {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    icon: Icon(Icons.delete_outline_sharp),
-                  ),
-                  IconButton(
-                    onPressed: () {},
                     icon: Icon(
-                      Icons.upload,
-                      color: Colors.white,
-                      size: 2.0,
+                      Icons.delete_outline_sharp,
+                      color: Color(0xFF4EABCC),
                     ),
-                    style: IconButton.styleFrom(
-                        backgroundColor: Color(0xFF4EABCC)),
                   ),
                 ],
               ),

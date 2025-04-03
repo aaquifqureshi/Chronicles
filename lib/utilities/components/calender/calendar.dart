@@ -505,8 +505,11 @@ class _CalendarState extends State<Calendar> {
                               }
                               localAverage += value;
                             }
-                            reactionAverage =
-                                (localAverage / fileCount).round();
+
+                            if (fileCount != 0) {
+                              reactionAverage =
+                                  (localAverage / fileCount).round();
+                            }
 
                             return Dialog(
                               backgroundColor: Color(0xFFFFFFFF),

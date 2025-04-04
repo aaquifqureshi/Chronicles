@@ -18,6 +18,10 @@ import 'package:chronicles/utilities/data/app_policy/privacy_policy.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:chronicles/utilities/data/user_auth_data.dart';
 import 'package:chronicles/services/pfp_services.dart';
+import 'package:chronicles/screens/profile/friends/friend_lists_mainscreen.dart';
+import 'package:chronicles/screens/profile/settings/settings_screen.dart';
+import 'package:chronicles/services/internet_connectivity.dart';
+import 'package:chronicles/utilities/components/alerts/no_internet_alert.dart';
 
 // Variable Values & TextStyles
 final double buttonHeight = 50.0;
@@ -249,7 +253,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               child: InfiniteRoundWidthButton(
-                onPress: () {},
+                onPress: () async {
+                  bool internetStatus = await getInternetStatus();
+
+                  if (internetStatus) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FriendListScreen(),
+                      ),
+                    );
+                  } else {
+                    noInternetAlert(context);
+                  }
+                },
                 buttonLabel: Text(
                   friendsButtonLabel,
                   style: buttonLabelTextStyle(
@@ -283,7 +300,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: CustomTextButton(
                         text: optionSettingText,
                         icon: Icons.settings,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SettingsPage(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     Padding(

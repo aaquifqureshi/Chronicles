@@ -37,6 +37,7 @@ class EditorTextBox extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                      scrollPhysics: NeverScrollableScrollPhysics(),
                       style: textEditorStyle,
                       decoration: InputDecoration(
                         border: InputBorder.none,

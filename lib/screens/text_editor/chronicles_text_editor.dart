@@ -17,6 +17,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:chronicles/services/file_manager.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utilities/components/alerts/text_editor_alerts.dart';
 import '../../utilities/components/text_editor/reaction_type_data.dart';
@@ -316,104 +317,106 @@ class _TextEditorState extends State<TextEditor> {
         context: context,
         builder: (context) {
           return Dialog(
-            backgroundColor: Color(0xFFFFFFFF),
+            backgroundColor: Color(0xFFf1f1f1),
             insetPadding: EdgeInsets.symmetric(
               horizontal: 80,
-              vertical: 250,
+              vertical: 240,
             ),
-            child: Container(
-              margin: EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        reactionType = ReactionType.crying;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.faceSadCry,
-                        color: Color(0xFF4EABCC),
-                      ),
-                      title: Text(
-                        'Crying!',
-                        style: emojiTextStyle,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        reactionType = ReactionType.sad;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.faceSadTear,
-                        color: Color(0xFF4EABCC),
-                      ),
-                      title: Text(
-                        'Sad!',
-                        style: emojiTextStyle,
+            child: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          reactionType = ReactionType.crying;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ListTile(
+                        leading: SvgPicture.asset(
+                          "assets/images/icons/reaction/crying.svg",
+                          semanticsLabel: 'Crying Logo',
+                        ),
+                        title: Text(
+                          'Crying!',
+                          style: emojiTextStyle,
+                        ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        reactionType = ReactionType.noSadNoHappy;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.faceMeh,
-                        color: Color(0xFF4EABCC),
-                      ),
-                      title: Text(
-                        'Ah No Expressions...!',
-                        style: emojiTextStyle,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        reactionType = ReactionType.smile;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.faceSmile,
-                        color: Color(0xFF4EABCC),
-                      ),
-                      title: Text(
-                        'Smile Please!',
-                        style: emojiTextStyle,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          reactionType = ReactionType.sad;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ListTile(
+                        leading: SvgPicture.asset(
+                          "assets/images/icons/reaction/sad.svg",
+                          semanticsLabel: 'Sad Logo',
+                        ),
+                        title: Text(
+                          'Sad!',
+                          style: emojiTextStyle,
+                        ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        reactionType = ReactionType.happy;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.faceLaugh,
-                        color: Color(0xFF4EABCC),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          reactionType = ReactionType.noSadNoHappy;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ListTile(
+                        leading: SvgPicture.asset(
+                          "assets/images/icons/reaction/normal.svg",
+                          semanticsLabel: 'normal Logo',
+                        ),
+                        title: Text(
+                          'Ah No Expressions...!',
+                          style: emojiTextStyle,
+                        ),
                       ),
-                      title: Text('Show Teeth!'),
                     ),
-                  ),
-                ],
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          reactionType = ReactionType.smile;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ListTile(
+                        leading: SvgPicture.asset(
+                          "assets/images/icons/reaction/smile.svg",
+                          semanticsLabel: 'Smile Logo',
+                        ),
+                        title: Text(
+                          'Smile Please!',
+                          style: emojiTextStyle,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          reactionType = ReactionType.happy;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ListTile(
+                        leading: SvgPicture.asset(
+                          "assets/images/icons/reaction/happy.svg",
+                          semanticsLabel: 'Happy Logo',
+                        ),
+                        title: Text('Show Teeth!'),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

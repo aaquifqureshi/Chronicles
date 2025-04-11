@@ -36,6 +36,8 @@ dependencies:
   flutter_custom_month_picker: ^0.1.3
   flutter_tts: ^4.2.2
   speech_to_text: ^7.0.0
+  flutter_svg: ^2.0.17
+
 
 dev_dependencies:
   flutter_test:
@@ -50,8 +52,7 @@ flutter:
     - assets/images/logo/
     - assets/images/icons/
     - assets/lottie/
-    - assets/images/icons/new_profile_icon.png
-
+    - assets/images/icons/reaction/
   fonts:
     - family: Abyssinica_SIL
       fonts:

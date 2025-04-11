@@ -2,6 +2,7 @@ import 'package:chronicles/screens/text_editor/chronicles_text_editor.dart';
 import 'package:chronicles/services/file_database.dart';
 import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
@@ -226,38 +227,38 @@ class _CalendarState extends State<Calendar> {
     return 0;
   }
 
-  IconData fetchAverageIcon(int reactionAverage) {
+  String fetchAverageIcon(int reactionAverage) {
     if (reactionAverage == 1) {
-      return FontAwesomeIcons.faceSadCry;
+      return "assets/images/icons/reaction/crying.svg";
     } else if (reactionAverage == 2) {
-      return FontAwesomeIcons.faceSadTear;
+      return "assets/images/icons/reaction/sad.svg";
     } else if (reactionAverage == 3) {
-      return FontAwesomeIcons.faceMeh;
+      return "assets/images/icons/reaction/normal.svg";
     } else if (reactionAverage == 4) {
-      return FontAwesomeIcons.faceSmile;
+      return "assets/images/icons/reaction/smile.svg";
     } else if (reactionAverage == 5) {
-      return FontAwesomeIcons.faceLaugh;
+      return "assets/images/icons/reaction/happy.svg";
     }
-    return Icons.add_reaction_rounded;
+    return "null";
   }
 
-  IconData fetchCurrentIcon(FileData file) {
+  String fetchCurrentIcon(FileData file) {
     int value = fetchReactionValue(file);
 
     reactionAverage = reactionAverage + value;
 
     if (value == 1) {
-      return FontAwesomeIcons.faceSadCry;
+      return "assets/images/icons/reaction/crying.svg";
     } else if (value == 2) {
-      return FontAwesomeIcons.faceSadTear;
+      return "assets/images/icons/reaction/sad.svg";
     } else if (value == 3) {
-      return FontAwesomeIcons.faceMeh;
+      return "assets/images/icons/reaction/normal.svg";
     } else if (value == 4) {
-      return FontAwesomeIcons.faceSmile;
+      return "assets/images/icons/reaction/smile.svg";
     } else if (value == 5) {
-      return FontAwesomeIcons.faceLaugh;
+      return "assets/images/icons/reaction/happy.svg";
     }
-    return Icons.add_reaction_rounded;
+    return "null";
   }
 
   @override
@@ -409,6 +410,7 @@ class _CalendarState extends State<Calendar> {
         const Gap(12),
         Flexible(
           child: GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
@@ -517,175 +519,178 @@ class _CalendarState extends State<Calendar> {
                                 horizontal: 80,
                                 vertical: 200,
                               ),
-                              child: Container(
-                                margin: EdgeInsets.all(12.0),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            '${date.day} - ${_monthName(date.month)} - ${date.year}',
-                                            style: TextStyle(
-                                              fontFamily: 'Hind',
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Icon(
-                                            fetchAverageIcon((reactionAverage)),
-                                            color: Color(0xFF4EABCC),
-                                          ),
-                                        ],
+                              child: SingleChildScrollView(
+                                child: Container(
+                                  margin: EdgeInsets.all(12.0),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10.0,
                                       ),
-                                    ),
-                                    DefaultTabController(
-                                      length: 2,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          TabBar(
-                                            labelColor: Color(0xFF4EABCC),
-                                            unselectedLabelColor:
-                                                Color(0xFF1F1F1F),
-                                            labelStyle: TextStyle(
-                                              fontFamily: 'Hind',
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            unselectedLabelStyle: TextStyle(
-                                              fontFamily: 'Hind',
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                            indicator: UnderlineTabIndicator(
-                                              borderSide: BorderSide(
-                                                width: 3.0,
-                                                color: Color(0xFF4EABCC),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '${date.day} - ${_monthName(date.month)} - ${date.year}',
+                                              style: TextStyle(
+                                                fontFamily: 'Hind',
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.w600,
                                               ),
-                                              insets: EdgeInsets.symmetric(
-                                                  horizontal: 50.0),
                                             ),
-                                            indicatorColor: Color(0xFF4EABCC),
-                                            indicatorSize:
-                                                TabBarIndicatorSize.label,
-                                            dividerColor: Color(0xFF1F1F1F),
-                                            dividerHeight: 3.0,
-                                            tabs: [
-                                              Tab(text: 'Diary'),
-                                              Tab(text: 'ToDo'),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 350,
-                                            child: TabBarView(
-                                              children: [
-                                                Center(
-                                                  child: files.isEmpty
-                                                      ? Center(
-                                                          child: Text(
-                                                              'No Instance of your Chronicles on this date.'),
-                                                        )
-                                                      : ListView.builder(
-                                                          itemCount:
-                                                              files.length,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            return Column(
-                                                              children: [
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) {
-                                                                          return TextEditor(
-                                                                            isModify:
-                                                                                true,
-                                                                            fileName:
-                                                                                '${files[index].millisecondSinceEpoch}.json',
-                                                                          );
-                                                                        },
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  child:
-                                                                      ListTile(
-                                                                    title: Text(
-                                                                      files[index]
-                                                                          .title,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontFamily:
-                                                                            'Hind',
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        fontSize:
-                                                                            18.0,
-                                                                        color: Color(
-                                                                            0xFF1F1F1F),
-                                                                      ),
-                                                                    ),
-                                                                    subtitle:
-                                                                        Text(
-                                                                      files[index]
-                                                                          .content,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontFamily:
-                                                                            'Hind',
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
-                                                                        fontSize:
-                                                                            16.0,
-                                                                        color: Color(
-                                                                            0xFF1F1F1F),
-                                                                      ),
-                                                                    ),
-                                                                    trailing:
-                                                                        Icon(
-                                                                      fetchCurrentIcon(
-                                                                          files[
-                                                                              index]),
-                                                                      color: Color(
-                                                                          0xFF4EABCC),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                if (index !=
-                                                                    files.length -
-                                                                        1)
-                                                                  Divider(
-                                                                    thickness:
-                                                                        0.5,
-                                                                    color: Color(
-                                                                        0xFF1F1F1F),
-                                                                  )
-                                                              ],
-                                                            );
-                                                          },
-                                                        ),
+                                            SvgPicture.asset(
+                                              fetchAverageIcon(
+                                                  (reactionAverage)),
+                                              semanticsLabel: 'Dart Logo',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      DefaultTabController(
+                                        length: 2,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TabBar(
+                                              labelColor: Color(0xFF4EABCC),
+                                              unselectedLabelColor:
+                                                  Color(0xFF1F1F1F),
+                                              labelStyle: TextStyle(
+                                                fontFamily: 'Hind',
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              unselectedLabelStyle: TextStyle(
+                                                fontFamily: 'Hind',
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              indicator: UnderlineTabIndicator(
+                                                borderSide: BorderSide(
+                                                  width: 3.0,
+                                                  color: Color(0xFF4EABCC),
                                                 ),
-                                                Center(
-                                                  child: Text(
-                                                      'ToDo Work in Progress...'),
-                                                ),
+                                                insets: EdgeInsets.symmetric(
+                                                    horizontal: 50.0),
+                                              ),
+                                              indicatorColor: Color(0xFF4EABCC),
+                                              indicatorSize:
+                                                  TabBarIndicatorSize.label,
+                                              dividerColor: Color(0xFF1F1F1F),
+                                              dividerHeight: 3.0,
+                                              tabs: [
+                                                Tab(text: 'Diary'),
+                                                Tab(text: 'ToDo'),
                                               ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                            Container(
+                                              height: 350,
+                                              child: TabBarView(
+                                                children: [
+                                                  Center(
+                                                    child: files.isEmpty
+                                                        ? Center(
+                                                            child: Text(
+                                                                'No Instance of your Chronicles on this date.'),
+                                                          )
+                                                        : ListView.builder(
+                                                            itemCount:
+                                                                files.length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return Column(
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder:
+                                                                              (context) {
+                                                                            return TextEditor(
+                                                                              isModify: true,
+                                                                              fileName: '${files[index].millisecondSinceEpoch}.json',
+                                                                            );
+                                                                          },
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        ListTile(
+                                                                      title:
+                                                                          Text(
+                                                                        files[index]
+                                                                            .title,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Hind',
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                          fontSize:
+                                                                              18.0,
+                                                                          color:
+                                                                              Color(0xFF1F1F1F),
+                                                                        ),
+                                                                      ),
+                                                                      subtitle:
+                                                                          Text(
+                                                                        files[index]
+                                                                            .content,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontFamily:
+                                                                              'Hind',
+                                                                          fontWeight:
+                                                                              FontWeight.w400,
+                                                                          fontSize:
+                                                                              16.0,
+                                                                          color:
+                                                                              Color(0xFF1F1F1F),
+                                                                        ),
+                                                                      ),
+                                                                      trailing:
+                                                                          SvgPicture
+                                                                              .asset(
+                                                                        fetchCurrentIcon(
+                                                                            files[index]),
+                                                                        semanticsLabel:
+                                                                            'Dart Logo',
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  if (index !=
+                                                                      files.length -
+                                                                          1)
+                                                                    Divider(
+                                                                      thickness:
+                                                                          0.5,
+                                                                      color: Color(
+                                                                          0xFF1F1F1F),
+                                                                    )
+                                                                ],
+                                                              );
+                                                            },
+                                                          ),
+                                                  ),
+                                                  Center(
+                                                    child: Text(
+                                                        'ToDo Work in Progress...'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

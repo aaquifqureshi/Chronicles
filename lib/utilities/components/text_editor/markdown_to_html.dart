@@ -23,6 +23,7 @@ class _MarkdownToHtmlState extends State<MarkdownToHtml> {
     return Markdown(
       shrinkWrap: true,
       data: widget.markdownText,
+      physics: NeverScrollableScrollPhysics(),
       styleSheet: MarkdownStyleSheet(
         codeblockDecoration: BoxDecoration(
           color: Color(0xFFFFFFFF),

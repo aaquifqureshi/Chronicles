@@ -30,37 +30,117 @@ class EditorTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController imageController = TextEditingController();
+    RegExp exp = RegExp(r'!\[([^\]]*)\]\(([^)]+)\)');
+    bool isImage = exp.hasMatch(controller.text);
+    RegExpMatch? match;
+
+    if (isImage) {
+      match = exp.firstMatch(controller.text);
+      if (match != null && match.groupCount >= 1) {
+        if (match.group(1) != 'Type Image Description Here') {
+          imageController.text = match.group(1)!;
+        } else {
+          imageController.text = '';
+        }
+      }
+    }
+
     return GestureDetector(
       onTap: onToggleEdit,
       child: editMode
-          ? Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                      scrollPhysics: NeverScrollableScrollPhysics(),
-                      style: textEditorStyle,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Write Your Journey!',
+          ? isImage
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        scrollPhysics: NeverScrollableScrollPhysics(),
+                        style: textEditorStyle,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Write Image Description!',
+                        ),
+                        maxLines: null,
+                        controller: imageController,
+                        onTapUpOutside: (event) {
+                          if (isImage && match != null) {
+                            final newText = controller.text.replaceRange(
+                              match.start,
+                              match.end,
+                              '![${imageController.text}](${match.group(2)!})',
+                            );
+                            controller.text = newText;
+                          }
+
+                          onToggleEdit();
+                        },
+                        onTapOutside: (event) {
+                          if (isImage && match != null) {
+                            final newText = controller.text.replaceRange(
+                              match.start,
+                              match.end,
+                              '![${imageController.text}](${match.group(2)!})',
+                            );
+                            controller.text = newText;
+                          }
+
+                          onToggleEdit();
+                        },
                       ),
-                      controller: controller,
-                      maxLines: null,
-                      onTapUpOutside: (event) {
-                        onToggleEdit();
-                      },
-                      onTapOutside: (event) {
-                        onToggleEdit();
-                      }),
-                ),
-                IconButton(
-                  onPressed: onDelete,
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Color(0xFF4EABCC),
-                  ),
-                ),
-              ],
-            )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          alignment: Alignment.centerRight,
+                          onPressed: () {
+                            print('CROP');
+                          },
+                          icon: Icon(
+                            Icons.crop,
+                            color: Color(0xFF4EABCC),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: onDelete,
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Color(0xFF4EABCC),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        scrollPhysics: NeverScrollableScrollPhysics(),
+                        style: textEditorStyle,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Write Your Journey!',
+                        ),
+                        controller: controller,
+                        maxLines: null,
+                        onTapUpOutside: (event) {
+                          onToggleEdit();
+                        },
+                        onTapOutside: (event) {
+                          onToggleEdit();
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: onDelete,
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Color(0xFF4EABCC),
+                      ),
+                    ),
+                  ],
+                )
           : MarkdownToHtml(markdownText: controller.text),
     );
   }

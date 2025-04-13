@@ -132,6 +132,24 @@ class _TextEditorState extends State<TextEditor> {
     required String createdAt,
     required String reactionType,
   }) {
+    RegExp exp = RegExp(r'!\[([^\]]*)\]\(([^)]+)\)');
+    bool isImage = exp.hasMatch(content);
+    RegExpMatch? match;
+
+    if (isImage) {
+      match = exp.firstMatch(content);
+      if (match != null && match.groupCount >= 1) {
+        if (match.group(1) != 'Type Image Description Here') {
+          content = 'Image Desc: ${match.group(1)!}';
+        } else {
+          content = 'Image: No Description';
+        }
+      }
+    }
+
+    if (title == '') {
+      title = createdAt;
+    }
     _fileDB.saveFileToDatabase(
       fileNameInMillisSinceEpoch: milliSinceEpoch,
       title: title,
@@ -149,6 +167,25 @@ class _TextEditorState extends State<TextEditor> {
     required String lastModified,
     required String reactionType,
   }) {
+    RegExp exp = RegExp(r'!\[([^\]]*)\]\(([^)]+)\)');
+    bool isImage = exp.hasMatch(content);
+    RegExpMatch? match;
+
+    if (isImage) {
+      match = exp.firstMatch(content);
+      if (match != null && match.groupCount >= 1) {
+        if (match.group(1) != 'Type Image Description Here') {
+          content = 'Image Desc: ${match.group(1)!}';
+        } else {
+          content = 'Image: No Description';
+        }
+      }
+    }
+
+    if (title == '') {
+      title = createdAt;
+    }
+
     _fileDB.updateFile(
       id: milliSinceEpoch,
       title: title,
@@ -442,13 +479,33 @@ class _TextEditorState extends State<TextEditor> {
 
   Future<void> playTts(StateSetter setStateDialog) async {
     while (ttsIndex < controllers.length && isPlaying) {
-      setState(() {
-        ttsController.text = controllers[ttsIndex].text;
-      });
+      TextEditingController imageController = TextEditingController();
+      RegExp exp = RegExp(r'!\[([^\]]*)\]\(([^)]+)\)');
+      bool isImage = exp.hasMatch(controllers[ttsIndex].text);
+      RegExpMatch? match;
 
-      setStateDialog(() {
-        ttsController.text = controllers[ttsIndex].text;
-      });
+      if (isImage) {
+        match = exp.firstMatch(controllers[ttsIndex].text);
+        if (match != null && match.groupCount >= 1) {
+          imageController.text = 'IMAGE: ${match.group(1)!}';
+
+          setState(() {
+            ttsController.text = imageController.text;
+          });
+          setStateDialog(() {
+            ttsController.text = imageController.text;
+          });
+          ttsController.text = imageController.text;
+        }
+      } else {
+        setState(() {
+          ttsController.text = controllers[ttsIndex].text;
+        });
+
+        setStateDialog(() {
+          ttsController.text = controllers[ttsIndex].text;
+        });
+      }
 
       try {
         int value = await flutterTts.speak(ttsController.text);
@@ -853,7 +910,10 @@ class _TextEditorState extends State<TextEditor> {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    icon: Icon(Icons.save, color: Color(0xFF4EABCC)),
+                    icon: Icon(
+                      Icons.save_rounded,
+                      color: Color(0xFF4EABCC),
+                    ),
                   ),
                   IconButton(
                     onPressed: () {

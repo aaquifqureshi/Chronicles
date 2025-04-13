@@ -288,9 +288,7 @@ class _TextEditorState extends State<TextEditor> {
         _updateFileToDB(
           milliSinceEpoch: milliSinceEpoch,
           title: titleController.text,
-          content: controllers[0].text.length >= 25
-              ? controllers[0].text.substring(0, 25)
-              : controllers[0].text,
+          content: controllers[0].text,
           lastModified: modifiedAt,
           reactionType: reactionType.toString(),
         );

@@ -5,6 +5,7 @@
 */
 
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -20,7 +21,15 @@ Icon connectionFalseIcon = Icon(
 );
 
 class InternetConnectionStatus extends StatefulWidget {
-  const InternetConnectionStatus({super.key});
+  Widget? active_child;
+  Widget? inactive_child;
+  bool enableChild = false;
+
+  InternetConnectionStatus(
+      {super.key,
+      this.active_child,
+      this.inactive_child,
+      required this.enableChild});
 
   @override
   State<InternetConnectionStatus> createState() =>
@@ -60,7 +69,17 @@ class _InternetConnectionStatusState extends State<InternetConnectionStatus> {
 
   @override
   Widget build(BuildContext context) {
-    return internetConnectionStatusIcon(_connectionStatus);
+    return widget.enableChild
+        ? _connectionStatus == InternetStatus.connected
+            ? widget.active_child ??
+                Center(
+                  child: Text('No Widget Given'),
+                )
+            : widget.inactive_child ??
+                Center(
+                  child: Text('No Widget Given'),
+                )
+        : internetConnectionStatusIcon(_connectionStatus);
   }
 
   Widget internetConnectionStatusIcon(connectionStatus) {

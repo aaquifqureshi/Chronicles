@@ -5,6 +5,7 @@
 *                    where users can publicly show their writings.
 */
 
+import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:flutter/material.dart';
 
 import '../../utilities/components/floating_action_button/navigate_floating_button.dart';
@@ -86,6 +87,23 @@ class ViewSharedDiaries extends StatelessWidget {
       appBar: AppBar(
         title: Text("Shared Diaries"),
       ),
+      body: InternetConnectionStatus(
+        enableChild: true,
+        active_child: active_internet(),
+        inactive_child: inactive_internet(),
+      ),
+    );
+  }
+
+  Widget active_internet() {
+    return Center(
+      child: Text('Internet Active'),
+    );
+  }
+
+  Widget inactive_internet() {
+    return Center(
+      child: Text('Internet No Available'),
     );
   }
 }

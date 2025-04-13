@@ -1,4 +1,5 @@
 import 'package:chronicles/screens/profile/friends/pending_friend_lists_screen.dart';
+import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:flutter/material.dart';
 import 'add_friends.dart';
 import 'friends_list_display.dart';
@@ -31,6 +32,45 @@ class _FriendListScreenState extends State<FriendListScreen>
 
   @override
   Widget build(BuildContext context) {
+    return InternetConnectionStatus(
+      enableChild: true,
+      active_child: active_internet(),
+      inactive_child: inactive_internet(),
+    );
+  }
+
+  Widget inactive_internet() {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Friends"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddFriendScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.person_add_alt_1_rounded),
+          ),
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: "Your Friends"),
+            Tab(text: "Pending"),
+          ],
+        ),
+      ),
+      body: Center(
+        child: Text('No Internet'),
+      ),
+    );
+  }
+
+  Widget active_internet() {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Friends"),

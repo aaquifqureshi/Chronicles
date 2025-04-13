@@ -441,289 +441,290 @@ class _CalendarState extends State<Calendar> {
                 isStreak = true;
               }
 
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 6.0),
-                decoration: BoxDecoration(
-                  color: isSingleStreak || isFirstInStreak || isLastInStreak
-                      ? Color(0xFF4EABCC)
-                      : Colors.transparent,
-                  shape: BoxShape.circle,
-                ),
-                child: Container(
-                  margin: EdgeInsets.only(
-                    top: 6.0,
-                    bottom: 6.0,
-                    left: isFirstInStreak ? 9.0 : 0.0,
-                    right: isLastInStreak ? 9.0 : 0.0,
-                  ),
-                  decoration: BoxDecoration(
-                      shape:
-                          isSingleStreak ? BoxShape.circle : BoxShape.rectangle,
-                      borderRadius: isSingleStreak
-                          ? null
-                          : BorderRadius.horizontal(
-                              left: isFirstInStreak
-                                  ? Radius.circular(50.0) // Rounded left
-                                  : Radius.zero,
-                              right: isLastInStreak
-                                  ? Radius.circular(50.0) // Rounded right
-                                  : Radius.zero,
-                            ),
-                      color: isStreak
-                          ? isSingleStreak
-                              ? Color(0xFF4EABCC)
-                              : Color(0x504EABCC)
-                          : Colors.transparent),
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: () async {
-                        ChroniclesDateTime cDate =
-                            ChroniclesDateTime(nowTime: date);
-                        String weekday = cDate.getHalfStringWeekDay();
-                        int day = cDate.getIntDay();
-                        String month = cDate.getHalfStringMonth();
-                        int year = cDate.getIntYear();
-                        String createdAt = '$weekday, $day-$month-$year';
+              return GestureDetector(
+                onTap: () async {
+                  ChroniclesDateTime cDate = ChroniclesDateTime(nowTime: date);
+                  String weekday = cDate.getHalfStringWeekDay();
+                  int day = cDate.getIntDay();
+                  String month = cDate.getHalfStringMonth();
+                  int year = cDate.getIntYear();
+                  String createdAt = '$weekday, $day-$month-$year';
 
-                        List<FileData> files = [];
-                        List<FileData> getFiles = await FileDatabase.instance
-                            .fetchFilesByDate(createdAt);
+                  List<FileData> files = [];
+                  List<FileData> getFiles =
+                      await FileDatabase.instance.fetchFilesByDate(createdAt);
 
-                        setState(() {
-                          files = getFiles;
-                        });
+                  setState(() {
+                    files = getFiles;
+                  });
 
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            reactionAverage = 0;
-                            int localAverage = 0;
-                            int fileCount = 0;
-                            int value;
-                            for (var file in files) {
-                              value = fetchReactionValue(file);
-                              if (value != 0) {
-                                fileCount++;
-                              }
-                              localAverage += value;
-                            }
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      reactionAverage = 0;
+                      int localAverage = 0;
+                      int fileCount = 0;
+                      int value;
+                      for (var file in files) {
+                        value = fetchReactionValue(file);
+                        if (value != 0) {
+                          fileCount++;
+                        }
+                        localAverage += value;
+                      }
 
-                            if (fileCount != 0) {
-                              reactionAverage =
-                                  (localAverage / fileCount).round();
-                            }
+                      if (fileCount != 0) {
+                        reactionAverage = (localAverage / fileCount).round();
+                      }
 
-                            return Dialog(
-                              backgroundColor: Color(0xFFFFFFFF),
-                              insetPadding: EdgeInsets.symmetric(
-                                horizontal: 80,
-                                vertical: 200,
-                              ),
-                              child: SingleChildScrollView(
-                                child: Container(
-                                  margin: EdgeInsets.all(12.0),
-                                  child: Column(
+                      return Dialog(
+                        backgroundColor: Color(0xFFFFFFFF),
+                        insetPadding: EdgeInsets.symmetric(
+                          horizontal: 80,
+                          vertical: 200,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Container(
+                            margin: EdgeInsets.all(12.0),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '${date.day} - ${_monthName(date.month)} - ${date.year}',
-                                              style: TextStyle(
-                                                fontFamily: 'Hind',
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            SvgPicture.asset(
-                                              fetchAverageIcon(
-                                                  (reactionAverage)),
-                                              semanticsLabel: 'Dart Logo',
-                                            ),
-                                          ],
+                                      Text(
+                                        '${date.day} - ${_monthName(date.month)} - ${date.year}',
+                                        style: TextStyle(
+                                          fontFamily: 'Hind',
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      DefaultTabController(
-                                        length: 2,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            TabBar(
-                                              labelColor: Color(0xFF4EABCC),
-                                              unselectedLabelColor:
-                                                  Color(0xFF1F1F1F),
-                                              labelStyle: TextStyle(
-                                                fontFamily: 'Hind',
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              unselectedLabelStyle: TextStyle(
-                                                fontFamily: 'Hind',
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                              indicator: UnderlineTabIndicator(
-                                                borderSide: BorderSide(
-                                                  width: 3.0,
-                                                  color: Color(0xFF4EABCC),
-                                                ),
-                                                insets: EdgeInsets.symmetric(
-                                                    horizontal: 50.0),
-                                              ),
-                                              indicatorColor: Color(0xFF4EABCC),
-                                              indicatorSize:
-                                                  TabBarIndicatorSize.label,
-                                              dividerColor: Color(0xFF1F1F1F),
-                                              dividerHeight: 3.0,
-                                              tabs: [
-                                                Tab(text: 'Diary'),
-                                                Tab(text: 'ToDo'),
-                                              ],
-                                            ),
-                                            Container(
-                                              height: 350,
-                                              child: TabBarView(
-                                                children: [
-                                                  Center(
-                                                    child: files.isEmpty
-                                                        ? Center(
-                                                            child: Text(
-                                                                'No Instance of your Chronicles on this date.'),
-                                                          )
-                                                        : ListView.builder(
-                                                            itemCount:
-                                                                files.length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Column(
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator
-                                                                          .push(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                          builder:
-                                                                              (context) {
-                                                                            return TextEditor(
-                                                                              isModify: true,
-                                                                              fileName: '${files[index].millisecondSinceEpoch}.json',
-                                                                            );
-                                                                          },
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                    child:
-                                                                        ListTile(
-                                                                      title:
-                                                                          Text(
-                                                                        files[index]
-                                                                            .title,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Hind',
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          fontSize:
-                                                                              18.0,
-                                                                          color:
-                                                                              Color(0xFF1F1F1F),
-                                                                        ),
-                                                                      ),
-                                                                      subtitle:
-                                                                          Text(
-                                                                        files[index]
-                                                                            .content,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Hind',
-                                                                          fontWeight:
-                                                                              FontWeight.w400,
-                                                                          fontSize:
-                                                                              16.0,
-                                                                          color:
-                                                                              Color(0xFF1F1F1F),
-                                                                        ),
-                                                                      ),
-                                                                      trailing:
-                                                                          SvgPicture
-                                                                              .asset(
-                                                                        fetchCurrentIcon(
-                                                                            files[index]),
-                                                                        semanticsLabel:
-                                                                            'Dart Logo',
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  if (index !=
-                                                                      files.length -
-                                                                          1)
-                                                                    Divider(
-                                                                      thickness:
-                                                                          0.5,
-                                                                      color: Color(
-                                                                          0xFF1F1F1F),
-                                                                    )
-                                                                ],
-                                                              );
-                                                            },
-                                                          ),
-                                                  ),
-                                                  Center(
-                                                    child: Text(
-                                                        'ToDo Work in Progress...'),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
+                                      SvgPicture.asset(
+                                        fetchAverageIcon((reactionAverage)),
+                                        semanticsLabel: 'Dart Logo',
+                                      ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          date.day.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: isCurrentMonth
-                                ? isStreak
-                                    ? isSingleStreak
-                                        ? Color(0xFFFFFFFF)
-                                        : isFirstInStreak || isLastInStreak
-                                            ? Color(0xFFFFFFFF)
-                                            : Color(0xFF1F1F1F)
-                                    : Color(0xFF1F1F1F)
-                                : isStreak
-                                    ? isSingleStreak
-                                        ? Color(0xFFFFFFFF)
-                                        : isFirstInStreak || isLastInStreak
-                                            ? Color(0xFFFFFFFF)
-                                            : Color(0xFF1F1F1F)
-                                    : Colors.grey,
+                                DefaultTabController(
+                                  length: 2,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TabBar(
+                                        labelColor: Color(0xFF4EABCC),
+                                        unselectedLabelColor: Color(0xFF1F1F1F),
+                                        labelStyle: TextStyle(
+                                          fontFamily: 'Hind',
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        unselectedLabelStyle: TextStyle(
+                                          fontFamily: 'Hind',
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        indicator: UnderlineTabIndicator(
+                                          borderSide: BorderSide(
+                                            width: 3.0,
+                                            color: Color(0xFF4EABCC),
+                                          ),
+                                          insets: EdgeInsets.symmetric(
+                                              horizontal: 50.0),
+                                        ),
+                                        indicatorColor: Color(0xFF4EABCC),
+                                        indicatorSize:
+                                            TabBarIndicatorSize.label,
+                                        dividerColor: Color(0xFF1F1F1F),
+                                        dividerHeight: 3.0,
+                                        tabs: [
+                                          Tab(text: 'Diary'),
+                                          Tab(text: 'ToDo'),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 350,
+                                        child: TabBarView(
+                                          children: [
+                                            Center(
+                                              child: files.isEmpty
+                                                  ? Center(
+                                                      child: Text(
+                                                          'No Instance of your Chronicles on this date.'),
+                                                    )
+                                                  : ListView.builder(
+                                                      itemCount: files.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Column(
+                                                          children: [
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) {
+                                                                      return TextEditor(
+                                                                        isModify:
+                                                                            true,
+                                                                        fileName:
+                                                                            '${files[index].millisecondSinceEpoch}.json',
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: ListTile(
+                                                                title: Text(
+                                                                  files[index]
+                                                                      .title,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        'Hind',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontSize:
+                                                                        18.0,
+                                                                    color: Color(
+                                                                        0xFF1F1F1F),
+                                                                  ),
+                                                                ),
+                                                                subtitle: Text(
+                                                                  files[index]
+                                                                      .content,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        'Hind',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        16.0,
+                                                                    color: Color(
+                                                                        0xFF1F1F1F),
+                                                                  ),
+                                                                ),
+                                                                trailing:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  fetchCurrentIcon(
+                                                                      files[
+                                                                          index]),
+                                                                  semanticsLabel:
+                                                                      'Dart Logo',
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            if (index !=
+                                                                files.length -
+                                                                    1)
+                                                              Divider(
+                                                                thickness: 0.5,
+                                                                color: Color(
+                                                                    0xFF1F1F1F),
+                                                              )
+                                                          ],
+                                                        );
+                                                      },
+                                                    ),
+                                            ),
+                                            Center(
+                                              child: Text(
+                                                  'ToDo Work in Progress...'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 6.0),
+                      decoration: BoxDecoration(
+                        color:
+                            isSingleStreak || isFirstInStreak || isLastInStreak
+                                ? Color(0xFF4EABCC)
+                                : Colors.transparent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Container(),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 6.0,
+                        bottom: 6.0,
+                        left: isFirstInStreak ? 9.0 : 0.0,
+                        right: isLastInStreak ? 9.0 : 0.0,
+                      ),
+                      decoration: BoxDecoration(
+                          shape: isSingleStreak
+                              ? BoxShape.circle
+                              : BoxShape.rectangle,
+                          borderRadius: isSingleStreak
+                              ? null
+                              : BorderRadius.horizontal(
+                                  left: isFirstInStreak
+                                      ? Radius.circular(50.0) // Rounded left
+                                      : Radius.zero,
+                                  right: isLastInStreak
+                                      ? Radius.circular(50.0) // Rounded right
+                                      : Radius.zero,
+                                ),
+                          color: isStreak
+                              ? isSingleStreak
+                                  ? Color(0xFF4EABCC)
+                                  : Color(0x504EABCC)
+                              : Colors.transparent),
+                      child: Center(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            date.day.toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: isCurrentMonth
+                                  ? isStreak
+                                      ? isSingleStreak
+                                          ? Color(0xFFFFFFFF)
+                                          : isFirstInStreak || isLastInStreak
+                                              ? Color(0xFFFFFFFF)
+                                              : Color(0xFF1F1F1F)
+                                      : Color(0xFF1F1F1F)
+                                  : isStreak
+                                      ? isSingleStreak
+                                          ? Color(0xFFFFFFFF)
+                                          : isFirstInStreak || isLastInStreak
+                                              ? Color(0xFFFFFFFF)
+                                              : Color(0xFF1F1F1F)
+                                      : Colors.grey,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               );
             },

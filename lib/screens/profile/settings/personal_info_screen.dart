@@ -1,4 +1,5 @@
 import 'package:chronicles/screens/profile/settings/settings_screen.dart';
+import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../services/secure_storage.dart';
@@ -109,6 +110,20 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return InternetConnectionStatus(
+      enableChild: true,
+      active_child: activeInternet(),
+      inactive_child: inactiveInternet(),
+    );
+  }
+
+  Widget inactiveInternet() {
+    return Center(
+      child: Text('No Internet'),
+    );
+  }
+
+  Widget activeInternet() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(

@@ -127,7 +127,9 @@ class LoginScreen extends StatelessWidget {
                     padding: EdgeInsets.only(
                       right: rightPaddingInternetConnectionIcon,
                     ),
-                    child: InternetConnectionStatus(),
+                    child: InternetConnectionStatus(
+                      enableChild: false,
+                    ),
                   ),
                 ],
               ),

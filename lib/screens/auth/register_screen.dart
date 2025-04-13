@@ -138,7 +138,9 @@ class RegisterScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(
                         right: rightPaddingInternetConnectionIcon),
-                    child: InternetConnectionStatus(),
+                    child: InternetConnectionStatus(
+                      enableChild: false,
+                    ),
                   ),
                 ],
               ),

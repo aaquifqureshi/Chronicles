@@ -842,6 +842,8 @@ class _TextEditorState extends State<TextEditor> {
     }
   }
 
+  void publicFileUpload() {}
+
   @override
   void initState() {
     nowTime = ChroniclesDateTime(nowTime: DateTime.now());
@@ -929,6 +931,12 @@ class _TextEditorState extends State<TextEditor> {
                       color: Color(0xFF4EABCC),
                     ),
                   ),
+                  IconButton(
+                      onPressed: publicFileUpload,
+                      icon: Icon(
+                        Icons.cloud_upload_rounded,
+                        color: Color(0xFF4EABCC),
+                      ))
                 ],
               ),
             ],

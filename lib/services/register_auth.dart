@@ -65,14 +65,16 @@ Future<String> registerAuthentication(BuildContext context, String firstName,
 
     storage.updateSecureData('isLoginDone', 'true');
     storage.updateSecureData('isPinRequired', 'false');
+    storage.updateSecureData('isUserDetailDone', 'false');
 
     updateUserIndex(nextIndex);
 
     return 'true';
   } on FirebaseAuthException catch (e) {
     if (e.code == 'email-already-in-use') {
-      storage.updateSecureData('isLoginDone', 'false');
+      storage.updateSecureData('isLoginDone', 'true');
       storage.updateSecureData('isPinRequired', 'false');
+
       return 'emailAlreadyUsed';
     } else if (e.code == 'invalid-email') {
       storage.updateSecureData('isLoginDone', 'false');

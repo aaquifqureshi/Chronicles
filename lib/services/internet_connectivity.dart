@@ -24,12 +24,14 @@ class InternetConnectionStatus extends StatefulWidget {
   Widget? active_child;
   Widget? inactive_child;
   bool enableChild = false;
+  Function? recall = () {};
 
   InternetConnectionStatus(
       {super.key,
       this.active_child,
       this.inactive_child,
-      required this.enableChild});
+      required this.enableChild,
+      this.recall});
 
   @override
   State<InternetConnectionStatus> createState() =>
@@ -50,6 +52,9 @@ class _InternetConnectionStatusState extends State<InternetConnectionStatus> {
             ? InternetStatus.connected
             : InternetStatus.disconnected;
       });
+      if (_connectionStatus == InternetStatus.connected) {
+        widget.recall;
+      }
     });
 
     _subscription = InternetConnection().onStatusChange.listen((status) {

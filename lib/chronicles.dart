@@ -9,6 +9,7 @@
 
 // Importing Packages
 
+import 'package:chronicles/screens/waiting_screen/waiting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:chronicles/screens/auth/user_detail_screen.dart';
@@ -70,7 +71,7 @@ class Chronicles extends StatelessWidget {
       future: _getHomeScreen(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return waitingScreen();
         }
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -102,8 +103,12 @@ class Chronicles extends StatelessWidget {
 Future<Widget> _getHomeScreen(BuildContext context) async {
   final bool isUserLoginActive = await isLoginDone();
   final bool isPinLoginRequired = await isPinRequired();
+  final bool isUserDetailRequired = await isUserDetailDone();
 
   if (isUserLoginActive) {
+    if (!isUserDetailRequired) {
+      return UsernameScreen();
+    }
     return isPinLoginRequired ? PinLoginScreen() : Dashboard();
   } else {
     return WelcomeScreen();

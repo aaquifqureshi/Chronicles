@@ -19,6 +19,7 @@ Future<bool> isGoogleAuthenticationDone(BuildContext context) async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     if (googleUser == null) {
+      print("Google Sign-In failed or was cancelled.");
       return false;
     }
 
@@ -47,6 +48,7 @@ Future<bool> isGoogleAuthenticationDone(BuildContext context) async {
     bool isFirstTime = !Doc.exists;
 
     if (user == null) {
+      print("Firebase User is null after Google Sign-In.");
       return false;
     }
 
@@ -99,6 +101,7 @@ Future<bool> isGoogleAuthenticationDone(BuildContext context) async {
     await storage.updateSecureData('UserData', dataString);
     return true;
   } catch (e) {
+    print("Error during Google Sign-In: $e");
     return false;
   }
 }

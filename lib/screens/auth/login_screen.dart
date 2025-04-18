@@ -99,176 +99,212 @@ void clearTextFields() {
   password.clear();
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isLoginProcessStarted = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(top: overallPadding),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: isLoginProcessStarted
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        clearTextFields();
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                  ImportLogo(height: 150, width: 150).importLogowo(),
+                  SizedBox(
+                    height: 10.0,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      right: rightPaddingInternetConnectionIcon,
-                    ),
-                    child: InternetConnectionStatus(
-                      enableChild: false,
-                    ),
+                  CircularProgressIndicator(
+                    color: Color(0xFF4EABCC),
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: logoLeft, right: logoRight, top: logoTop),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(top: overallPadding),
                 child: Column(
                   children: [
-                    ImportLogo(width: logoWidth, height: logoHeight)
-                        .importLogowo(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: accLoginEmailText),
-                            child: Text(
-                              accountLoginText,
-                              style: accountLoginTextStyle,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          emailText,
-                          style: labelTextStyle,
-                        ),
-                        GrayTextfield(
-                          controller: email,
-                          hintText: emailHint,
-                          topPadding: topPadding,
-                          bottomPadding: bottomPadding,
-                        ),
-                        Text(
-                          passwordText,
-                          style: labelTextStyle,
-                        ),
-                        GrayTextfield(
-                          controller: password,
-                          hintText: passwordHint,
-                          topPadding: topPadding,
-                          bottomPadding: bottomPadding,
-                          isPassword: true,
-                        ),
                         Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ForgotPasswordScreen(),
-                                ),
-                              );
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back),
+                            onPressed: () {
+                              clearTextFields();
+                              Navigator.of(context).pop();
                             },
-                            child: Text(
-                              forgotPasswordText,
-                              style: forgotPasswordStyle,
-                            ),
                           ),
                         ),
-                        InfiniteRoundWidthButton(
-                          onPress: () async {
-                            var authValue = await loginAuthentication(
-                              context,
-                              email.text.trim(),
-                              password.text.trim(),
-                            );
-                            bool hasInternet = await getInternetStatus();
-                            if (context.mounted) {
-                              if (hasInternet == true) {
-                                if (authValue == 'true') {
-                                  await updateSaveImage();
-                                  await getSavedImagePath();
-                                  Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    '/Dashboard',
-                                    (Route<dynamic> route) => false,
-                                  );
-                                } else if (authValue == "emptyFields") {
-                                  authAlert(context,
-                                      message: "Fields cannot be empty",
-                                      icon: Icons.error_outline);
-                                } else if (authValue == "invalidEmailSyntax") {
-                                  authAlert(context,
-                                      message: "Invalid Email Syntax",
-                                      icon: Icons.warning_amber,
-                                      iconColor: Colors.orangeAccent);
-                                } else if (authValue == "invalidCredentials") {
-                                  authAlert(context,
-                                      message: "Email or Password is wrong",
-                                      icon: Icons.error_outline);
-                                } else if (authValue == 'unexpectedError') {
-                                  authAlert(context,
-                                      message: "Unexpected Error Occured",
-                                      icon: Icons.error_outline);
-                                }
-                              } else {
-                                noInternetAlert(context);
-                              }
-                            }
-                          },
-                          buttonLabel: Text(
-                            loginText,
-                            style:
-                                buttonLabelTextStyle(textColor: loginTextColor),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: rightPaddingInternetConnectionIcon,
                           ),
-                          verticalMargin: verticalButtonMargin,
-                          height: buttonHeight,
-                          highlightColor: loginRegisterHighlightColor,
-                          splashColor: loginRegisterSplashColor,
-                          horizontalMargin: horizontalMargin,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              normalmsg,
-                              style: normalMsgStyle,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                clearTextFields();
-                                Navigator.popAndPushNamed(context, '/Register');
-                              },
-                              child: Text(
-                                registerButtonText,
-                                style: registerTextStyle,
-                              ),
-                            ),
-                          ],
+                          child: InternetConnectionStatus(
+                            enableChild: false,
+                          ),
                         ),
                       ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: logoLeft, right: logoRight, top: logoTop),
+                      child: Column(
+                        children: [
+                          ImportLogo(width: logoWidth, height: logoHeight)
+                              .importLogowo(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: accLoginEmailText),
+                                  child: Text(
+                                    accountLoginText,
+                                    style: accountLoginTextStyle,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                emailText,
+                                style: labelTextStyle,
+                              ),
+                              GrayTextfield(
+                                controller: email,
+                                hintText: emailHint,
+                                topPadding: topPadding,
+                                bottomPadding: bottomPadding,
+                              ),
+                              Text(
+                                passwordText,
+                                style: labelTextStyle,
+                              ),
+                              GrayTextfield(
+                                controller: password,
+                                hintText: passwordHint,
+                                topPadding: topPadding,
+                                bottomPadding: bottomPadding,
+                                isPassword: true,
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ForgotPasswordScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    forgotPasswordText,
+                                    style: forgotPasswordStyle,
+                                  ),
+                                ),
+                              ),
+                              InfiniteRoundWidthButton(
+                                onPress: () async {
+                                  setState(() {
+                                    isLoginProcessStarted = true;
+                                  });
+
+                                  var authValue = await loginAuthentication(
+                                    context,
+                                    email.text.trim(),
+                                    password.text.trim(),
+                                  );
+                                  bool hasInternet = await getInternetStatus();
+                                  if (context.mounted) {
+                                    if (hasInternet == true) {
+                                      if (authValue == 'true') {
+                                        await updateSaveImage();
+                                        await getSavedImagePath();
+                                        Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          '/Dashboard',
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      } else if (authValue == "emptyFields") {
+                                        authAlert(context,
+                                            message: "Fields cannot be empty",
+                                            icon: Icons.error_outline);
+                                      } else if (authValue ==
+                                          "invalidEmailSyntax") {
+                                        authAlert(context,
+                                            message: "Invalid Email Syntax",
+                                            icon: Icons.warning_amber,
+                                            iconColor: Colors.orangeAccent);
+                                      } else if (authValue ==
+                                          "invalidCredentials") {
+                                        authAlert(context,
+                                            message:
+                                                "Email or Password is wrong",
+                                            icon: Icons.error_outline);
+                                      } else if (authValue ==
+                                          'unexpectedError') {
+                                        authAlert(context,
+                                            message: "Unexpected Error Occured",
+                                            icon: Icons.error_outline);
+                                      }
+                                    } else {
+                                      noInternetAlert(context);
+                                    }
+                                  }
+                                  setState(() {
+                                    isLoginProcessStarted = false;
+                                  });
+                                },
+                                buttonLabel: Text(
+                                  loginText,
+                                  style: buttonLabelTextStyle(
+                                      textColor: loginTextColor),
+                                ),
+                                verticalMargin: verticalButtonMargin,
+                                height: buttonHeight,
+                                highlightColor: loginRegisterHighlightColor,
+                                splashColor: loginRegisterSplashColor,
+                                horizontalMargin: horizontalMargin,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    normalmsg,
+                                    style: normalMsgStyle,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      clearTextFields();
+                                      Navigator.popAndPushNamed(
+                                          context, '/Register');
+                                    },
+                                    child: Text(
+                                      registerButtonText,
+                                      style: registerTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

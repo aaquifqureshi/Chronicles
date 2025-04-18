@@ -68,112 +68,143 @@ TextStyle buttonLabelTextStyle({required Color textColor}) {
   );
 }
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  bool isGoogleProcessStarted = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: logoChroniclesWriteYourJourneyFlex,
-            child: Center(
+      body: isGoogleProcessStarted
+          ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ImportLogo(width: logoWidth, height: logoHeight)
-                      .importLogowo(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        chroniclesText,
-                        style: chroniclesTextStyle,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(left: writeYourJourneyLeftPadding),
-                        child: Text(
-                          writeYourJourneyText,
-                          style: writeYourJourneyTextStyle,
-                        ),
-                      ),
-                    ],
-                  )
+                  ImportLogo(height: 150, width: 150).importLogowo(),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  CircularProgressIndicator(
+                    color: Color(0xFF4EABCC),
+                  ),
                 ],
               ),
-            ),
-          ),
-          Expanded(
-            flex: buttonFlex,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InfiniteRoundWidthButton(
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ),
-                    );
-                  },
-                  buttonLabel: Text(
-                    loginText,
-                    style: buttonLabelTextStyle(textColor: loginTextColor),
+                Expanded(
+                  flex: logoChroniclesWriteYourJourneyFlex,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ImportLogo(width: logoWidth, height: logoHeight)
+                            .importLogowo(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              chroniclesText,
+                              style: chroniclesTextStyle,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: writeYourJourneyLeftPadding),
+                              child: Text(
+                                writeYourJourneyText,
+                                style: writeYourJourneyTextStyle,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                  verticalMargin: verticalButtonMargin,
-                  height: buttonHeight,
-                  highlightColor: loginRegisterHighlightColor,
-                  splashColor: loginRegisterSplashColor,
                 ),
-                InfiniteRoundWidthButton(
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => RegisterScreen(),
-                      ),
-                    );
-                  },
-                  buttonLabel: Text(
-                    registerText,
-                    style: buttonLabelTextStyle(textColor: registerTextColor),
-                  ),
-                  verticalMargin: verticalButtonMargin,
-                  height: buttonHeight,
-                  highlightColor: loginRegisterHighlightColor,
-                  splashColor: loginRegisterSplashColor,
-                ),
-                InfiniteRoundWidthButton(
-                  onPress: () async {
-                    await isGoogleAuthenticationDone(context);
-                  },
-                  backgroundColor: continueWithGoogleBGColor,
-                  borderWidth: googleButtonBorderWidth,
-                  borderColor: continueWithGoogleBorderColor,
-                  buttonLabel: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                Expanded(
+                  flex: buttonFlex,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Image.asset(logoPathForGoogle),
-                      SizedBox(
-                        width: googleLogoTextPartitionWidth,
+                      InfiniteRoundWidthButton(
+                        onPress: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                          );
+                        },
+                        buttonLabel: Text(
+                          loginText,
+                          style:
+                              buttonLabelTextStyle(textColor: loginTextColor),
+                        ),
+                        verticalMargin: verticalButtonMargin,
+                        height: buttonHeight,
+                        highlightColor: loginRegisterHighlightColor,
+                        splashColor: loginRegisterSplashColor,
                       ),
-                      Text(
-                        continueWithGoogleText,
-                        style: buttonLabelTextStyle(
-                            textColor: continueWithGoogleTextColor),
+                      InfiniteRoundWidthButton(
+                        onPress: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => RegisterScreen(),
+                            ),
+                          );
+                        },
+                        buttonLabel: Text(
+                          registerText,
+                          style: buttonLabelTextStyle(
+                              textColor: registerTextColor),
+                        ),
+                        verticalMargin: verticalButtonMargin,
+                        height: buttonHeight,
+                        highlightColor: loginRegisterHighlightColor,
+                        splashColor: loginRegisterSplashColor,
+                      ),
+                      InfiniteRoundWidthButton(
+                        onPress: () async {
+                          setState(() {
+                            isGoogleProcessStarted = true;
+                          });
+                          await isGoogleAuthenticationDone(context);
+
+                          setState(() {
+                            isGoogleProcessStarted = false;
+                          });
+                        },
+                        backgroundColor: continueWithGoogleBGColor,
+                        borderWidth: googleButtonBorderWidth,
+                        borderColor: continueWithGoogleBorderColor,
+                        buttonLabel: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(logoPathForGoogle),
+                            SizedBox(
+                              width: googleLogoTextPartitionWidth,
+                            ),
+                            Text(
+                              continueWithGoogleText,
+                              style: buttonLabelTextStyle(
+                                  textColor: continueWithGoogleTextColor),
+                            ),
+                          ],
+                        ),
+                        verticalMargin: verticalButtonMargin,
+                        height: buttonHeight,
                       ),
                     ],
                   ),
-                  verticalMargin: verticalButtonMargin,
-                  height: buttonHeight,
-                ),
+                )
               ],
             ),
-          )
-        ],
-      ),
     );
   }
 }

@@ -111,208 +111,240 @@ void clearTextFields() {
   password.clear();
 }
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  bool isRegisterProcessStarted = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(top: overallPadding),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: isRegisterProcessStarted
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        clearTextFields();
-                        Navigator.pop(context);
-                      },
-                    ),
+                  ImportLogo(height: 150, width: 150).importLogowo(),
+                  SizedBox(
+                    height: 10.0,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        right: rightPaddingInternetConnectionIcon),
-                    child: InternetConnectionStatus(
-                      enableChild: false,
-                    ),
+                  CircularProgressIndicator(
+                    color: Color(0xFF4EABCC),
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: leftPadding, right: rightPadding, top: logoTop),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(top: overallPadding),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ImportLogo(width: logoWidth, height: logoHeight)
-                        .importLogowo(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Text(
-                            createAccountText,
-                            style: createAccountStyle,
-                          ),
-                        ),
-                        GrayTextfield(
-                          controller: firstName,
-                          hintText: firstNameHint,
-                          topPadding: firstTopPadding,
-                          bottomPadding: bottomPadding,
-                        ),
-                        GrayTextfield(
-                          controller: lastName,
-                          hintText: lastNameHint,
-                          topPadding: topPadding,
-                          bottomPadding: bottomPadding,
-                        ),
-                        GrayTextfield(
-                          controller: email,
-                          hintText: emailHint,
-                          topPadding: topPadding,
-                          bottomPadding: bottomPadding,
-                        ),
-                        GrayTextfield(
-                          controller: password,
-                          hintText: passwordHint,
-                          topPadding: topPadding,
-                          isPassword: isPasswordVisible,
-                          bottomPadding: lastBottomPadding,
-                        ),
-                      ],
-                    ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          normalMeassageText,
-                          style: normalMeassageTextStyle,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back),
+                            onPressed: () {
+                              clearTextFields();
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    TermsAndConditionsScreen(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            termsConditionText,
-                            style: gestureButtonStyle,
+                        Padding(
+                          padding: EdgeInsets.only(
+                              right: rightPaddingInternetConnectionIcon),
+                          child: InternetConnectionStatus(
+                            enableChild: false,
                           ),
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          textBetweenTCandPrivayPolicy,
-                          style: normalMeassageTextStyle,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PrivacyPolicyScreen(),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: leftPadding, right: rightPadding, top: logoTop),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ImportLogo(width: logoWidth, height: logoHeight)
+                              .importLogowo(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  createAccountText,
+                                  style: createAccountStyle,
+                                ),
                               ),
-                            );
-                          },
-                          child: Text(
-                            privacyPolicyText,
-                            style: gestureButtonStyle,
+                              GrayTextfield(
+                                controller: firstName,
+                                hintText: firstNameHint,
+                                topPadding: firstTopPadding,
+                                bottomPadding: bottomPadding,
+                              ),
+                              GrayTextfield(
+                                controller: lastName,
+                                hintText: lastNameHint,
+                                topPadding: topPadding,
+                                bottomPadding: bottomPadding,
+                              ),
+                              GrayTextfield(
+                                controller: email,
+                                hintText: emailHint,
+                                topPadding: topPadding,
+                                bottomPadding: bottomPadding,
+                              ),
+                              GrayTextfield(
+                                controller: password,
+                                hintText: passwordHint,
+                                topPadding: topPadding,
+                                isPassword: isPasswordVisible,
+                                bottomPadding: lastBottomPadding,
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    InfiniteRoundWidthButton(
-                      onPress: () async {
-                        var authValue = await registerAuthentication(
-                          context,
-                          firstName.text.trim(),
-                          lastName.text.trim(),
-                          email.text.trim(),
-                          password.text.trim(),
-                        );
-                        bool hasInternet = await getInternetStatus();
-                        if (context.mounted) {
-                          if (hasInternet == true) {
-                            if (authValue == 'true') {
-                              Navigator.pushNamedAndRemoveUntil(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                normalMeassageText,
+                                style: normalMeassageTextStyle,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          TermsAndConditionsScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  termsConditionText,
+                                  style: gestureButtonStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                textBetweenTCandPrivayPolicy,
+                                style: normalMeassageTextStyle,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PrivacyPolicyScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  privacyPolicyText,
+                                  style: gestureButtonStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          InfiniteRoundWidthButton(
+                            onPress: () async {
+                              setState(() {
+                                isRegisterProcessStarted = true;
+                              });
+
+                              var authValue = await registerAuthentication(
                                 context,
-                                '/UsernameScreen',
-                                (Route<dynamic> route) => false,
+                                firstName.text.trim(),
+                                lastName.text.trim(),
+                                email.text.trim(),
+                                password.text.trim(),
                               );
-                            } else if (authValue == "emptyFields") {
-                              authAlert(context,
-                                  message: "Fields cannot be empty",
-                                  icon: Icons.error_outline);
-                            } else if (authValue == "emailAlreadyUsed") {
-                              authAlert(context,
-                                  message: "Email Already in use.",
-                                  icon: Icons.warning_amber,
-                                  iconColor: Colors.orangeAccent);
-                            } else if (authValue == "invalidEmailSyntax") {
-                              authAlert(context,
-                                  message: "Invalid Email syntax.",
-                                  icon: Icons.warning_amber,
-                                  iconColor: Colors.orangeAccent);
-                            } else if (authValue == 'unexpectedError') {
-                              authAlert(context,
-                                  message: "Unexpected Error Occured",
-                                  icon: Icons.error_outline);
-                            }
-                          } else {
-                            noInternetAlert(context);
-                          }
-                        }
-                      },
-                      buttonLabel: Text(
-                        signUpText,
-                        style: buttonLabelTextStyle(textColor: signUpTextColor),
-                      ),
-                      verticalMargin: verticalButtonMargin,
-                      height: buttonHeight,
-                      highlightColor: loginRegisterHighlightColor,
-                      splashColor: loginRegisterSplashColor,
-                      horizontalMargin: horizontalMargin,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          accountExistText,
-                          style: accountExistStyle,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            clearTextFields();
-                            Navigator.popAndPushNamed(context, '/Login');
-                          },
-                          child: Text(
-                            loginButttonText,
-                            style: loginButtonStyle,
+                              bool hasInternet = await getInternetStatus();
+                              if (context.mounted) {
+                                if (hasInternet == true) {
+                                  if (authValue == 'true') {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      '/UsernameScreen',
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  } else if (authValue == "emptyFields") {
+                                    authAlert(context,
+                                        message: "Fields cannot be empty",
+                                        icon: Icons.error_outline);
+                                  } else if (authValue == "emailAlreadyUsed") {
+                                    authAlert(context,
+                                        message: "Email Already in use.",
+                                        icon: Icons.warning_amber,
+                                        iconColor: Colors.orangeAccent);
+                                  } else if (authValue ==
+                                      "invalidEmailSyntax") {
+                                    authAlert(context,
+                                        message: "Invalid Email syntax.",
+                                        icon: Icons.warning_amber,
+                                        iconColor: Colors.orangeAccent);
+                                  } else if (authValue == 'unexpectedError') {
+                                    authAlert(context,
+                                        message: "Unexpected Error Occured",
+                                        icon: Icons.error_outline);
+                                  }
+                                } else {
+                                  noInternetAlert(context);
+                                }
+                              }
+                              setState(() {
+                                isRegisterProcessStarted = false;
+                              });
+                            },
+                            buttonLabel: Text(
+                              signUpText,
+                              style: buttonLabelTextStyle(
+                                  textColor: signUpTextColor),
+                            ),
+                            verticalMargin: verticalButtonMargin,
+                            height: buttonHeight,
+                            highlightColor: loginRegisterHighlightColor,
+                            splashColor: loginRegisterSplashColor,
+                            horizontalMargin: horizontalMargin,
                           ),
-                        ),
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                accountExistText,
+                                style: accountExistStyle,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  clearTextFields();
+                                  Navigator.popAndPushNamed(context, '/Login');
+                                },
+                                child: Text(
+                                  loginButttonText,
+                                  style: loginButtonStyle,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

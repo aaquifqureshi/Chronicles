@@ -18,6 +18,7 @@ import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
 import 'package:chronicles/utilities/components/alerts/no_internet_alert.dart';
 import 'package:chronicles/services/pfp_services.dart';
+import 'package:flutter/services.dart';
 
 // Logo Values
 final double logoWidth = 130.0;
@@ -108,6 +109,16 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isLoginProcessStarted = false;
+
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

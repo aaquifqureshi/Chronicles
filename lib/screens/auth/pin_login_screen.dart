@@ -7,6 +7,7 @@
 import 'package:chronicles/utilities/components/keyboard/blue_numeric_keyboard.dart';
 import 'package:chronicles/utilities/components/textfields/otp_display_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../services/secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -99,6 +100,16 @@ class _PinLoginScreen extends State<PinLoginScreen> {
         });
       }
     }
+  }
+
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
+    super.initState();
   }
 
   @override

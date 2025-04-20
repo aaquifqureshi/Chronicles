@@ -1,6 +1,7 @@
 import 'package:chronicles/screens/profile/friends/pending_friend_lists_screen.dart';
 import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'add_friends.dart';
 import 'friends_list_display.dart';
 
@@ -45,6 +46,12 @@ class _FriendListScreenState extends State<FriendListScreen>
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     tabController = TabController(length: 2, vsync: this);
   }
 

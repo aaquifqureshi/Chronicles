@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/todo/todo.dart';
 import 'package:chronicles/services/todo_services.dart';
 import 'package:chronicles/utilities/components/textfields/todo_textfield.dart';
+import 'package:flutter/services.dart';
 
 class ToDoScreen extends StatefulWidget {
   const ToDoScreen({super.key});
@@ -24,6 +25,12 @@ class _ToDoScreenState extends State<ToDoScreen> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     _loadTodos();
   }
 

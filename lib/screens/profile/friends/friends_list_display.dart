@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../services/friends_services.dart';
 import '../../../utilities/components/List_Tile/friends_list_tile.dart';
 
@@ -42,6 +43,12 @@ class _FriendsListPageState extends State<FriendsListPage> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     loadFriends();
   }
 

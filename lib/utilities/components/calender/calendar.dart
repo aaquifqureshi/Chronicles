@@ -478,7 +478,7 @@ class _CalendarState extends State<Calendar> {
                       }
 
                       return Dialog(
-                        backgroundColor: Color(0xFFFFFFFF),
+                        backgroundColor: Color(0xFFF1F1F1),
                         insetPadding: EdgeInsets.symmetric(
                           horizontal: 80,
                           vertical: 200,

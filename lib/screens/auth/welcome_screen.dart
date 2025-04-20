@@ -13,6 +13,7 @@ import 'package:chronicles/screens/auth/register_screen.dart';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
 import 'package:chronicles/utilities/image_import/logo_import.dart';
 import 'package:chronicles/services/google_auth.dart';
+import 'package:flutter/services.dart';
 
 // Logo Height and Width
 final double logoWidth = 135.0;
@@ -77,6 +78,16 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   bool isGoogleProcessStarted = false;
+
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

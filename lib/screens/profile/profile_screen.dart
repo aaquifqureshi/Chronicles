@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:chronicles/utilities/components/buttons/infinite_width_button.dart';
 import 'package:chronicles/utilities/data/app_policy/terms_and_conditions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:chronicles/services/secure_storage.dart';
 import 'package:chronicles/utilities/components/buttons/custom_textbutton.dart';
@@ -21,6 +22,8 @@ import 'package:chronicles/screens/profile/friends/friend_lists_mainscreen.dart'
 import 'package:chronicles/screens/profile/settings/settings_screen.dart';
 import 'package:chronicles/utilities/components/alerts/two_buttons_auth_alert.dart';
 import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
+
+import '../../utilities/image_import/logo_import.dart';
 
 // Variable Values & TextStyles
 final double buttonHeight = 50.0;
@@ -98,10 +101,17 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   File? profileImage;
+  bool isProcessOn = false;
 
   @override
   void initState() {
     fetchUserData();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     super.initState();
   }
 
@@ -167,203 +177,233 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: bodyHorizontalPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: height25,
-            ),
-            Stack(clipBehavior: Clip.none, children: [
-              Container(
-                height: 230,
-                width: 355,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color(0xFFF4F4F4),
-                ),
+      body: isProcessOn
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ImportLogo(height: 150, width: 150).importLogowo(),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  CircularProgressIndicator(
+                    color: Color(0xFF4EABCC),
+                  ),
+                ],
               ),
-              Positioned(
-                top: -20,
-                right: 0,
-                left: 0,
-                child: Container(
-                  height: 180,
-                  width: 180,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFFF4F4F4),
-                      border: Border.all(
+            )
+          : Padding(
+              padding: EdgeInsets.symmetric(horizontal: bodyHorizontalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: height25,
+                  ),
+                  Stack(clipBehavior: Clip.none, children: [
+                    Container(
+                      height: 230,
+                      width: 355,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
                         color: Color(0xFFF4F4F4),
-                      )),
-                  child: Center(
-                    child:
-                        ProfileAvatar(circleAvatarRadius: circleAvatarRadius),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 15.0,
-                left: 0,
-                right: 0,
-                child: Column(children: [
-                  Text(
-                    "$firstName $lastName",
-                    style: firstNameLastNameStyle,
-                  ),
-                  Text(
-                    "@${username.toLowerCase()}",
-                    style: usernameStyle,
-                  ),
-                ]),
-              ),
-            ]),
-            SizedBox(
-              height: height25,
-            ),
-            Container(
-              height: height60,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadiusInfiniteButton),
-                color: friendBGColor,
-                border: Border.all(
-                  color: friendBorderColor,
-                  width: friendBorderWidth,
-                ),
-              ),
-              child: InfiniteRoundWidthButton(
-                onPress: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FriendListScreen(),
+                      ),
                     ),
-                  );
-                },
-                buttonLabel: Text(
-                  friendsButtonLabel,
-                  style: buttonLabelTextStyle(
-                    textColor: buttonTextColor,
+                    Positioned(
+                      top: -20,
+                      right: 0,
+                      left: 0,
+                      child: Container(
+                        height: 180,
+                        width: 180,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFFF4F4F4),
+                            border: Border.all(
+                              color: Color(0xFFF4F4F4),
+                            )),
+                        child: Center(
+                          child: ProfileAvatar(
+                              circleAvatarRadius: circleAvatarRadius),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 15.0,
+                      left: 0,
+                      right: 0,
+                      child: Column(children: [
+                        Text(
+                          "$firstName $lastName",
+                          style: firstNameLastNameStyle,
+                        ),
+                        Text(
+                          "@${username.toLowerCase()}",
+                          style: usernameStyle,
+                        ),
+                      ]),
+                    ),
+                  ]),
+                  SizedBox(
+                    height: height25,
                   ),
-                ),
-                height: buttonHeight,
-                highlightColor: buttonHighlightColor,
-                splashColor: buttonSplashColor,
-                horizontalMargin: buttonHorizontalMargin,
-                verticalMargin: infiniteButtonVerticalMargin,
-              ),
-            ),
-            SizedBox(
-              height: sizedBoxBetweenProfilePicAndSetting,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: optionBottomPadding,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: optionBGColor,
-                  borderRadius: BorderRadius.circular(optionBorderRadius),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: padding15, left: padding15, right: padding15),
-                      child: CustomTextButton(
-                        text: optionSettingText,
-                        icon: Icons.settings,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SettingsPage(),
+                  Container(
+                    height: height60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(borderRadiusInfiniteButton),
+                      color: friendBGColor,
+                      border: Border.all(
+                        color: friendBorderColor,
+                        width: friendBorderWidth,
+                      ),
+                    ),
+                    child: InfiniteRoundWidthButton(
+                      onPress: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FriendListScreen(),
+                          ),
+                        );
+                      },
+                      buttonLabel: Text(
+                        friendsButtonLabel,
+                        style: buttonLabelTextStyle(
+                          textColor: buttonTextColor,
+                        ),
+                      ),
+                      height: buttonHeight,
+                      highlightColor: buttonHighlightColor,
+                      splashColor: buttonSplashColor,
+                      horizontalMargin: buttonHorizontalMargin,
+                      verticalMargin: infiniteButtonVerticalMargin,
+                    ),
+                  ),
+                  SizedBox(
+                    height: sizedBoxBetweenProfilePicAndSetting,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: optionBottomPadding,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: optionBGColor,
+                        borderRadius: BorderRadius.circular(optionBorderRadius),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: padding15,
+                                left: padding15,
+                                right: padding15),
+                            child: CustomTextButton(
+                              text: optionSettingText,
+                              icon: Icons.settings,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SettingsPage(),
+                                  ),
+                                );
+                              },
                             ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: padding10,
+                                left: padding15,
+                                right: padding15),
+                            child: CustomTextButton(
+                              text: optionBadgeText,
+                              icon: Icons.badge_outlined,
+                              onPressed: () {},
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: padding10,
+                              left: padding15,
+                              right: padding15,
+                              bottom: padding15,
+                            ),
+                            child: CustomTextButton(
+                              text: optionTemplateText,
+                              icon: Icons.design_services,
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: height60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(endContainerBorderRadius),
+                      color: endContainerBGColor,
+                      border: Border.all(
+                        color: endContainerBorderColor,
+                        width: endContainerBorderWidth,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: padding15),
+                      child: CustomTextButton(
+                        text: optionLogoutText,
+                        icon: Icons.logout_outlined,
+                        containerColor: Color(0x804EABCC),
+                        onPressed: () async {
+                          twoButtonsAuthAlert(
+                            context,
+                            message: "Are you sure you want to logout?",
+                            cancelButtonText: "Cancel",
+                            proceedButtonText: "Logout",
+                            onCancel: () {
+                              Navigator.pop(context);
+                            },
+                            onProceed: () async {
+                              setState(() {
+                                isProcessOn = true;
+                              });
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/WelcomeScreen',
+                                (Route<dynamic> route) => false,
+                              );
+
+                              SecureStorage storage = SecureStorage();
+                              GoogleSignIn googleSignIn = GoogleSignIn();
+
+                              await googleSignIn.signOut();
+
+                              storage.updateSecureData('isLoginDone', 'false');
+                              storage.updateSecureData(
+                                  'isPinRequired', 'false');
+                              storage.updateSecureData(
+                                  'isUserDetailDone', 'true');
+
+                              setState(() {
+                                isProcessOn = false;
+                              });
+                            },
+                            icon: Icons.logout,
+                            iconColor: Color(0xFF1F1F1F),
                           );
                         },
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: padding10, left: padding15, right: padding15),
-                      child: CustomTextButton(
-                        text: optionBadgeText,
-                        icon: Icons.badge_outlined,
-                        onPressed: () {},
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: padding10,
-                        left: padding15,
-                        right: padding15,
-                        bottom: padding15,
-                      ),
-                      child: CustomTextButton(
-                        text: optionTemplateText,
-                        icon: Icons.design_services,
-                        onPressed: () {},
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: height20),
+                ],
               ),
             ),
-            Container(
-              height: height60,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(endContainerBorderRadius),
-                color: endContainerBGColor,
-                border: Border.all(
-                  color: endContainerBorderColor,
-                  width: endContainerBorderWidth,
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: padding15),
-                child: CustomTextButton(
-                  text: optionLogoutText,
-                  icon: Icons.logout_outlined,
-                  containerColor: Color(0x804EABCC),
-                  onPressed: () async {
-                    twoButtonsAuthAlert(
-                      context,
-                      message: "Are you sure you want to logout?",
-                      cancelButtonText: "Cancel",
-                      proceedButtonText: "Logout",
-                      onCancel: () {
-                        Navigator.pop(context);
-                      },
-                      onProceed: () async {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          '/WelcomeScreen',
-                          (Route<dynamic> route) => false,
-                        );
-
-                        SecureStorage storage = SecureStorage();
-                        GoogleSignIn googleSignIn = GoogleSignIn();
-
-                        await googleSignIn.signOut();
-
-                        storage.updateSecureData('isLoginDone', 'false');
-                        storage.updateSecureData('isPinRequired', 'false');
-                        storage.updateSecureData('isUserDetailDone', 'true');
-                      },
-                      icon: Icons.logout,
-                      iconColor: Color(0xFF1F1F1F),
-                    );
-                  },
-                ),
-              ),
-            ),
-            SizedBox(height: height20),
-          ],
-        ),
-      ),
     );
   }
 }

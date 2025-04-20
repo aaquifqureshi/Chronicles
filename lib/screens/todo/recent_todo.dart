@@ -9,6 +9,7 @@ import 'package:chronicles/utilities/components/todo/todo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chronicles/services/todo_services.dart';
+import 'package:flutter/services.dart';
 
 class RecentToDo extends StatefulWidget {
   const RecentToDo({super.key});
@@ -46,6 +47,12 @@ class _RecentToDoState extends State<RecentToDo> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     _loadTodos();
   }
 

@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "164887569503-9m79n9tdospgdggh0fsknqu9ri8gru9m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trOlsz.chronicles",
+            "certificate_hash": "5b5b446ed0748a96333e4721821ee3ed3d61309a"
+          }
+        },
+        {
           "client_id": "164887569503-jbv42cerd49vodp3jmpj4t7mkvo71i59.apps.googleusercontent.com",
           "client_type": 3
         }

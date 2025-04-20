@@ -1,35 +1,22 @@
 import 'package:chronicles/utilities/components/keyboard/blue_numeric_keyboard.dart';
-
 import 'package:chronicles/utilities/components/textfields/otp_display_textfield.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 final String passwordResetText = 'Password Reset';
-
 final String normalMessageTitleText = 'We sent a code to your email';
-
 final String normalMessageText = "Did not receive OTP? ";
-
 final String resendButtonText = "Resend Code";
 
 final double bodyLeftRightPadding = 25.0;
-
 final double bodyTopPadding = 60.0;
-
 final double iconContainerSize = 90.0;
-
 final double containerRadius = 12.0;
-
 final double iconSize = 80.0;
-
 final double titleTopPadding = 20.0;
-
 final double textFieldTopPadding = 50.0;
-
 final double textFieldBottomPadding = 10.0;
-
 final double resendTextTopPadding = 5.0;
-
 final double resendTextBottomPadding = 15.0;
 
 final Color borderColor = Color(0xFFDDDFE5);
@@ -85,6 +72,16 @@ class _OtpScreenState extends State<OtpScreen> {
         inputText += key;
       }
     });
+  }
+
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
+    super.initState();
   }
 
   @override

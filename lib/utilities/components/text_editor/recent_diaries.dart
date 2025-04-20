@@ -68,47 +68,49 @@ class _Top2RecentDiariesState extends State<Top2RecentDiaries> {
               margin: EdgeInsets.only(right: 9.0, left: 9.0),
               padding: EdgeInsets.all(10.0),
               width: 140.0,
-              height: 180.0,
+              height: 200.0,
               decoration: BoxDecoration(
                 color: containerColor,
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    displayDate,
-                    style: TextStyle(
-                      fontFamily: "Hind",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 11,
-                      color: Color(0x801F1F1F),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0, bottom: 5.0),
-                    child: Text(
-                      file.title,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      displayDate,
                       style: TextStyle(
-                        fontFamily: "hind",
+                        fontFamily: "Hind",
                         fontWeight: FontWeight.w600,
-                        fontSize: 20,
+                        fontSize: 11,
+                        color: Color(0x801F1F1F),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.0, bottom: 5.0),
+                      child: Text(
+                        file.title,
+                        style: TextStyle(
+                          fontFamily: "hind",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                          color: Color(0xFF1F1F1F),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      file.content.length > 40
+                          ? "${file.content.substring(0, 40)}..."
+                          : file.content,
+                      style: TextStyle(
+                        fontFamily: "Hind",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
                         color: Color(0xFF1F1F1F),
                       ),
                     ),
-                  ),
-                  Text(
-                    file.content.length > 40
-                        ? "${file.content.substring(0, 40)}..."
-                        : file.content,
-                    style: TextStyle(
-                      fontFamily: "Hind",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15,
-                      color: Color(0xFF1F1F1F),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

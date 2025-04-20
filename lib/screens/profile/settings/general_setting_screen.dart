@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../utilities/components/switch/custom_switch.dart';
 
 final String darkModeButtonText = "Dark Mode";
@@ -39,6 +40,16 @@ class GeneralTabState extends State<generalTab> {
   bool isDarkMode = false;
   bool notificationsEnabled = false;
   bool aboutUsExpanded = false;
+
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import 'package:chronicles/services/file_database.dart';
 import 'package:chronicles/utilities/components/text_editor/file_data_class.dart';
+import 'package:flutter/services.dart';
 
 TextStyle pageTitleStyle = TextStyle(
   fontFamily: 'Hind',
@@ -111,13 +112,24 @@ class _DiaryArchiveState extends State<DiaryArchive> {
   @override
   void initState() {
     _loadAllDiaries();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFFFFFF),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -127,51 +139,6 @@ class _DiaryArchiveState extends State<DiaryArchive> {
               "Archive",
               style: pageTitleStyle,
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 30,
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10.0, 6.0, 10.0, 6.0),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: Color(0x80000000)),
-                  borderRadius: BorderRadius.circular(3.0),
-                  color: Color(0x00000080),
-                ),
-                child: Text(
-                  "Productive",
-                  style: TextStyle(
-                    fontFamily: 'Hind',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
-                    color: Color(0xFF1F1F1F),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 25,
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10.0, 6.0, 10.0, 6.0),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: Color(0x80000000)),
-                  borderRadius: BorderRadius.circular(3.0),
-                  color: Color(0x00000080),
-                ),
-                child: Text(
-                  "Weekday",
-                  style: TextStyle(
-                    fontFamily: 'Hind',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
-                    color: Color(0xFF1F1F1F),
-                  ),
-                ),
-              ),
-            ],
           ),
           SizedBox(
             height: 10.0,
@@ -241,6 +208,7 @@ class _DiaryArchiveState extends State<DiaryArchive> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
+                                          softWrap: true,
                                           diary.title,
                                           style: TextStyle(
                                             fontFamily: 'Hind',
@@ -250,6 +218,7 @@ class _DiaryArchiveState extends State<DiaryArchive> {
                                           ),
                                         ),
                                         Text(
+                                          softWrap: true,
                                           diary.content,
                                           style: TextStyle(
                                             fontFamily: 'Hind',
@@ -259,6 +228,7 @@ class _DiaryArchiveState extends State<DiaryArchive> {
                                           ),
                                         ),
                                         Text(
+                                          softWrap: true,
                                           diary.modifiedAt,
                                           style: TextStyle(
                                             fontFamily: 'Hind',
@@ -318,13 +288,18 @@ class _DiaryArchiveState extends State<DiaryArchive> {
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 10.0, bottom: 20.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: dayDiariesWidget,
+                                  Flexible(
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                        left: 10.0,
+                                        bottom: 20.0,
+                                        right: 5.0,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: dayDiariesWidget,
+                                      ),
                                     ),
                                   ),
                                 ],

@@ -18,6 +18,7 @@ import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
 import 'package:chronicles/utilities/components/alerts/no_internet_alert.dart';
 import 'package:chronicles/utilities/data/app_policy/terms_and_conditions.dart';
 import 'package:chronicles/utilities/data/app_policy/privacy_policy.dart';
+import 'package:flutter/services.dart';
 
 // Variable Values & TextStyles
 final double overallPadding = 20.0;
@@ -120,6 +121,16 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isRegisterProcessStarted = false;
+
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:chronicles/screens/profile/settings/settings_screen.dart';
 import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import '../../../services/secure_storage.dart';
 import '../../../utilities/data/gender.dart';
 import '../../../utilities/data/user_auth_data.dart';
@@ -57,6 +58,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     _initializeUserData();
 
     _firstNameController.addListener(() {
@@ -181,7 +188,18 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   Widget inactiveInternet() {
     return Center(
-      child: Text('No Internet'),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xFF4EABCC),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text('No Internet'),
+        ],
+      ),
     );
   }
 

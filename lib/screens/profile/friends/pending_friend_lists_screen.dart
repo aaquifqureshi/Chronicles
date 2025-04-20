@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../services/friends_services.dart';
 import '../../../utilities/components/List_Tile/friends_list_tile.dart';
 
@@ -48,6 +49,12 @@ class _PendingRequestsPageState extends State<PendingRequestsPage> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     pendingRequest();
   }
 

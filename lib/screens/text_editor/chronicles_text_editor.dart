@@ -12,6 +12,7 @@ import 'package:chronicles/utilities/components/floating_action_button/text_edit
 import 'package:chronicles/utilities/components/text_editor/editor_textbox.dart';
 import 'package:flutter/material.dart';
 import 'package:chronicles/utilities/components/date_time/chronicles_date_time.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -846,6 +847,11 @@ class _TextEditorState extends State<TextEditor> {
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     nowTime = ChroniclesDateTime(nowTime: DateTime.now());
     if (widget.fileName == null) {
       controllers.add(TextEditingController());

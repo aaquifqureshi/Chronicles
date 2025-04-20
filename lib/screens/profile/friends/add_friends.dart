@@ -1,5 +1,6 @@
 import 'package:chronicles/services/internet_connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../services/add_friends_services.dart';
 import '../../../services/pfp_services.dart';
 import '../../../utilities/components/buttons/custom_action_button.dart';
@@ -66,6 +67,12 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     loadFriendsData();
   }
 

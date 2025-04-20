@@ -79,6 +79,7 @@ class Chronicles extends StatelessWidget {
 
         Widget? homeScreen = snapshot.data;
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: galacticOcean,
           routes: {
             '/WelcomeScreen': (context) => WelcomeScreen(),

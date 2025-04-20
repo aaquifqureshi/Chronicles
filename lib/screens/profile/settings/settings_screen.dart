@@ -3,6 +3,7 @@ import 'package:chronicles/screens/profile/settings/general_setting_screen.dart'
 import 'package:chronicles/screens/profile/settings/personal_info_screen.dart';
 import 'package:chronicles/screens/profile/settings/security_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../services/pfp_services.dart';
 import '../../../utilities/data/user_auth_data.dart';
 import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
@@ -75,6 +76,11 @@ class _SettingsPageState extends State<SettingsPage>
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     fetchUserData();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
   }
 
   void fetchUserData() async {

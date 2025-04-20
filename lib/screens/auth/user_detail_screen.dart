@@ -6,12 +6,14 @@ import 'package:chronicles/utilities/components/buttons/infinite_width_button.da
 import 'package:chronicles/utilities/components/textfields/gray_textfield.dart';
 import 'package:chronicles/utilities/components/alerts/two_buttons_auth_alert.dart';
 import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
+import 'package:flutter/services.dart';
 import '../../services/internet_connectivity.dart';
 import '../../services/pfp_services.dart';
 import '../../services/user_service.dart';
 import '../../utilities/components/alerts/no_internet_alert.dart';
 import '../../utilities/data/user_auth_data.dart';
 import '../../services/secure_storage.dart';
+import '../../utilities/image_import/logo_import.dart';
 
 // Variable Values & TextStyle
 final double appBarRightPadding = 10.0;
@@ -92,9 +94,15 @@ class UsernameScreen extends StatefulWidget {
 class _UsernameScreenState extends State<UsernameScreen> {
   File? _selectedImage;
   late File imageFile;
+  bool isProcessOn = false;
 
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
 
     fetchUserDetail();
   }
@@ -137,138 +145,162 @@ class _UsernameScreenState extends State<UsernameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(overAllPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: profileIconTopPadding,
-                    bottom: profileIconBottomPadding),
-                child: GestureDetector(
-                  onTap: pickProfileImage,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: ProfileAvatar(
-                            circleAvatarRadius: circleAvatarRadius),
-                      ),
-                      if (_selectedImage == null)
-                        Positioned(
-                          bottom: iconBottomPosition,
-                          left: iconLeftPosition,
-                          child: Container(
-                            height: containerHeightWidth,
-                            width: containerHeightWidth,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 2,
-                                  offset: Offset(5, 5),
-                                ),
-                              ],
-                            ),
-                            child: Icon(Icons.add_a_photo),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: isProcessOn
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    usernameText,
-                    style: labelTextStyle,
+                  ImportLogo(height: 150, width: 150).importLogowo(),
+                  SizedBox(
+                    height: 10.0,
                   ),
-                  GrayTextfield(
-                    controller: username,
-                    hintText: usernameHint,
-                    topPadding: topPadding,
-                    bottomPadding: bottomPadding,
+                  CircularProgressIndicator(
+                    color: Color(0xFF4EABCC),
                   ),
-                  InfiniteRoundWidthButton(
-                    onPress: () async {
-                      SecureStorage storage = SecureStorage();
-                      bool hasInternet = await getInternetStatus();
-                      if (!hasInternet) {
-                        noInternetAlert(context);
-                        return;
-                      }
-                      if (_selectedImage != null) {
-                        await saveProfileImage();
-                        await saveProfileImageOnline();
-                      } else {
-                        String defaultUrl = await fetchDefaultProfileUrl();
-
-                        String userId = await UserDataFetcher().fetchUID();
-
-                        await updateUrlInFirebase(userId, defaultUrl);
-                      }
-
-                      String enteredUsername = username.text.trim();
-
-                      if (enteredUsername.isEmpty) {
-                        twoButtonsAuthAlert(
-                          context,
-                          message:
-                              "$usernameHint will be your permanent username. Continue?",
-                          cancelButtonText: "Cancel",
-                          proceedButtonText: "Proceed",
-                          onProceed: () async {
-                            usernameCheck(context, "success");
-
-                            storage.updateSecureData(
-                                'isUserDetailDone', 'true');
-                          },
-                          onCancel: () {
-                            Navigator.pop(context);
-                          },
-                        );
-                      } else {
-                        twoButtonsAuthAlert(
-                          context,
-                          message:
-                              "$enteredUsername will be your permanent username. Continue?",
-                          cancelButtonText: "Cancel",
-                          proceedButtonText: "Proceed",
-                          onProceed: () async {
-                            String checkUsername =
-                                await updateUsername(context, enteredUsername);
-
-                            usernameCheck(context, checkUsername);
-
-                            storage.updateSecureData(
-                                'isUserDetailDone', 'true');
-                          },
-                          onCancel: () {
-                            Navigator.pop(context);
-                          },
-                        );
-                      }
-                    },
-                    buttonLabel: Text(
-                      buttonText,
-                      style: buttonLabelTextStyle(textColor: buttonTextColor),
-                    ),
-                    verticalMargin: verticalButtonMargin,
-                    height: buttonHeight,
-                    highlightColor: buttonHighlightColor,
-                    splashColor: buttonSplashColor,
-                    horizontalMargin: horizontalMargin,
-                  )
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(overAllPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: profileIconTopPadding,
+                          bottom: profileIconBottomPadding),
+                      child: GestureDetector(
+                        onTap: pickProfileImage,
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: ProfileAvatar(
+                                  circleAvatarRadius: circleAvatarRadius),
+                            ),
+                            if (_selectedImage == null)
+                              Positioned(
+                                bottom: iconBottomPosition,
+                                left: iconLeftPosition,
+                                child: Container(
+                                  height: containerHeightWidth,
+                                  width: containerHeightWidth,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 2,
+                                        offset: Offset(5, 5),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Icon(Icons.add_a_photo),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          usernameText,
+                          style: labelTextStyle,
+                        ),
+                        GrayTextfield(
+                          controller: username,
+                          hintText: usernameHint,
+                          topPadding: topPadding,
+                          bottomPadding: bottomPadding,
+                        ),
+                        InfiniteRoundWidthButton(
+                          onPress: () async {
+                            setState(() {
+                              isProcessOn = true;
+                            });
+                            SecureStorage storage = SecureStorage();
+                            bool hasInternet = await getInternetStatus();
+                            if (!hasInternet) {
+                              noInternetAlert(context);
+                              return;
+                            }
+                            if (_selectedImage != null) {
+                              await saveProfileImage();
+                              await saveProfileImageOnline();
+                            } else {
+                              String defaultUrl =
+                                  await fetchDefaultProfileUrl();
+
+                              String userId =
+                                  await UserDataFetcher().fetchUID();
+
+                              await updateUrlInFirebase(userId, defaultUrl);
+                            }
+
+                            String enteredUsername = username.text.trim();
+
+                            if (enteredUsername.isEmpty) {
+                              twoButtonsAuthAlert(
+                                context,
+                                message:
+                                    "$usernameHint will be your permanent username. Continue?",
+                                cancelButtonText: "Cancel",
+                                proceedButtonText: "Proceed",
+                                onProceed: () async {
+                                  usernameCheck(context, "success");
+
+                                  storage.updateSecureData(
+                                      'isUserDetailDone', 'true');
+                                },
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                            } else {
+                              twoButtonsAuthAlert(
+                                context,
+                                message:
+                                    "$enteredUsername will be your permanent username. Continue?",
+                                cancelButtonText: "Cancel",
+                                proceedButtonText: "Proceed",
+                                onProceed: () async {
+                                  String checkUsername = await updateUsername(
+                                      context, enteredUsername);
+
+                                  usernameCheck(context, checkUsername);
+
+                                  storage.updateSecureData(
+                                      'isUserDetailDone', 'true');
+                                },
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                            }
+                            setState(() {
+                              isProcessOn = false;
+                            });
+                          },
+                          buttonLabel: Text(
+                            buttonText,
+                            style: buttonLabelTextStyle(
+                                textColor: buttonTextColor),
+                          ),
+                          verticalMargin: verticalButtonMargin,
+                          height: buttonHeight,
+                          highlightColor: buttonHighlightColor,
+                          splashColor: buttonSplashColor,
+                          horizontalMargin: horizontalMargin,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:chronicles/utilities/components/alerts/auth_alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import '../../../services/secure_storage.dart';
 import '../../../utilities/components/switch/custom_switch.dart';
 import '../../auth/change_password.dart';
@@ -37,6 +38,11 @@ class _SecurityTabState extends State<SecurityTab> {
     super.initState();
     _loadPinLoginStatus();
     checkGoogleUser();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
   }
 
   Future<void> _loadPinLoginStatus() async {
@@ -128,6 +134,7 @@ class _SecurityTabState extends State<SecurityTab> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Color(0xFFFFFFFF),
           title: const Text("Enter 4-digit PIN"),
           content: TextField(
             controller: pinController,
@@ -181,6 +188,7 @@ class _SecurityTabState extends State<SecurityTab> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Color(0xFFFFFFFF),
           title: const Text("Enter Account Password"),
           content: TextField(
             controller: passwordController,
@@ -230,6 +238,7 @@ class _SecurityTabState extends State<SecurityTab> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Color(0xFFFFFFFF),
           title: const Text("Verify Old Password"),
           content: TextField(
             controller: passwordController,

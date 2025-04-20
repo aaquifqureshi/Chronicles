@@ -1,8 +1,10 @@
+import 'package:chronicles/screens/text_editor/diary_archive.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chronicles/screens/shared_diaries/view_shared_diaries.dart';
 import 'package:chronicles/screens/text_editor/chronicles_text_editor.dart';
 import 'package:chronicles/utilities/components/floating_action_button/navigate_floating_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DashboardFab extends StatelessWidget {
   const DashboardFab({super.key});
@@ -53,21 +55,14 @@ class DashboardFab extends StatelessWidget {
           ),
           NavigateFloatingButton(
             buttonPadding: EdgeInsets.fromLTRB(0, 6, 9.5, 6),
-            buttonIcon: Icons.person,
+            buttonIcon: FontAwesomeIcons.book,
             buttonIconColor: Color(0xFF797C7D),
             buttonBackgroundColor: Color(0xFFFFFFFF),
             buttonHeroTag: 'user_button',
             onPressed: () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      ViewSharedDiaries(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return child;
-                  },
-                ),
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return DiaryArchive();
+              }));
             },
           ),
         ],

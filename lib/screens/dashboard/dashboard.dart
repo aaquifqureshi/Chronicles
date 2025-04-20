@@ -18,6 +18,7 @@ import 'package:chronicles/utilities/components/floating_action_button/dashboard
 import 'dart:io';
 import 'package:chronicles/services/pfp_services.dart';
 import 'package:chronicles/utilities/components/profile/profile_avatar.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../services/streak_services.dart';
@@ -136,6 +137,12 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     fetchUserDetail();
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+
     super.initState();
   }
 

@@ -11,6 +11,9 @@
  4. Team
 ---
 
+## [Documentation](https://github.com/mrunalnshah/Chronicles/tree/Chronicles/documentation)
+
+
 # Introduction
 Chronicles - Write Your Journey is a diary writing application empowered with markdown support, custom built todo list, and a current inbuilding text editor which is better as of now than many of our competitor. Chronicles comes with Text To Speech and Speech To Text support and also impowers the overall data analysis.
 

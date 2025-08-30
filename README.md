@@ -1,20 +1,21 @@
 # Chronicles - Write Your Journey
  Chronicles is an AI-powered diary app that enhances your journaling experience with features like to-do lists, text-to-speech, speech-to-text, and a rich text editor for daily entries. It also incorporates data analysis while ensuring high data security. 
 
- The application is currently under testing. We are trying to fix as many bugs as we can before the launch.
+ The application is currently <b> under testing </b>. We are trying to fix as many bugs as we can before the launch.
 
 --- 
  # Content
  1. Introduction
  2. Features
- 3. Installation
- 4. Usage
- 5. Screenshots
- 6. Contributing
- 7. Bug Reporting
- 8. License
+ 3. Screenshots
+ 4. Team
 ---
 
+# Introduction
+Chronicles - Write Your Journey is a diary writing application empowered with markdown support, custom built todo list, and a current inbuilding text editor which is better as of now than many of our competitor. Chronicles comes with Text To Speech and Speech To Text support and also impowers the overall data analysis.
+
+# Features
+(Working on it. refer to documentation, which also includes all system designs and feature description in detail.)
 
 # Screenshots
 
@@ -73,3 +74,10 @@
   <td> ToDo List </td>
  </tr>
 </table>
+
+
+# Team
+1. Malav Shah [Prompt Engineer, Terms&Condition and Licensing Documentor]
+2. Asgar Datari [Figma UI-UX Designer]
+3. Aaquif Qureshi [Database Engineer]
+4. Mrunal Shah [Lead Engineer, System Architect]

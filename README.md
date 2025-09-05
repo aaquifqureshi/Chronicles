@@ -82,5 +82,5 @@ Chronicles - Write Your Journey is a diary writing application empowered with ma
 # Team
 1. Malav Shah [Prompt Engineer, Terms&Condition and Licensing Documentor]
 2. Asgar Datari [Figma UI-UX Designer]
-3. Aaquif Qureshi [Database Engineer]
-4. Mrunal Shah [Lead Engineer, System Architect]
+3. Aaquif Qureshi [Lead Engineer, Database(Firebase + Supabase) Engineer]
+4. Mrunal Shah [Lead Engineer, Database(SQLite) Engineer, System Architect]
